@@ -31,8 +31,8 @@ export default function Login() {
         <div className="login-left-grid"/><div className="login-left-orb"/>
         <div style={{position:'relative',zIndex:1}}>
           <Link to="/" style={{display:'flex',alignItems:'center',gap:10,marginBottom:52}}>
-            <div className="pub-logo-mark" style={{width:40,height:40,fontSize:18}}>S</div>
-            <span style={{fontFamily:'Syne,sans-serif',fontSize:20,fontWeight:800,color:'#fff'}}>Somali<span style={{color:'var(--brand-secondary)'}}>Learn</span></span>
+            <div className="pub-logo-mark" style={{width:40,height:40,fontSize:18}}>A</div>
+            <span style={{fontFamily:'Syne,sans-serif',fontSize:20,fontWeight:800,color:'#fff'}}>Aqoon<span style={{color:'var(--brand-secondary)'}}>Jire</span></span>
           </Link>
           <h1 style={{color:'#fff',fontSize:'clamp(2rem,3.5vw,3rem)',fontWeight:800,letterSpacing:'-0.03em',lineHeight:1.1,marginBottom:18}}>Your Learning<br/>Journey Continues</h1>
           <p style={{color:'rgba(255,255,255,0.55)',fontSize:15,lineHeight:1.8,marginBottom:48,maxWidth:380}}>Sign in to access your courses, track your progress, and earn certificates that advance your career.</p>
@@ -46,7 +46,7 @@ export default function Login() {
           </div>
           <div style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:18,padding:22,backdropFilter:'blur(12px)'}}>
             <div style={{display:'flex',gap:3,marginBottom:10}}>{[...Array(5)].map((_,i) => <span key={i} style={{color:'var(--brand-secondary)',fontSize:14}}>★</span>)}</div>
-            <p style={{color:'rgba(255,255,255,0.7)',fontSize:13,lineHeight:1.75,marginBottom:14,fontStyle:'italic'}}>"SomaliLearn completely changed my career. I learned web development in my own language and now earn more than I ever imagined."</p>
+            <p style={{color:'rgba(255,255,255,0.7)',fontSize:13,lineHeight:1.75,marginBottom:14,fontStyle:'italic'}}>"AqoonJire completely changed my career. I learned web development in my own language and now earn more than I ever imagined."</p>
             <div style={{display:'flex',alignItems:'center',gap:10}}>
               <div style={{width:34,height:34,borderRadius:'50%',background:'linear-gradient(135deg,var(--brand-secondary),#00d4b0)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:800,color:'var(--brand-primary)',fontFamily:'Syne,sans-serif'}}>H</div>
               <div><div style={{fontSize:13,fontWeight:700,color:'#fff'}}>Hodan Abdi</div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Web Developer · Mogadishu</div></div>
@@ -91,7 +91,7 @@ export default function Login() {
             {[['📚','Browse our course catalog'],['📱','Contact us via WhatsApp'],['💳','Pay via EVC Plus, eDahab or Zaad'],['🎓','Receive your account within 24h']].map(([e,t]) => (
               <div key={t} style={{display:'flex',alignItems:'center',gap:10,marginBottom:10,fontSize:13,color:'var(--text-muted)'}}><span style={{fontSize:16}}>{e}</span>{t}</div>
             ))}
-            <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-outline-teal" style={{width:'100%',justifyContent:'center',marginTop:10}}>📱 WhatsApp to Enroll</a>
+            <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-outline-teal" style={{width:'100%',justifyContent:'center',marginTop:10}}>📱 WhatsApp to Enroll</a>
           </div>
         </div>
       </div>

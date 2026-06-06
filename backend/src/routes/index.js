@@ -45,6 +45,7 @@ const funnel       = require('../controllers/funnelController');
 const streak       = require('../controllers/streakController');
 const faq          = require('../controllers/faqController');
 const broadcast    = require('../controllers/broadcastController');
+const siteFaq      = require('../controllers/siteFaqController');
 
 // ── PUBLIC ────────────────────────────────────────────────────────────────
 router.get('/landing',                         landing.getLandingData);
@@ -60,6 +61,7 @@ router.get('/courses/:courseId/reviews',       review.getCourseReviews);
 router.get('/settings',                        settings.getSettings);
 router.get('/certificates/verify/:certNumber', certificate.verifyCertificate);
 router.get('/unsubscribe',                     broadcast.publicUnsubscribe);
+router.get('/site-faqs',                       siteFaq.listPublic);
 
 // ── AUTH ──────────────────────────────────────────────────────────────────
 router.post('/auth/login',           loginLimiter, loginRules, validate, auth.login);
@@ -274,5 +276,11 @@ router.get ('/admin/broadcasts',         authenticate, adminOnly, broadcast.list
 router.post('/admin/broadcasts/preview', authenticate, adminOnly, broadcast.previewAudience);
 router.post('/admin/broadcasts',         authenticate, adminOnly, broadcast.createAndSend);
 router.get ('/admin/broadcasts/:id',     authenticate, adminOnly, broadcast.getCampaign);
+
+// ── SITE FAQ MANAGEMENT ───────────────────────────────────────────────────
+router.get   ('/admin/site-faqs',     authenticate, adminOnly, siteFaq.listAll);
+router.post  ('/admin/site-faqs',     authenticate, adminOnly, siteFaq.createFaq);
+router.put   ('/admin/site-faqs/:id', authenticate, adminOnly, siteFaq.updateFaq);
+router.delete('/admin/site-faqs/:id', authenticate, adminOnly, siteFaq.deleteFaq);
 
 module.exports = router;

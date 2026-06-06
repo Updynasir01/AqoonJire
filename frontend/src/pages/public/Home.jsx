@@ -5,7 +5,7 @@ import { landingAPI } from '../../services/api'
 import { BookOpen, Users, Award, ArrowRight, CheckCircle, Star, Clock, Globe, ChevronRight, Zap, Shield, Play } from 'lucide-react'
  
 
-const EMOJIS = { laptop:'💻', briefcase:'💼', book:'📖', globe:'🌍', calculator:'🔢', heart:'❤️', star:'⭐', moon:'🌙', flask:'🧪', pencil:'✏️' }
+const EMOJIS = { laptop:'💻', briefcase:'💼', book:'📖', globe:'🌍', calculator:'🔢', stethoscope:'🩺', heart:'❤️', star:'⭐', moon:'🌙', flask:'🧪', pencil:'✏️' }
 
 function useCountUp(target, duration = 2000) {
   const [count, setCount] = useState(0)
@@ -212,7 +212,7 @@ export default function Home() {
               { name:'Arabic Language', icon:'book', course_count:6 },
               { name:'English Language', icon:'globe', course_count:9 },
               { name:'Mathematics', icon:'calculator', course_count:5 },
-              { name:'Health & Medicine', icon:'heart', course_count:4 },
+              { name:'Health & Medicine', icon:'stethoscope', course_count:4 },
             ]).map(cat => (
               <Link to={`/courses?category=${cat.name}`} key={cat.name} className="cat-card">
                 <span className="cat-emoji">{EMOJIS[cat.icon]||'📚'}</span>
@@ -334,7 +334,7 @@ export default function Home() {
           </div>
           <div className="grid-3">
             {[
-              { name:'Hodan Abdi', role:'IT Graduate', text:'SomaliLearn changed my life. I learned web development in my own language and now work as a freelancer earning great income.', avatar:'H' },
+              { name:'Hodan Abdi', role:'IT Graduate', text:'AqoonJire changed my life. I learned web development in my own language and now work as a freelancer earning great income.', avatar:'H' },
               { name:'Mohamed Farah', role:'Business Student', text:'The business course was incredibly detailed. The instructor explained everything clearly in Somali, making complex concepts easy to understand.', avatar:'M' },
               { name:'Amina Hassan', role:'English Course', text:'My English improved dramatically. I got a promotion at work because of the professional communication skills I learned here.', avatar:'A' },
             ].map(t => (
@@ -360,10 +360,10 @@ export default function Home() {
           <div className="cta-wrap">
             <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 20px' }}>🎯 Get Started</div>
             <h2 className="cta-h">Ready to Transform<br/>Your Career?</h2>
-            <p className="cta-sub">Join 1,200+ students already learning and growing with SomaliLearn. Your journey starts today.</p>
+            <p className="cta-sub">Join 1,200+ students already learning and growing with AqoonJire. Your journey starts today.</p>
             <div className="cta-btns">
               <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16}/></Link>
-              <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">📱 WhatsApp Us</a>
+              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">📱 WhatsApp Us</a>
             </div>
             <div className="cta-perks">
               {['No hidden fees','Pay in local currency','Account ready in 24h'].map(f => (

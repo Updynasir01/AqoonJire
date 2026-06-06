@@ -21,7 +21,7 @@ export default function Contact() {
               Have a question about courses, payments, or enrollment? Our team is here to help you start learning quickly.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
-              <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg">
+              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg">
                 WhatsApp Us <MessageCircle size={16} />
               </a>
               <Link to="/courses" className="btn btn-ghost-white btn-lg">
@@ -50,7 +50,7 @@ export default function Contact() {
               </div>
               <h3 style={{ marginBottom: 8 }}>Call or WhatsApp</h3>
               <p style={{ color: 'var(--text-muted)', marginBottom: 14 }}>Fast replies for admissions and payments.</p>
-              <a href="tel:+252610000000" className="pub-footer-link" style={{ marginBottom: 0 }}>+252 61 000 0000</a>
+              <a href="tel:+252610317264" className="pub-footer-link" style={{ marginBottom: 0 }}>+252 61 031 7264</a>
             </div>
 
             <div className="card card-body">
@@ -138,7 +138,7 @@ export default function Contact() {
             <p className="cta-sub">Explore our courses and reach out if you need any help choosing the best path.</p>
             <div className="cta-btns">
               <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16} /></Link>
-              <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">WhatsApp Support</a>
+              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">WhatsApp Support</a>
             </div>
           </div>
         </div>

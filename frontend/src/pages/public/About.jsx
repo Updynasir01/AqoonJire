@@ -17,11 +17,11 @@ export default function About() {
             Empowering Somalia<br/>Through Education
           </h1>
           <p style={{ color:'rgba(255,255,255,0.6)',fontSize:17,lineHeight:1.8,maxWidth:600,margin:'0 auto 40px' }}>
-            SomaliLearn was built with a single mission: to make world-class education accessible to every Somali learner, in their own language, at a price they can afford.
+            AqoonJire was built with a single mission: to make world-class education accessible to every Somali learner, in their own language, at a price they can afford.
           </p>
           <div style={{ display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap' }}>
             <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16}/></Link>
-            <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">📱 Contact Us</a>
+            <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">📱 Contact Us</a>
           </div>
         </div>
         <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display:'block',width:'100%' }}>
@@ -49,12 +49,12 @@ export default function About() {
           <div className="about-mission">
             <div>
               <div className="section-tag">🎯 Our Mission</div>
-              <h2 className="section-h">Why We Built<br/>SomaliLearn</h2>
+              <h2 className="section-h">Why We Built<br/>AqoonJire</h2>
               <p style={{ color:'var(--text-muted)',fontSize:15,lineHeight:1.85,marginTop:16,marginBottom:28 }}>
                 Somalia has millions of talented, motivated learners who deserve access to quality education. But language barriers, high costs, and lack of localised content have held them back.
               </p>
               <p style={{ color:'var(--text-muted)',fontSize:15,lineHeight:1.85,marginBottom:32 }}>
-                We built SomaliLearn to change that. Every course is taught in Somali, priced fairly, and designed for the realities of Somali learners — whether you're in Mogadishu, Hargeisa, or anywhere in the diaspora.
+                We built AqoonJire to change that. Every course is taught in Somali, priced fairly, and designed for the realities of Somali learners — whether you're in Mogadishu, Hargeisa, or anywhere in the diaspora.
               </p>
               <div style={{ display:'flex',flexDirection:'column',gap:14 }}>
                 {['Courses entirely in Somali language','Fair, one-time pricing — no subscriptions','Pay through EVC Plus, eDahab, Zaad or cash','Certificates recognised by employers','24-hour account setup after payment','Lifetime access to all course materials'].map(item => (
@@ -119,7 +119,7 @@ export default function About() {
         <div className="pub-inner">
           <div style={{ textAlign:'center',marginBottom:52 }}>
             <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 16px' }}>👥 The Team</div>
-            <h2 className="section-h">The People Behind SomaliLearn</h2>
+            <h2 className="section-h">The People Behind AqoonJire</h2>
           </div>
           <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))',gap:24 }}>
             {[
@@ -144,10 +144,10 @@ export default function About() {
           <div className="cta-wrap">
             <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 20px' }}>🎓 Join Us</div>
             <h2 className="cta-h">Ready to Start Your<br/>Learning Journey?</h2>
-            <p className="cta-sub">Join thousands of Somali learners already transforming their lives with SomaliLearn.</p>
+            <p className="cta-sub">Join thousands of Somali learners already transforming their lives with AqoonJire.</p>
             <div className="cta-btns">
               <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16}/></Link>
-              <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">📱 WhatsApp Us</a>
+              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">📱 WhatsApp Us</a>
             </div>
           </div>
         </div>

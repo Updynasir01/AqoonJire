@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
 import { adminAPI } from '../../services/api'
-import { LayoutDashboard, BookOpen, Users, Settings, LogOut, FileText, ClipboardList, Megaphone, Award, Home, Menu, X, CreditCard, BarChart2, ShieldCheck, BookMarked, Sun, Moon, Ticket, Package, TrendingUp, Share2, Video, MessageSquare, Gift, Send } from 'lucide-react'
+import { LayoutDashboard, BookOpen, Users, Settings, LogOut, FileText, ClipboardList, Megaphone, Award, Home, Menu, X, CreditCard, BarChart2, ShieldCheck, BookMarked, Sun, Moon, Ticket, Package, TrendingUp, Share2, Video, MessageSquare, Gift, Send, HelpCircle } from 'lucide-react'
 
 const NAV = {
   admin: [
@@ -28,6 +28,7 @@ const NAV = {
     { label:'Content', items:[
       { to:'/admin/categories', icon:<BookMarked size={15}/>, label:'Categories' },
       { to:'/admin/announcements', icon:<Megaphone size={15}/>, label:'Announcements' },
+      { to:'/admin/faqs', icon:<HelpCircle size={15}/>, label:'FAQs' },
       { to:'/admin/settings', icon:<Settings size={15}/>, label:'Settings' },
     ]},
   ],
@@ -89,9 +90,9 @@ export default function DashboardLayout({ children, title }) {
       <aside className={`sidebar${open ? ' open' : ''}`}>
         <div className="sidebar-logo">
           <div style={{display:'flex',alignItems:'center',gap:9}}>
-            <div className="pub-logo-mark" style={{width:32,height:32,fontSize:15,flexShrink:0}}>S</div>
+            <div className="pub-logo-mark" style={{width:32,height:32,fontSize:15,flexShrink:0}}>A</div>
             <div>
-              <h2 style={{fontSize:15}}>Somali<span style={{color:'var(--brand-secondary)'}}>Learn</span></h2>
+              <h2 style={{fontSize:15}}>Aqoon<span style={{color:'var(--brand-secondary)'}}>Jire</span></h2>
               <span style={{color:'var(--brand-secondary)',fontSize:10,textTransform:'capitalize',letterSpacing:'.04em'}}>{user?.role} Portal</span>
             </div>
           </div>

@@ -118,12 +118,12 @@ const generateCertificatePDF = async ({ studentName, courseName, teacherName, ce
         .lineWidth(1).strokeColor('#333').stroke();
       doc.fontSize(11).fillColor('#333')
         .text('Platform Director', sig2X, sigY + 5, { width: 160, align: 'center' })
-        .text('Somalia E-Learning', sig2X, sigY + 20, { width: 160, align: 'center' });
+        .text('AqoonJire', sig2X, sigY + 20, { width: 160, align: 'center' });
 
       // ─── FOOTER ────────────────────────────────────────────────────
       doc.rect(30, H - 70, W - 60, 40).fill('#1a5276');
       doc.fontSize(10).fillColor('#ffffff')
-        .text('Somalia E-Learning Platform  •  Verify at: elearning.so/verify', 0, H - 57, { align: 'center' });
+        .text('AqoonJire  •  Verify at: aqoonjire.com/verify', 0, H - 57, { align: 'center' });
 
       doc.end();
 

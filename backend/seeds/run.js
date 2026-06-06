@@ -45,7 +45,7 @@ async function seed() {
       { id: uuidv4(), name: 'Arabic Language', icon: 'book' },
       { id: uuidv4(), name: 'English Language', icon: 'globe' },
       { id: uuidv4(), name: 'Mathematics', icon: 'calculator' },
-      { id: uuidv4(), name: 'Health & Medicine', icon: 'heart' },
+      { id: uuidv4(), name: 'Health & Medicine', icon: 'stethoscope' },
     ];
 
     for (const cat of categories) {

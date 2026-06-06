@@ -15,7 +15,7 @@ const createTransporter = () => {
   });
 };
 
-const FROM = `"${process.env.PLATFORM_NAME || 'Somalia E-Learning'}" <${process.env.SMTP_USER}>`;
+const FROM = `"${process.env.PLATFORM_NAME || 'AqoonJire'}" <${process.env.SMTP_USER}>`;
 
 // ─── EMAIL TEMPLATES ──────────────────────────────────────────────────────
 
@@ -218,7 +218,7 @@ const sendEmail = async ({ to, subject, html }) => {
 const sendSignupWelcomeEmail = async ({ email, fullName, loginUrl }) => {
   const html = baseTemplate(`
     <p>Hello <strong>${fullName}</strong>,</p>
-    <p>Welcome to <strong>SomaliLearn</strong>! Your free account is ready.</p>
+    <p>Welcome to <strong>AqoonJire</strong>! Your free account is ready.</p>
     <div class="highlight">
       Browse our course catalog anytime. When you're ready to enroll in a paid course,
       contact our team — we'll unlock your courses after payment.
@@ -227,14 +227,14 @@ const sendSignupWelcomeEmail = async ({ email, fullName, loginUrl }) => {
     <a href="${loginUrl || process.env.FRONTEND_URL + '/student'}" class="btn">Go to My Dashboard</a>
     <p>Questions? Reply to this email or message us on WhatsApp.</p>
   `);
-  return sendEmail({ to: email, subject: 'Welcome to SomaliLearn — account created!', html });
+  return sendEmail({ to: email, subject: 'Welcome to AqoonJire — account created!', html });
 };
 
 // Welcome email when admin creates a student account
 const sendWelcomeEmail = async ({ email, fullName, password, loginUrl }) => {
   const html = baseTemplate(`
     <p>Hello <strong>${fullName}</strong>,</p>
-    <p>Your account on the <strong>Somalia E-Learning Platform</strong> has been created. You can now log in and start learning!</p>
+    <p>Your account on <strong>AqoonJire</strong> has been created. You can now log in and start learning!</p>
     <div class="highlight">
       <strong>Your Login Details:</strong><br>
       Email: <code>${email}</code><br>
@@ -244,7 +244,7 @@ const sendWelcomeEmail = async ({ email, fullName, password, loginUrl }) => {
     <a href="${loginUrl || process.env.FRONTEND_URL + '/login'}" class="btn">Login Now</a>
     <p>If you have any questions, contact our admin team.</p>
   `);
-  return sendEmail({ to: email, subject: 'Welcome to Somalia E-Learning Platform!', html });
+  return sendEmail({ to: email, subject: 'Welcome to AqoonJire!', html });
 };
 
 // Notify student that they've been enrolled in a course

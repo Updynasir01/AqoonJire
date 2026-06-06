@@ -10,6 +10,7 @@ import About from './pages/public/About.jsx'
 import Contact from './pages/public/Contact.jsx'
 import Login from './pages/public/Login.jsx'
 import Register from './pages/public/Register.jsx'
+import FAQ from './pages/public/FAQ.jsx'
 
 import AdminDashboard from './pages/admin/Dashboard.jsx'
 import AdminUsers from './pages/admin/Users.jsx'
@@ -26,6 +27,7 @@ import AdminBundles from './pages/admin/Bundles.jsx'
 import AdminFunnel from './pages/admin/Funnel.jsx'
 import AdminReferrals from './pages/admin/Referrals.jsx'
 import AdminBroadcast from './pages/admin/Broadcast.jsx'
+import AdminFAQs from './pages/admin/FAQs.jsx'
 
 import TeacherDashboard from './pages/teacher/Dashboard.jsx'
 import TeacherCourses from './pages/teacher/Courses.jsx'
@@ -71,6 +73,7 @@ export default function App() {
             <Route path="/courses/:slug" element={<CourseDetail />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="/login" element={<RedirectIfGuest><Login /></RedirectIfGuest>} />
             <Route path="/register" element={<RedirectIfGuest><Register /></RedirectIfGuest>} />
 
@@ -89,6 +92,7 @@ export default function App() {
             <Route path="/admin/funnel" element={<RequireAuth roles={['admin']}><AdminFunnel /></RequireAuth>} />
             <Route path="/admin/referrals" element={<RequireAuth roles={['admin']}><AdminReferrals /></RequireAuth>} />
             <Route path="/admin/broadcast" element={<RequireAuth roles={['admin']}><AdminBroadcast /></RequireAuth>} />
+            <Route path="/admin/faqs" element={<RequireAuth roles={['admin']}><AdminFAQs /></RequireAuth>} />
 
             <Route path="/teacher" element={<RequireAuth roles={['teacher','admin']}><TeacherDashboard /></RequireAuth>} />
             <Route path="/teacher/courses" element={<RequireAuth roles={['teacher','admin']}><TeacherCourses /></RequireAuth>} />

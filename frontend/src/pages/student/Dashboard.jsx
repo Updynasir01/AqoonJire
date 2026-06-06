@@ -157,7 +157,7 @@ export default function StudentDashboard() {
           <p style={{ fontSize:14, marginBottom:24 }}>Your account is active! Browse courses below — when you're ready to enroll, contact us on WhatsApp and we'll unlock your courses after payment.</p>
           <div style={{ display:'flex', gap:10, justifyContent:'center', flexWrap:'wrap' }}>
             <Link to="/courses" className="btn btn-primary">Browse Courses</Link>
-            <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-secondary">WhatsApp to Enroll</a>
+            <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-secondary">WhatsApp to Enroll</a>
           </div>
         </div>
       )}

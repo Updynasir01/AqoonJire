@@ -46,14 +46,14 @@ CREATE TABLE IF NOT EXISTS site_settings (
 
 -- Default settings
 INSERT INTO site_settings (key, value) VALUES
-  ('platform_name',    'Somalia E-Learning'),
+  ('platform_name',    'AqoonJire'),
   ('platform_tagline', 'Quality Education for Everyone'),
   ('contact_email',    'info@aqoonjire.com'),
-  ('contact_phone',    '+252 61 0000000'),
+  ('contact_phone',    '+252 61 031 7264'),
   ('contact_address',  'Mogadishu, Somalia'),
   ('hero_title',       'Learn New Skills Online'),
   ('hero_subtitle',    'Access quality courses taught by expert instructors'),
-  ('footer_text',      '© 2024 Somalia E-Learning Platform'),
+  ('footer_text',      '© 2026 AqoonJire'),
   ('currency_default', 'USD'),
   ('primary_color',    '#1a5276')
 ON CONFLICT (key) DO NOTHING;

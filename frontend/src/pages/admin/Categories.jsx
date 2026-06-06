@@ -5,7 +5,7 @@ import { categoryAPI } from '../../services/api'
 import toast from 'react-hot-toast'
 import { Plus, Edit, Trash2, BookMarked } from 'lucide-react'
 
-const ICONS = ['laptop','briefcase','book','globe','calculator','heart','star','music','flask','pencil']
+const ICONS = ['laptop','briefcase','book','globe','calculator','stethoscope','heart','star','music','flask','pencil']
 
 export default function Categories() {
   const [cats, setCats] = useState([])
@@ -37,7 +37,7 @@ export default function Categories() {
     finally { setSaving(false) }
   }
 
-  const emojiFor = icon => ({ laptop:'💻', briefcase:'💼', book:'📖', globe:'🌍', calculator:'🔢', heart:'❤️', star:'⭐', music:'🎵', flask:'🧪', pencil:'✏️' }[icon] || '📚')
+  const emojiFor = icon => ({ laptop:'💻', briefcase:'💼', book:'📖', globe:'🌍', calculator:'🔢', stethoscope:'🩺', heart:'❤️', star:'⭐', music:'🎵', flask:'🧪', pencil:'✏️' }[icon] || '📚')
 
   return (
     <DashboardLayout title="Categories">

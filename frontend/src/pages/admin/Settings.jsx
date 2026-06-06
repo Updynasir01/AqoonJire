@@ -139,7 +139,7 @@ export default function Settings() {
         <div className="card">
           <div className="card-body">
             <h3 style={{ fontSize: 16, marginBottom: 20 }}>Platform Identity</h3>
-            {field('platform_name', 'Platform Name', 'text', 'Somalia E-Learning')}
+            {field('platform_name', 'Platform Name', 'text', 'AqoonJire')}
             {field('platform_tagline', 'Tagline', 'text', 'Quality Education for Everyone')}
             {field('primary_color', 'Primary Color', 'color')}
             {field('logo_url', 'Logo URL', 'url')}
@@ -159,7 +159,7 @@ export default function Settings() {
           <div className="card-body">
             <h3 style={{ fontSize: 16, marginBottom: 20 }}>Contact Information</h3>
             {field('contact_email', 'Email', 'email', 'info@aqoonjire.com')}
-            {field('contact_phone', 'Phone', 'tel', '+252 61 0000000')}
+            {field('contact_phone', 'Phone', 'tel', '+252 61 031 7264')}
             {field('contact_address', 'Address', 'text', 'Mogadishu, Somalia')}
             {field('whatsapp_number', 'WhatsApp Number', 'tel')}
           </div>

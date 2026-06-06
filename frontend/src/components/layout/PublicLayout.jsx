@@ -2,7 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
-import { Sun, Moon, Menu, X, ChevronRight, Mail, Phone, MapPin } from 'lucide-react'
+import { Sun, Moon, Menu, X, ChevronRight, Mail, Phone, MapPin, Facebook, Linkedin, Instagram } from 'lucide-react'
+
+const TikTokIcon = ({ size = 16 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
+    <path d="M16.5 3c.3 2.1 1.6 3.6 3.5 3.85v2.3c-1.2.1-2.4-.2-3.5-.83v5.93c0 3-2.1 5.32-5 5.32s-5-2.3-5-5.12 2.4-5.12 5.3-4.92v2.42c-.3-.1-.6-.13-.9-.13-1.4 0-2.5 1.13-2.5 2.63s1.1 2.6 2.5 2.6 2.6-1.2 2.6-2.7V3h2.5z"/>
+  </svg>
+)
 
 export function Navbar() {
   const { user } = useAuth()
@@ -19,7 +25,7 @@ export function Navbar() {
 
   useEffect(() => { setMobileOpen(false) }, [location.pathname])
 
-  const links = [{ to: '/', label: 'Home' }, { to: '/courses', label: 'Courses' }, { to: '/about', label: 'About' }, { to: '/contact', label: 'Contact' }]
+  const links = [{ to: '/', label: 'Home' }, { to: '/courses', label: 'Courses' }, { to: '/about', label: 'About' }, { to: '/faq', label: 'FAQ' }, { to: '/contact', label: 'Contact' }]
   const dashPath = user ? `/${user.role}` : '/login'
   const overDark = !scrolled && (
     location.pathname === '/about' ||
@@ -32,8 +38,8 @@ export function Navbar() {
       <nav className={`pub-nav${scrolled ? ' scrolled' : ''}${overDark ? ' over-dark' : ''}`} style={{ background: scrolled ? undefined : 'transparent' }}>
         <div className="pub-nav-inner">
           <Link to="/" className="pub-logo">
-            <div className="pub-logo-mark">S</div>
-            <span className="pub-logo-text">Somali<em>Learn</em></span>
+            <div className="pub-logo-mark">A</div>
+            <span className="pub-logo-text">Aqoon<em>Jire</em></span>
           </Link>
 
           <div className="pub-nav-links" style={{ display: 'flex' }}>
@@ -90,22 +96,31 @@ export function Footer() {
         <div className="pub-footer-grid">
           <div>
             <div className="pub-footer-brand-logo">
-              <div className="pub-logo-mark" style={{ width: 36, height: 36, fontSize: 16 }}>S</div>
-              <span className="pub-footer-brand-text">Somali<em>Learn</em></span>
+              <div className="pub-logo-mark" style={{ width: 36, height: 36, fontSize: 16 }}>A</div>
+              <span className="pub-footer-brand-text">Aqoon<em>Jire</em></span>
             </div>
             <p className="pub-footer-brand-desc">
               Empowering Somalia through quality education. Learn from expert instructors in your own language, earn certificates, and build your future.
             </p>
             <div className="pub-footer-socials">
-              {['F', 'T', 'in', 'YT'].map(s => (
-                <div key={s} className="pub-footer-social">{s}</div>
-              ))}
+              <a href="https://www.facebook.com/AqoonjirePlatform/" target="_blank" rel="noreferrer" className="pub-footer-social" title="Facebook" aria-label="Facebook">
+                <Facebook size={16} />
+              </a>
+              <a href="https://www.linkedin.com/company/aqoonjire/" target="_blank" rel="noreferrer" className="pub-footer-social" title="LinkedIn" aria-label="LinkedIn">
+                <Linkedin size={16} />
+              </a>
+              <a href="https://www.instagram.com/aqoonjireplatform" target="_blank" rel="noreferrer" className="pub-footer-social" title="Instagram" aria-label="Instagram">
+                <Instagram size={16} />
+              </a>
+              <a href="https://www.tiktok.com/@aqoonjireplatform" target="_blank" rel="noreferrer" className="pub-footer-social" title="TikTok" aria-label="TikTok">
+                <TikTokIcon size={16} />
+              </a>
             </div>
           </div>
 
           <div>
             <div className="pub-footer-col-title">Platform</div>
-            {[['/', 'Home'], ['/courses', 'Browse Courses'], ['/about', 'About Us'], ['/contact', 'Contact Us'], ['/login', 'Student Login']].map(([to, label]) => (
+            {[['/', 'Home'], ['/courses', 'Browse Courses'], ['/about', 'About Us'], ['/faq', 'FAQ'], ['/contact', 'Contact Us'], ['/login', 'Student Login']].map(([to, label]) => (
               <Link key={to} to={to} className="pub-footer-link">{label}</Link>
             ))}
           </div>
@@ -122,20 +137,20 @@ export function Footer() {
             <a href="mailto:info@aqoonjire.com" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               <Mail size={13} color="var(--brand-secondary)"/> info@aqoonjire.com
             </a>
-            <a href="tel:+252610000000" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              <Phone size={13} color="var(--brand-secondary)"/> +252 61 000 0000
+            <a href="tel:+252610317264" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <Phone size={13} color="var(--brand-secondary)"/> +252 61 031 7264
             </a>
             <a href="#" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               <MapPin size={13} color="var(--brand-secondary)"/> Mogadishu, Somalia
             </a>
-            <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm" style={{ marginTop: 16 }}>
+            <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm" style={{ marginTop: 16 }}>
               📱 WhatsApp Us
             </a>
           </div>
         </div>
 
         <div className="pub-footer-bottom">
-          <span className="pub-footer-copy">© {new Date().getFullYear()} SomaliLearn Platform. All rights reserved.</span>
+          <span className="pub-footer-copy">© {new Date().getFullYear()} AqoonJire. All rights reserved.</span>
           <div className="pub-footer-legal">
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>

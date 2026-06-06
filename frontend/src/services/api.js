@@ -244,3 +244,11 @@ export const broadcastAPI = {
   send: d => api.post('/admin/broadcasts', d),
   get: id => api.get(`/admin/broadcasts/${id}`),
 }
+
+export const siteFaqAPI = {
+  publicList: () => api.get('/site-faqs'),
+  list: () => api.get('/admin/site-faqs'),
+  create: d => api.post('/admin/site-faqs', d),
+  update: (id, d) => api.put(`/admin/site-faqs/${id}`, d),
+  delete: id => api.delete(`/admin/site-faqs/${id}`),
+}

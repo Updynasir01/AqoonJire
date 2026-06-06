@@ -67,7 +67,7 @@ export default function Register() {
                   <span style={{ fontSize: 16 }}>{e}</span>{t}
                 </div>
               ))}
-              <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', marginTop: 10 }}>
+              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', marginTop: 10 }}>
                 📱 Contact us on WhatsApp
               </a>
             </div>
@@ -87,8 +87,8 @@ export default function Register() {
         <div className="login-left-grid"/><div className="login-left-orb"/>
         <div style={{position:'relative',zIndex:1}}>
           <Link to="/" style={{display:'flex',alignItems:'center',gap:10,marginBottom:52}}>
-            <div className="pub-logo-mark" style={{width:40,height:40,fontSize:18}}>S</div>
-            <span style={{fontFamily:'Syne,sans-serif',fontSize:20,fontWeight:800,color:'#fff'}}>Somali<span style={{color:'var(--brand-secondary)'}}>Learn</span></span>
+            <div className="pub-logo-mark" style={{width:40,height:40,fontSize:18}}>A</div>
+            <span style={{fontFamily:'Syne,sans-serif',fontSize:20,fontWeight:800,color:'#fff'}}>Aqoon<span style={{color:'var(--brand-secondary)'}}>Jire</span></span>
           </Link>
           <h1 style={{color:'#fff',fontSize:'clamp(2rem,3.5vw,3rem)',fontWeight:800,letterSpacing:'-0.03em',lineHeight:1.1,marginBottom:18}}>Join Free.<br/>Learn When You're Ready.</h1>
           <p style={{color:'rgba(255,255,255,0.55)',fontSize:15,lineHeight:1.8,marginBottom:48,maxWidth:380}}>Create a free account to browse courses and get notified about new launches. Course access is unlocked after you enroll with our team.</p>
@@ -144,7 +144,7 @@ export default function Register() {
             </button>
           </form>
           <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 16, lineHeight: 1.6 }}>
-            By signing up you agree to receive course updates and announcements. Course access requires enrollment — <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" style={{ color: 'var(--brand-secondary)' }}>contact us on WhatsApp</a> when ready.
+            By signing up you agree to receive course updates and announcements. Course access requires enrollment — <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" style={{ color: 'var(--brand-secondary)' }}>contact us on WhatsApp</a> when ready.
           </p>
         </div>
       </div>

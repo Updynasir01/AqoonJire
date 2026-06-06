@@ -111,7 +111,7 @@ export default function CourseDetail() {
               </div>
               <div style={{ fontSize:12,color:'var(--text-muted)',marginBottom:20 }}>One-time payment · Lifetime access</div>
 
-              <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer"
+              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer"
                 className="btn btn-secondary btn-lg" style={{ width:'100%',justifyContent:'center',marginBottom:10 }}>
                 📱 Enroll via WhatsApp
               </a>
@@ -232,7 +232,7 @@ export default function CourseDetail() {
           <div style={{ background:'var(--bg-card)',borderRadius:20,border:'1px solid var(--border)',padding:28,marginBottom:16 }}>
             <h3 style={{ fontSize:17,marginBottom:14 }}>Ready to Start?</h3>
             <p style={{ fontSize:13,color:'var(--text-muted)',lineHeight:1.75,marginBottom:20 }}>Contact us on WhatsApp after payment. Account created within 24 hours.</p>
-            <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ width:'100%',justifyContent:'center',marginBottom:10 }}>📱 WhatsApp to Enroll</a>
+            <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ width:'100%',justifyContent:'center',marginBottom:10 }}>📱 WhatsApp to Enroll</a>
             <Link to="/login" className="btn btn-glass btn-sm" style={{ width:'100%',justifyContent:'center' }}>Already have an account?</Link>
           </div>
 
