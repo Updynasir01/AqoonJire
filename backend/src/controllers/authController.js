@@ -17,7 +17,7 @@ const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const result = await query(
-    'SELECT id, full_name, email, password_hash, role, is_active, profile_photo FROM users WHERE email = $1',
+    'SELECT id, full_name, email, password_hash, role, is_active, is_approved, profile_photo FROM users WHERE email = $1',
     [email.toLowerCase().trim()]
   );
 
@@ -34,6 +34,14 @@ const login = asyncHandler(async (req, res) => {
   const passwordMatch = await bcrypt.compare(password, user.password_hash);
   if (!passwordMatch) {
     return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+  }
+
+  // Subscribers (registered but not yet granted a course) can't log in to a dashboard yet.
+  if (user.role === 'student' && user.is_approved === false) {
+    return res.status(403).json({
+      success: false,
+      message: "You're registered for our updates! To access a course, contact us with this email and we'll unlock your dashboard."
+    });
   }
 
   // Update last login
@@ -86,9 +94,12 @@ const register = asyncHandler(async (req, res) => {
     if (ref.rows.length) referrerId = ref.rows[0].id;
   }
 
+  // New public sign-ups are subscribers only (is_approved = FALSE):
+  // they receive newsletters/announcements but get no dashboard access
+  // until an admin grants them a course.
   const result = await query(
-    `INSERT INTO users (id, full_name, email, password_hash, role, phone, referral_code, referred_by)
-     VALUES ($1, $2, $3, $4, 'student', $5, $6, $7)
+    `INSERT INTO users (id, full_name, email, password_hash, role, phone, referral_code, referred_by, is_approved)
+     VALUES ($1, $2, $3, $4, 'student', $5, $6, $7, FALSE)
      RETURNING id, full_name, email, role, phone, profile_photo`,
     [id, full_name.trim(), normalizedEmail, password_hash, phone?.trim() || null, ownReferralCode, referrerId]
   );
@@ -111,23 +122,16 @@ const register = asyncHandler(async (req, res) => {
 
   logEvent({ userId: id, type: 'signup' }).catch(() => {});
 
-  const token = jwt.sign(
-    { id: user.id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-  );
-
+  // No token issued — subscribers don't get dashboard access yet.
+  // They must contact us to be granted a course, which approves them.
   res.status(201).json({
     success: true,
-    message: 'Account created! Browse courses anytime — contact us when you are ready to enroll.',
+    message: "We're happy to have you! You'll now get our updates, new courses and special offers by email. To start a course, contact us with this email and we'll unlock it for you.",
     data: {
-      token,
       user: {
         id: user.id,
         full_name: user.full_name,
-        email: user.email,
-        role: user.role,
-        profile_photo: user.profile_photo
+        email: user.email
       }
     }
   });

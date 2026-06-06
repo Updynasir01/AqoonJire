@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS site_settings (
 INSERT INTO site_settings (key, value) VALUES
   ('platform_name',    'Somalia E-Learning'),
   ('platform_tagline', 'Quality Education for Everyone'),
-  ('contact_email',    'info@elearning.so'),
+  ('contact_email',    'info@aqoonjire.com'),
   ('contact_phone',    '+252 61 0000000'),
   ('contact_address',  'Mogadishu, Somalia'),
   ('hero_title',       'Learn New Skills Online'),

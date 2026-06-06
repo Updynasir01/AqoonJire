@@ -29,7 +29,7 @@ const getUsers = asyncHandler(async (req, res) => {
   const total = parseInt(countResult.rows[0].count);
 
   const result = await query(
-    `SELECT u.id, u.full_name, u.email, u.role, u.phone, u.is_active,
+    `SELECT u.id, u.full_name, u.email, u.role, u.phone, u.is_active, u.is_approved,
             u.last_login, u.created_at, u.profile_photo
      FROM users u WHERE ${where}
      ORDER BY u.created_at DESC LIMIT $${i} OFFSET $${i + 1}`,
@@ -93,7 +93,7 @@ const createUser = asyncHandler(async (req, res) => {
 // GET /api/admin/users/:id
 const getUser = asyncHandler(async (req, res) => {
   const result = await query(
-    `SELECT id, full_name, email, role, phone, bio, profile_photo, is_active, last_login, created_at
+    `SELECT id, full_name, email, role, phone, bio, profile_photo, is_active, is_approved, last_login, created_at
      FROM users WHERE id = $1`,
     [req.params.id]
   );
@@ -119,7 +119,7 @@ const getUser = asyncHandler(async (req, res) => {
 
 // PUT /api/admin/users/:id
 const updateUser = asyncHandler(async (req, res) => {
-  const { full_name, phone, is_active } = req.body;
+  const { full_name, phone, is_active, is_approved } = req.body;
   const fields = [];
   const values = [];
   let i = 1;
@@ -127,13 +127,14 @@ const updateUser = asyncHandler(async (req, res) => {
   if (full_name) { fields.push(`full_name = $${i++}`); values.push(full_name); }
   if (phone !== undefined) { fields.push(`phone = $${i++}`); values.push(phone); }
   if (is_active !== undefined) { fields.push(`is_active = $${i++}`); values.push(is_active); }
+  if (is_approved !== undefined) { fields.push(`is_approved = $${i++}`); values.push(is_approved); }
 
   if (!fields.length) throw createError('Nothing to update.');
   fields.push(`updated_at = NOW()`);
   values.push(req.params.id);
 
   const result = await query(
-    `UPDATE users SET ${fields.join(', ')} WHERE id = $${i} RETURNING id, full_name, email, role, phone, is_active`,
+    `UPDATE users SET ${fields.join(', ')} WHERE id = $${i} RETURNING id, full_name, email, role, phone, is_active, is_approved`,
     values
   );
   if (!result.rows.length) throw createError('User not found.', 404);
@@ -203,6 +204,9 @@ const grantAccess = asyncHandler(async (req, res) => {
      RETURNING *`,
     [studentId, course_id, req.user.id, notes || null]
   );
+
+  // Granting a course approves the student — unlocks dashboard/login access.
+  await query(`UPDATE users SET is_approved = TRUE WHERE id = $1`, [studentId]);
 
   // Update total_students count
   await query(

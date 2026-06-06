@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
 import { adminAPI } from '../../services/api'
-import { LayoutDashboard, BookOpen, Users, Settings, LogOut, FileText, ClipboardList, Megaphone, Award, Home, Menu, X, CreditCard, BarChart2, ShieldCheck, BookMarked, Sun, Moon, Ticket, Package, TrendingUp, Share2, Video, MessageSquare, Gift } from 'lucide-react'
+import { LayoutDashboard, BookOpen, Users, Settings, LogOut, FileText, ClipboardList, Megaphone, Award, Home, Menu, X, CreditCard, BarChart2, ShieldCheck, BookMarked, Sun, Moon, Ticket, Package, TrendingUp, Share2, Video, MessageSquare, Gift, Send } from 'lucide-react'
 
 const NAV = {
   admin: [
@@ -23,6 +23,7 @@ const NAV = {
       { to:'/admin/bundles', icon:<Package size={15}/>, label:'Bundles & Plans' },
       { to:'/admin/funnel', icon:<TrendingUp size={15}/>, label:'Funnel Analytics' },
       { to:'/admin/referrals', icon:<Share2 size={15}/>, label:'Referrals' },
+      { to:'/admin/broadcast', icon:<Send size={15}/>, label:'Email Broadcast' },
     ]},
     { label:'Content', items:[
       { to:'/admin/categories', icon:<BookMarked size={15}/>, label:'Categories' },

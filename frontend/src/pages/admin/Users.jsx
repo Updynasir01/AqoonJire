@@ -4,7 +4,7 @@ import DashboardLayout from '../../components/layout/DashboardLayout.jsx'
 import { Modal, ConfirmModal, Spinner, Badge, EmptyState } from '../../components/common/index.jsx'
 import { adminAPI } from '../../services/api'
 import toast from 'react-hot-toast'
-import { UserPlus, Search, RefreshCw, Ban, Eye, KeyRound } from 'lucide-react'
+import { UserPlus, Search, RefreshCw, Ban, Eye, KeyRound, CheckCircle } from 'lucide-react'
 
 export default function AdminUsers() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -52,6 +52,16 @@ export default function AdminUsers() {
       setConfirmDeactivate(null)
       load()
     } catch { toast.error('Failed') }
+    finally { setSaving(false) }
+  }
+
+  const handleApprove = async (u) => {
+    setSaving(true)
+    try {
+      await adminAPI.updateUser(u.id, { is_approved: true })
+      toast.success(`${u.full_name} approved — dashboard unlocked`)
+      load()
+    } catch { toast.error('Failed to approve') }
     finally { setSaving(false) }
   }
 
@@ -103,14 +113,14 @@ export default function AdminUsers() {
           <table>
             <thead>
               <tr>
-                <th>Name</th><th>Email</th><th>Phone</th><th>Status</th><th>Joined</th><th>Actions</th>
+                <th>Name</th><th>Email</th><th>Phone</th><th>Status</th>{role === 'student' && <th>Access</th>}<th>Joined</th><th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', padding: 40 }}><Spinner /></td></tr>
+                <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40 }}><Spinner /></td></tr>
               ) : users.length === 0 ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', padding: 40, color: 'var(--text-muted)' }}>No users found.</td></tr>
+                <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: 'var(--text-muted)' }}>No users found.</td></tr>
               ) : users.map(u => (
                 <tr key={u.id}>
                   <td>
@@ -122,9 +132,15 @@ export default function AdminUsers() {
                   <td style={{ color: 'var(--text-muted)' }}>{u.email}</td>
                   <td style={{ color: 'var(--text-muted)' }}>{u.phone || '—'}</td>
                   <td><Badge variant={u.is_active ? 'success' : 'danger'}>{u.is_active ? 'Active' : 'Inactive'}</Badge></td>
+                  {role === 'student' && (
+                    <td><Badge variant={u.is_approved ? 'success' : 'warning'}>{u.is_approved ? 'Approved' : 'Subscriber'}</Badge></td>
+                  )}
                   <td style={{ color: 'var(--text-muted)' }}>{new Date(u.created_at).toLocaleDateString()}</td>
                   <td>
                     <div style={{ display: 'flex', gap: 6 }}>
+                      {role === 'student' && !u.is_approved && (
+                        <button className="btn btn-secondary btn-sm" onClick={() => handleApprove(u)} disabled={saving} title="Approve & unlock dashboard"><CheckCircle size={14} /> Approve</button>
+                      )}
                       <Link to={`/admin/users/${u.id}`} className="btn btn-ghost btn-sm"><Eye size={14} /></Link>
                       <button className="btn btn-ghost btn-sm" onClick={() => { setResetModal(u); setResetPw('') }} title="Reset password"><KeyRound size={14} /></button>
                       {u.is_active && role !== 'admin' && (

@@ -41,7 +41,7 @@ export default function Contact() {
               </div>
               <h3 style={{ marginBottom: 8 }}>Email Support</h3>
               <p style={{ color: 'var(--text-muted)', marginBottom: 14 }}>Send us your questions anytime.</p>
-              <a href="mailto:info@elearning.so" className="pub-footer-link" style={{ marginBottom: 0 }}>info@elearning.so</a>
+              <a href="mailto:info@aqoonjire.com" className="pub-footer-link" style={{ marginBottom: 0 }}>info@aqoonjire.com</a>
             </div>
 
             <div className="card card-body">

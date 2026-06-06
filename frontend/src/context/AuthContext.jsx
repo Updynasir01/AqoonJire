@@ -32,11 +32,9 @@ export function AuthProvider({ children }) {
 
   const register = async (data) => {
     const r = await authAPI.register(data)
-    const { token, user: u } = r.data.data
-    localStorage.setItem('token', token)
-    localStorage.setItem('user', JSON.stringify(u))
-    setUser(u)
-    return u
+    // New sign-ups are subscribers — no token, no dashboard access yet.
+    // Return the server message so the UI can show the confirmation.
+    return { message: r.data.message, user: r.data.data?.user }
   }
 
   const logout = () => {

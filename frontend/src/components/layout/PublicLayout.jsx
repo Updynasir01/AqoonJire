@@ -119,8 +119,8 @@ export function Footer() {
 
           <div>
             <div className="pub-footer-col-title">Contact</div>
-            <a href="mailto:info@elearning.so" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              <Mail size={13} color="var(--brand-secondary)"/> info@elearning.so
+            <a href="mailto:info@aqoonjire.com" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <Mail size={13} color="var(--brand-secondary)"/> info@aqoonjire.com
             </a>
             <a href="tel:+252610000000" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               <Phone size={13} color="var(--brand-secondary)"/> +252 61 000 0000

@@ -25,6 +25,7 @@ import AdminCoupons from './pages/admin/Coupons.jsx'
 import AdminBundles from './pages/admin/Bundles.jsx'
 import AdminFunnel from './pages/admin/Funnel.jsx'
 import AdminReferrals from './pages/admin/Referrals.jsx'
+import AdminBroadcast from './pages/admin/Broadcast.jsx'
 
 import TeacherDashboard from './pages/teacher/Dashboard.jsx'
 import TeacherCourses from './pages/teacher/Courses.jsx'
@@ -87,6 +88,7 @@ export default function App() {
             <Route path="/admin/bundles" element={<RequireAuth roles={['admin']}><AdminBundles /></RequireAuth>} />
             <Route path="/admin/funnel" element={<RequireAuth roles={['admin']}><AdminFunnel /></RequireAuth>} />
             <Route path="/admin/referrals" element={<RequireAuth roles={['admin']}><AdminReferrals /></RequireAuth>} />
+            <Route path="/admin/broadcast" element={<RequireAuth roles={['admin']}><AdminBroadcast /></RequireAuth>} />
 
             <Route path="/teacher" element={<RequireAuth roles={['teacher','admin']}><TeacherDashboard /></RequireAuth>} />
             <Route path="/teacher/courses" element={<RequireAuth roles={['teacher','admin']}><TeacherCourses /></RequireAuth>} />

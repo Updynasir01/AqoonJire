@@ -237,3 +237,10 @@ export const slaAPI = {
   metrics: () => api.get('/teacher/sla'),
   inbox: () => api.get('/teacher/sla/inbox'),
 }
+
+export const broadcastAPI = {
+  list: () => api.get('/admin/broadcasts'),
+  preview: d => api.post('/admin/broadcasts/preview', d),
+  send: d => api.post('/admin/broadcasts', d),
+  get: id => api.get(`/admin/broadcasts/${id}`),
+}

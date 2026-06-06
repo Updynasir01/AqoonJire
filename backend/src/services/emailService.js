@@ -2,10 +2,12 @@ const nodemailer = require('nodemailer');
 
 // Create transporter — configure via .env
 const createTransporter = () => {
+  const port = parseInt(process.env.SMTP_PORT) || 587;
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.SMTP_PORT) || 587,
-    secure: false,
+    host: process.env.SMTP_HOST || 'smtp.hostinger.com',
+    port,
+    // Port 465 uses implicit SSL; 587 uses STARTTLS
+    secure: port === 465,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
@@ -17,6 +19,9 @@ const FROM = `"${process.env.PLATFORM_NAME || 'Somalia E-Learning'}" <${process.
 
 // ─── EMAIL TEMPLATES ──────────────────────────────────────────────────────
 
+const PLATFORM = process.env.PLATFORM_NAME || 'AqoonJire';
+const SITE_URL = process.env.FRONTEND_URL || '#';
+
 const baseTemplate = (body) => `
 <!DOCTYPE html>
 <html>
@@ -25,22 +30,171 @@ const baseTemplate = (body) => `
   <style>
     body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
     .container { max-width: 600px; margin: 30px auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .header { background: #1a5276; padding: 28px 32px; text-align: center; }
+    .header { background: #280454; padding: 28px 32px; text-align: center; }
     .header h1 { color: #fff; margin: 0; font-size: 22px; }
     .body { padding: 32px; color: #333; line-height: 1.6; }
-    .btn { display: inline-block; margin: 20px 0; padding: 12px 28px; background: #1a5276; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; }
+    .btn { display: inline-block; margin: 20px 0; padding: 12px 28px; background: #00b898; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; }
     .footer { background: #f0f0f0; padding: 16px 32px; text-align: center; font-size: 12px; color: #888; }
-    .highlight { background: #eaf2ff; border-left: 4px solid #1a5276; padding: 12px 16px; border-radius: 4px; margin: 16px 0; }
+    .highlight { background: #eef0ff; border-left: 4px solid #280454; padding: 12px 16px; border-radius: 4px; margin: 16px 0; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header"><h1>Somalia E-Learning Platform</h1></div>
+    <div class="header"><h1>${PLATFORM}</h1></div>
     <div class="body">${body}</div>
-    <div class="footer">© ${new Date().getFullYear()} Somalia E-Learning Platform. All rights reserved.</div>
+    <div class="footer">© ${new Date().getFullYear()} ${PLATFORM}. All rights reserved.</div>
   </div>
 </body>
 </html>`;
+
+// ─── PREMIUM BROADCAST TEMPLATES ──────────────────────────────────────────
+// Table-based, inline-styled, bulletproof — renders cleanly in Gmail, Apple
+// Mail, Outlook, etc. Minimal, high-contrast, generous whitespace.
+
+const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+const INK = '#16151f';
+const MUTED = '#6b7280';
+
+// Bulletproof CTA button.
+const button = (label, url, color = '#280454') => `
+  <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="margin:4px 0;">
+    <tr><td align="center" bgcolor="${color}" style="border-radius:12px;">
+      <a href="${url}" target="_blank"
+         style="display:inline-block;padding:15px 34px;font-family:${FONT};font-size:15px;font-weight:700;line-height:1;color:#ffffff;text-decoration:none;border-radius:12px;letter-spacing:.2px;">${label}</a>
+    </td></tr>
+  </table>`;
+
+// Small uppercase eyebrow label.
+const eyebrow = (text, color) =>
+  `<div style="font-family:${FONT};font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${color};margin:0 0 12px;">${text}</div>`;
+
+// Premium course card.
+const courseCard = (course, ctaLabel, ctaColor) => {
+  if (!course) return '';
+  const img = course.thumbnail && /^https?:\/\//i.test(course.thumbnail)
+    ? `<img src="${course.thumbnail}" alt="${course.title}" width="536" style="width:100%;display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;">`
+    : `<div style="height:8px;background:linear-gradient(90deg,#280454,#00b898);"></div>`;
+  const price = Number(course.price) > 0 ? `$${Number(course.price)}` : 'Free';
+  const meta = [course.level, course.duration_hours ? `${course.duration_hours} hours` : null].filter(Boolean).join('  ·  ');
+  return `
+    <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%"
+           style="border:1px solid #ececf0;border-radius:16px;overflow:hidden;margin:8px 0 4px;">
+      <tr><td style="font-size:0;line-height:0;">${img}</td></tr>
+      <tr><td style="padding:22px 24px;font-family:${FONT};">
+        <div style="font-size:19px;font-weight:700;color:${INK};line-height:1.3;margin:0 0 6px;">${course.title}</div>
+        ${meta ? `<div style="font-size:13px;color:${MUTED};text-transform:capitalize;margin:0 0 14px;">${meta}</div>` : '<div style="height:6px;"></div>'}
+        <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%"><tr>
+          <td align="left" style="font-family:${FONT};font-size:20px;font-weight:800;color:${INK};">${price}</td>
+          <td align="right">${button(ctaLabel, `${SITE_URL}/courses/${course.slug}`, ctaColor)}</td>
+        </tr></table>
+      </td></tr>
+    </table>`;
+};
+
+// Outer shell — clean logo header, white card, refined footer with unsubscribe.
+const broadcastShell = (content, unsubscribeUrl) => `
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="color-scheme" content="light">
+  <title>${PLATFORM}</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f7;-webkit-font-smoothing:antialiased;">
+  <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%" style="background:#f4f4f7;">
+    <tr><td align="center" style="padding:32px 12px;">
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="600" style="width:600px;max-width:600px;">
+        <!-- Logo -->
+        <tr><td align="center" style="padding:4px 0 26px;font-family:${FONT};">
+          <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#280454;">Aqoon<span style="color:#00b898;">Jire</span></span>
+        </td></tr>
+        <!-- Card -->
+        <tr><td style="background:#ffffff;border:1px solid #ececf0;border-radius:20px;overflow:hidden;">
+          ${content}
+        </td></tr>
+        <!-- Footer -->
+        <tr><td align="center" style="padding:26px 24px 8px;font-family:${FONT};color:#9aa0aa;font-size:12px;line-height:1.7;">
+          <div style="font-weight:700;color:#6b7280;margin-bottom:4px;">${PLATFORM}</div>
+          <div>Learn in your language. Anytime, anywhere.</div>
+          <div style="margin-top:12px;">
+            <a href="${SITE_URL}/courses" style="color:#9aa0aa;text-decoration:none;">Courses</a> &nbsp;·&nbsp;
+            <a href="${unsubscribeUrl}" style="color:#9aa0aa;text-decoration:underline;">Unsubscribe</a>
+          </div>
+          <div style="margin-top:10px;">© ${new Date().getFullYear()} ${PLATFORM}. All rights reserved.</div>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+// Content padding wrapper.
+const contentWrap = (inner) =>
+  `<table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%"><tr>
+     <td style="padding:40px;font-family:${FONT};color:#3a3a46;font-size:16px;line-height:1.75;">${inner}</td>
+   </tr></table>`;
+
+const heroTitle = (title) =>
+  `<h1 style="margin:0 0 18px;font-family:${FONT};font-size:30px;line-height:1.2;font-weight:800;color:${INK};letter-spacing:-0.5px;">${title}</h1>`;
+
+const divider = `<div style="height:1px;background:#ececf0;margin:32px 0;line-height:1px;font-size:0;">&nbsp;</div>`;
+
+// Thin accent stripe at the top of the card.
+const accentStripe = (color) => `<div style="height:5px;background:${color};line-height:5px;font-size:0;">&nbsp;</div>`;
+
+// Builds the full inner card HTML (accent stripe + padded content) for a campaign type.
+const buildCampaignContent = ({ type, subject, bodyHtml, course, coupon }) => {
+  const title = subject || PLATFORM;
+
+  if (type === 'course_announcement') {
+    const inner =
+      eyebrow('New Course', '#00b898') +
+      heroTitle(title) +
+      `<p style="margin:0 0 24px;color:${MUTED};font-size:16px;">A brand-new course just landed — here's what you can start learning today.</p>` +
+      courseCard(course, 'View Course', '#00b898') +
+      divider +
+      `<div style="color:#3a3a46;">${bodyHtml}</div>`;
+    return accentStripe('#00b898') + contentWrap(inner);
+  }
+
+  if (type === 'discount_announcement') {
+    const offer = coupon
+      ? (coupon.discount_type === 'percent' ? `Save ${parseFloat(coupon.discount_value)}%` : `Save $${parseFloat(coupon.discount_value)}`)
+      : 'Special offer';
+    const expiry = coupon && coupon.expires_at
+      ? `<div style="font-family:${FONT};font-size:13px;color:#b45309;margin-top:12px;">Offer ends ${new Date(coupon.expires_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>`
+      : '';
+    const codeBox = coupon ? `
+      <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%" style="margin:8px 0 28px;">
+        <tr><td align="center"
+            style="background:#fff8ec;border:1px solid #fde3b3;border-radius:16px;padding:26px 24px;font-family:${FONT};">
+          <div style="font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#b45309;">${offer}</div>
+          <div style="font-size:13px;color:${MUTED};margin:6px 0 14px;">Use this code at checkout</div>
+          <div style="display:inline-block;background:#ffffff;border:2px dashed #f59e0b;border-radius:12px;padding:14px 30px;font-size:24px;font-weight:800;letter-spacing:3px;color:${INK};">${coupon.code}</div>
+          ${expiry}
+        </td></tr>
+      </table>` : '';
+    const inner =
+      eyebrow('Limited-time offer', '#f59e0b') +
+      heroTitle(title) +
+      codeBox +
+      courseCard(course, 'Enroll Now', '#f59e0b') +
+      divider +
+      `<div style="color:#3a3a46;">${bodyHtml}</div>`;
+    return accentStripe('#f59e0b') + contentWrap(inner);
+  }
+
+  // default: newsletter
+  const inner =
+    eyebrow('Newsletter', '#00b898') +
+    heroTitle(title) +
+    `<div style="color:#3a3a46;">${bodyHtml}</div>` +
+    divider +
+    `<div style="text-align:center;">${button('Browse Courses', `${SITE_URL}/courses`, '#280454')}</div>`;
+  return accentStripe('#280454') + contentWrap(inner);
+};
 
 // ─── SEND FUNCTIONS ───────────────────────────────────────────────────────
 
@@ -151,6 +305,13 @@ const sendPasswordResetEmail = async ({ email, fullName, newPassword }) => {
   return sendEmail({ to: email, subject: 'Your password has been reset', html });
 };
 
+// Broadcast / newsletter email — wraps the pre-built campaign content in the
+// professional branded shell, which ALWAYS includes a compliant unsubscribe link.
+const sendBroadcastEmail = async ({ to, subject, bodyHtml, unsubscribeUrl }) => {
+  const html = broadcastShell(bodyHtml, unsubscribeUrl);
+  return sendEmail({ to, subject, html });
+};
+
 // Re-engagement nudge — student inactive for a few days (Duolingo-style)
 const sendStreakReminder = async ({ email, fullName, daysInactive, currentStreak, courseName }) => {
   const streakLine = currentStreak > 0
@@ -169,5 +330,5 @@ const sendStreakReminder = async ({ email, fullName, daysInactive, currentStreak
 module.exports = {
   sendSignupWelcomeEmail, sendWelcomeEmail, sendEnrollmentEmail,
   sendGradeEmail, sendCertificateEmail, sendPasswordResetEmail,
-  sendStreakReminder, sendEmail
+  sendStreakReminder, sendEmail, sendBroadcastEmail, baseTemplate, buildCampaignContent, broadcastShell
 };

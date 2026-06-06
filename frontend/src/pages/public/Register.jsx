@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
-import { Eye, EyeOff, ArrowRight, Sun, Moon, BookOpen, Award, Users } from 'lucide-react'
+import { Eye, EyeOff, ArrowRight, Sun, Moon, BookOpen, Award, Users, CheckCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function Register() {
   const { register } = useAuth()
   const { toggle, isDark } = useTheme()
-  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const refCode = searchParams.get('ref') || ''
 
@@ -22,26 +21,64 @@ export default function Register() {
   const [loading, setLoading] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState(null)
 
   const handleSubmit = async e => {
     e.preventDefault()
     setError('')
     setLoading(true)
     try {
-      const user = await register({
+      const res = await register({
         full_name: form.full_name,
         email: form.email,
         password: form.password,
         phone: form.phone || undefined,
         referral_code: form.referral_code || undefined
       })
-      toast.success(`Welcome, ${user.full_name}! Your account is ready.`)
-      navigate('/student')
+      toast.success('You\'re in! Check your email.')
+      setSuccess({ name: form.full_name, email: form.email, message: res.message })
     } catch (err) {
       setError(err.response?.data?.message || 'Could not create account. Please try again.')
     } finally {
       setLoading(false)
     }
+  }
+
+  if (success) {
+    return (
+      <div className="login-shell">
+        <div className="login-right" style={{ width: '100%' }}>
+          <div style={{ width: '100%', maxWidth: 460, textAlign: 'center' }}>
+            <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'rgba(0,184,152,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: 'var(--brand-secondary)' }}>
+              <CheckCircle size={38} />
+            </div>
+            <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.025em', marginBottom: 12 }}>
+              Welcome, {success.name.split(' ')[0]}! 🎉
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: 15, lineHeight: 1.7, marginBottom: 24 }}>
+              {success.message || "You're now subscribed to our updates. You'll get new courses and special offers by email."}
+            </p>
+            <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border)', borderRadius: 16, padding: 22, textAlign: 'left', marginBottom: 24 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <BookOpen size={16} /> Want to start a course?
+              </div>
+              {[['📱', 'Contact us on WhatsApp'], ['📧', `Tell us your email: ${success.email}`], ['🎓', "We'll unlock the course & your dashboard"]].map(([e, t]) => (
+                <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 13, color: 'var(--text-muted)' }}>
+                  <span style={{ fontSize: 16 }}>{e}</span>{t}
+                </div>
+              ))}
+              <a href="https://wa.me/252610000000" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', marginTop: 10 }}>
+                📱 Contact us on WhatsApp
+              </a>
+            </div>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <Link to="/courses" className="btn btn-outline-teal" style={{ flex: 1, justifyContent: 'center' }}>Browse Courses</Link>
+              <Link to="/login" className="btn btn-ghost" style={{ flex: 1, justifyContent: 'center' }}>Sign in</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (

@@ -44,6 +44,7 @@ const referral     = require('../controllers/referralController');
 const funnel       = require('../controllers/funnelController');
 const streak       = require('../controllers/streakController');
 const faq          = require('../controllers/faqController');
+const broadcast    = require('../controllers/broadcastController');
 
 // ── PUBLIC ────────────────────────────────────────────────────────────────
 router.get('/landing',                         landing.getLandingData);
@@ -58,6 +59,7 @@ router.get('/courses/:slug',                   course.getCourse);
 router.get('/courses/:courseId/reviews',       review.getCourseReviews);
 router.get('/settings',                        settings.getSettings);
 router.get('/certificates/verify/:certNumber', certificate.verifyCertificate);
+router.get('/unsubscribe',                     broadcast.publicUnsubscribe);
 
 // ── AUTH ──────────────────────────────────────────────────────────────────
 router.post('/auth/login',           loginLimiter, loginRules, validate, auth.login);
@@ -266,5 +268,11 @@ router.put   ('/faqs/:id',               authenticate, teacherOrAdmin, faq.updat
 router.delete('/faqs/:id',               authenticate, teacherOrAdmin, faq.deleteFaq);
 router.get   ('/teacher/sla',            authenticate, teacherOrAdmin, faq.slaMetrics);
 router.get   ('/teacher/sla/inbox',      authenticate, teacherOrAdmin, faq.slaInbox);
+
+// ── EMAIL BROADCAST / NEWSLETTER ──────────────────────────────────────────
+router.get ('/admin/broadcasts',         authenticate, adminOnly, broadcast.listCampaigns);
+router.post('/admin/broadcasts/preview', authenticate, adminOnly, broadcast.previewAudience);
+router.post('/admin/broadcasts',         authenticate, adminOnly, broadcast.createAndSend);
+router.get ('/admin/broadcasts/:id',     authenticate, adminOnly, broadcast.getCampaign);
 
 module.exports = router;
