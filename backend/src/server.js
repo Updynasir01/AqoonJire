@@ -19,11 +19,23 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' } // Allow serving uploaded files
 }));
 
+// Accept one or more allowed origins (comma-separated in FRONTEND_URL),
+// plus localhost for development.
+const allowedOrigins = [
+  ...(process.env.FRONTEND_URL || 'http://localhost:3000')
+    .split(',')
+    .map(o => o.trim())
+    .filter(Boolean),
+  'http://localhost:3000',
+  'http://localhost:3001'
+];
+
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL || 'http://localhost:3000',
-    'http://localhost:3001'
-  ],
+  origin(origin, callback) {
+    // Allow non-browser requests (no origin) and any whitelisted origin.
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error(`Origin ${origin} not allowed by CORS`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
