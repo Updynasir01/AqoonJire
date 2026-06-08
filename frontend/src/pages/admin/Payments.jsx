@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/layout/DashboardLayout.jsx'
 import { Modal, Spinner, Badge } from '../../components/common/index.jsx'
 import { adminAPI, courseAPI } from '../../services/api'
@@ -6,6 +7,7 @@ import toast from 'react-hot-toast'
 import { Plus, Download } from 'lucide-react'
 
 export default function Payments() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [payments, setPayments] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
@@ -24,6 +26,15 @@ export default function Payments() {
     adminAPI.getUsers({ role: 'student', limit: 200 }).then(r => setStudents(r.data.data))
     courseAPI.list({ limit: 100 }).then(r => setCourses(r.data.data))
   }, [])
+
+  // Auto-open the create modal when arriving via "Log Payment" (?new=1).
+  useEffect(() => {
+    if (searchParams.get('new') === '1') {
+      setShowModal(true)
+      searchParams.delete('new')
+      setSearchParams(searchParams, { replace: true })
+    }
+  }, [searchParams, setSearchParams])
 
   const handleSubmit = async e => {
     e.preventDefault(); setSaving(true)

@@ -28,6 +28,15 @@ export default function AdminUsers() {
 
   useEffect(() => { load() }, [role, search])
 
+  // Auto-open the create modal when arriving via "Add Student" (?new=1).
+  useEffect(() => {
+    if (searchParams.get('new') === '1') {
+      setShowCreate(true)
+      searchParams.delete('new')
+      setSearchParams(searchParams, { replace: true })
+    }
+  }, [searchParams, setSearchParams])
+
   const handleCreate = async e => {
     e.preventDefault(); setSaving(true)
     try {

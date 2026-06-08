@@ -26,7 +26,7 @@ export default function TeacherDashboard() {
       </div>
 
       <div style={{ display: 'flex', gap: 14, marginBottom: 28 }}>
-        <Link to="/teacher/courses/new" className="btn btn-primary"><Plus size={16}/> New Course</Link>
+        <Link to="/teacher/courses?new=1" className="btn btn-primary"><Plus size={16}/> New Course</Link>
         <Link to="/teacher/assignments" className="btn btn-outline"><ClipboardList size={16}/> Grade Assignments</Link>
       </div>
 

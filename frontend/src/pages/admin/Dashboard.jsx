@@ -29,9 +29,9 @@ export default function AdminDashboard() {
 
       {/* Quick actions */}
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 32 }}>
-        <Link to="/admin/users/new" className="btn btn-primary"><UserPlus size={16} /> Add Student</Link>
+        <Link to="/admin/users?new=1" className="btn btn-primary"><UserPlus size={16} /> Add Student</Link>
         <Link to="/admin/access" className="btn btn-accent"><ShieldCheck size={16} /> Manage Access</Link>
-        <Link to="/admin/payments/new" className="btn btn-outline"><CreditCard size={16} /> Log Payment</Link>
+        <Link to="/admin/payments?new=1" className="btn btn-outline"><CreditCard size={16} /> Log Payment</Link>
         <Link to="/admin/reports" className="btn btn-ghost"><BookOpen size={16} /> View Reports</Link>
       </div>
 

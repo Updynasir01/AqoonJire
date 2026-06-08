@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/layout/DashboardLayout.jsx'
 import { Modal, Spinner, Badge, EmptyState } from '../../components/common/index.jsx'
 import { courseAPI, categoryAPI } from '../../services/api'
@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { Plus, Edit, Eye, BookOpen, Trash2 } from 'lucide-react'
 
 export default function TeacherCourses() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [courses, setCourses] = useState([])
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
@@ -20,6 +21,15 @@ export default function TeacherCourses() {
   useEffect(() => { load(); categoryAPI.list().then(r => setCategories(r.data.data)) }, [])
 
   const openCreate = () => { setEditing(null); setForm({ title: '', description: '', price: '', language: 'Somali', level: 'beginner', category_id: '', duration_hours: '' }); setShowModal(true) }
+
+  // Auto-open the create modal when arriving via "New Course" (?new=1).
+  useEffect(() => {
+    if (searchParams.get('new') === '1') {
+      openCreate()
+      searchParams.delete('new')
+      setSearchParams(searchParams, { replace: true })
+    }
+  }, [searchParams, setSearchParams])
   const openEdit = c => { setEditing(c); setForm({ title: c.title, description: c.description || '', price: c.price || '', language: c.language || 'Somali', level: c.level || 'beginner', category_id: c.category_id || '', duration_hours: c.duration_hours || '' }); setShowModal(true) }
 
   const handleSubmit = async e => {
