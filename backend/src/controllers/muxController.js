@@ -36,6 +36,9 @@ const createLessonUploadUrl = asyncHandler(async (req, res) => {
   const upload = await mux.video.uploads.create({
     new_asset_settings: {
       playback_policy: ['public'],
+      // 'basic' quality = $0 encoding + cheaper storage, still adaptive 1080p.
+      // No downloadable MP4/master (good for paid course content).
+      video_quality: 'basic',
       passthrough: JSON.stringify({ lessonId })
     },
     cors_origin: process.env.FRONTEND_URL || '*'
