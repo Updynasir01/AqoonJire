@@ -2,9 +2,15 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { siteFaqAPI } from '../../services/api'
+import { useSEO } from '../../hooks/useSEO'
 import { Search, ChevronDown, MessageCircle, ArrowRight, HelpCircle } from 'lucide-react'
 
 export default function FAQ() {
+  useSEO({
+    title: 'FAQ — Help Center',
+    description: 'Answers to common questions about AqoonJire: how to enroll, payment methods, course access, certificates and more.',
+    path: '/faq',
+  })
   const [faqs, setFaqs] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')

@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { landingAPI } from '../../services/api'
+import { useSEO } from '../../hooks/useSEO'
 import { BookOpen, Users, Award, ArrowRight, CheckCircle, Star, Clock, Globe, ChevronRight, Zap, Shield, Play } from 'lucide-react'
  
 
@@ -55,6 +56,10 @@ function PubCourseCard({ course }) {
 }
 
 export default function Home() {
+  useSEO({
+    description: "AqoonJire is Somalia's online learning platform. Learn IT, business, languages, health and more — taught in Somali by expert instructors. Earn certificates and study at your own pace.",
+    path: '/',
+  })
   const [data, setData] = useState(null)
   useEffect(() => { landingAPI.get().then(r => setData(r.data.data)).catch(() => {}) }, [])
 

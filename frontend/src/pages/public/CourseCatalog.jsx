@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { courseAPI, categoryAPI, funnelAPI } from '../../services/api'
+import { useSEO } from '../../hooks/useSEO'
 import { BookOpen, Users, Search, SlidersHorizontal, X } from 'lucide-react'
 
 function CourseCard({ course }) {
@@ -48,6 +49,11 @@ function SkeletonCard() {
 }
 
 export default function CourseCatalog() {
+  useSEO({
+    title: 'All Courses',
+    description: 'Browse all AqoonJire courses — IT, business, languages, health and more, taught in Somali. Pay once, learn for life, earn certificates.',
+    path: '/courses',
+  })
   const [searchParams, setSearchParams] = useSearchParams()
   const [courses, setCourses] = useState([])
   const [categories, setCategories] = useState([])

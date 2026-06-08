@@ -1,8 +1,14 @@
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { Link } from 'react-router-dom'
+import { useSEO } from '../../hooks/useSEO'
 import { ArrowRight, CheckCircle, Award, Users, BookOpen, Globe } from 'lucide-react'
 
 export default function About() {
+  useSEO({
+    title: 'About Us',
+    description: 'Learn about AqoonJire — our mission to make quality education accessible to every Somali learner, in their own language, at a fair price.',
+    path: '/about',
+  })
   return (
     <div>
       <Navbar/>

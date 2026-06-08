@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
+import { useSEO } from '../../hooks/useSEO'
 import { Eye, EyeOff, ArrowRight, Sun, Moon, BookOpen, Award, Users, CheckCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function Register() {
+  useSEO({ title: 'Create a Free Account', description: 'Create a free AqoonJire account to browse courses and get notified about new launches and special offers.', path: '/register' })
   const { register } = useAuth()
   const { toggle, isDark } = useTheme()
   const [searchParams] = useSearchParams()

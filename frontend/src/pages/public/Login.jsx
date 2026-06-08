@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
+import { useSEO } from '../../hooks/useSEO'
 import { Eye, EyeOff, ArrowRight, Sun, Moon, BookOpen, Award, Users } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function Login() {
+  useSEO({ title: 'Sign In', description: 'Sign in to your AqoonJire account to access your courses and dashboard.', path: '/login' })
   const { login } = useAuth()
   const { toggle, isDark } = useTheme()
   const navigate = useNavigate()

@@ -1,8 +1,14 @@
 import { Link } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
+import { useSEO } from '../../hooks/useSEO'
 import { ArrowRight, Mail, Phone, MapPin, Clock, MessageCircle, CheckCircle } from 'lucide-react'
 
 export default function Contact() {
+  useSEO({
+    title: 'Contact Us',
+    description: 'Get in touch with AqoonJire. Reach us on WhatsApp at +252 61 031 7264 or email info@aqoonjire.com for help with courses, payments and enrollment.',
+    path: '/contact',
+  })
   return (
     <div>
       <Navbar />

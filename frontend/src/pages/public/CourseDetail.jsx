@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { courseAPI, funnelAPI } from '../../services/api'
+import { useSEO } from '../../hooks/useSEO'
 import { BookOpen, Clock, Users, Award, ChevronDown, ChevronUp, Play, FileText, Lock, CheckCircle, Star, ArrowRight, Globe } from 'lucide-react'
 
 export default function CourseDetail() {
@@ -16,6 +17,14 @@ export default function CourseDetail() {
       if (r.data.data?.id) funnelAPI.track({ type: 'course_view', course_id: r.data.data.id })
     }).catch(() => {}).finally(() => setLoading(false))
   }, [slug])
+
+  useSEO({
+    title: course?.title,
+    description: course?.description
+      ? course.description.replace(/\s+/g, ' ').trim().slice(0, 160)
+      : 'Enroll in this AqoonJire course — taught in Somali, with lifetime access and a certificate on completion.',
+    path: `/courses/${slug}`,
+  })
 
   if (loading) return (
     <div><Navbar/>
