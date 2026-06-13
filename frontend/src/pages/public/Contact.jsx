@@ -150,12 +150,6 @@ export default function Contact() {
         </div>
       </section>
 
-      <style>{`
-        @media(max-width:1024px){
-          .contact-grid{grid-template-columns:1fr!important}
-        }
-      `}</style>
-
       <Footer />
     </div>
   )

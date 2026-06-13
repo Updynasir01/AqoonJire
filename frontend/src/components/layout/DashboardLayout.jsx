@@ -85,7 +85,7 @@ export default function DashboardLayout({ children, title }) {
 
   return (
     <div className="app-layout">
-      {open && <div onClick={() => setOpen(false)} style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.6)',zIndex:99,backdropFilter:'blur(4px)'}}/>}
+      {open && <div className="sidebar-backdrop" onClick={() => setOpen(false)} aria-hidden="true" />}
 
       <aside className={`sidebar${open ? ' open' : ''}`}>
         <div className="sidebar-logo">
@@ -144,18 +144,18 @@ export default function DashboardLayout({ children, title }) {
       <div className="main-content">
         <header className="topbar">
           <div style={{display:'flex',alignItems:'center',gap:12}}>
-            <button style={{display:'none',background:'none',border:'none',color:'var(--text-muted)',cursor:'pointer'}} id="mob-sidebar-btn" onClick={() => setOpen(o=>!o)}>
+            <button type="button" className="mob-sidebar-btn" aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen(o=>!o)}>
               {open ? <X size={20}/> : <Menu size={20}/>}
             </button>
             <span className="topbar-title">{title}</span>
           </div>
           <div className="topbar-right">
-            <button className="theme-toggle" onClick={toggle} title="Toggle theme">
+            <button className="theme-toggle" onClick={toggle} title="Toggle theme" type="button">
               {isDark ? <Sun size={15}/> : <Moon size={15}/>}
             </button>
             <div style={{display:'flex',alignItems:'center',gap:9,padding:'6px 12px',background:'var(--bg-glass)',border:'1px solid var(--border)',borderRadius:10}}>
               <div className="avatar" style={{width:30,height:30,fontSize:12}}>{user?.full_name?.charAt(0)}</div>
-              <div style={{lineHeight:1.3}}>
+              <div className="topbar-user-details">
                 <div style={{fontSize:13,fontWeight:700,color:'var(--text)'}}>{user?.full_name}</div>
                 <div style={{fontSize:11,color:'var(--text-muted)',textTransform:'capitalize'}}>{user?.role}</div>
               </div>
@@ -164,7 +164,6 @@ export default function DashboardLayout({ children, title }) {
         </header>
         <main className="page-content">{children}</main>
       </div>
-      <style>{`@media(max-width:768px){#mob-sidebar-btn{display:flex!important}}`}</style>
     </div>
   )
 }

@@ -60,6 +60,7 @@ export default function CourseCatalog() {
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const [search, setSearch] = useState(searchParams.get('search')||'')
   const [inputVal, setInputVal] = useState(searchParams.get('search')||'')
   const category = searchParams.get('category')||''
@@ -131,10 +132,15 @@ export default function CourseCatalog() {
       </div>
 
       {/* Main */}
-      <div style={{ maxWidth:1280,margin:'0 auto',padding:'36px 5% 96px',display:'grid',gridTemplateColumns:'220px 1fr',gap:40,alignItems:'start' }} className="catalog-layout">
+      <div style={{ maxWidth:1280,margin:'0 auto',padding:'36px 5% 96px' }} className="catalog-layout">
 
-        {/* Sidebar filters */}
-        <div className="catalog-filters" style={{ position:'sticky',top:90 }}>
+        <div className="catalog-sidebar-col">
+          <button type="button" className="btn btn-outline-teal catalog-filter-toggle" onClick={() => setFiltersOpen(o => !o)}>
+            <SlidersHorizontal size={16}/> {filtersOpen ? 'Hide Filters' : 'Show Filters'}
+          </button>
+
+          {/* Sidebar filters */}
+          <div className={`catalog-filters catalog-filters-panel${filtersOpen ? ' open' : ''}`} style={{ position:'sticky',top:90 }}>
           <div style={{ background:'var(--bg-card)',borderRadius:20,border:'1px solid var(--border)',padding:22 }}>
             <div style={{ display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20 }}>
               <div style={{ fontWeight:700,fontSize:13,color:'var(--text)',display:'flex',alignItems:'center',gap:6 }}>
@@ -146,7 +152,7 @@ export default function CourseCatalog() {
             <div style={{ marginBottom:22 }}>
               <div style={{ fontSize:10,fontWeight:700,color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'.09em',marginBottom:10 }}>Category</div>
               {[{ name:'', course_count:null }, ...categories].map((c,i) => (
-                <button key={c.name||'all'} onClick={() => setFilter('category', c.name)}
+                <button key={c.name||'all'} onClick={() => { setFilter('category', c.name); setFiltersOpen(false) }}
                   style={{ width:'100%',textAlign:'left',padding:'8px 10px',borderRadius:9,border:'none',background:category===c.name?'rgba(0,184,152,0.12)':'transparent',color:category===c.name?'var(--brand-secondary)':'var(--text-muted)',fontWeight:category===c.name?700:400,fontSize:13,cursor:'pointer',fontFamily:'var(--font-body)',display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:2,transition:'all 0.2s' }}>
                   <span>{c.name||'All Categories'}</span>
                   {c.course_count!=null && <span style={{ fontSize:11,color:'var(--text-light)',fontWeight:500 }}>{c.course_count}</span>}
@@ -157,7 +163,7 @@ export default function CourseCatalog() {
             <div>
               <div style={{ fontSize:10,fontWeight:700,color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'.09em',marginBottom:10 }}>Level</div>
               {['','beginner','intermediate','advanced'].map(l => (
-                <button key={l||'all'} onClick={() => setFilter('level', l)}
+                <button key={l||'all'} onClick={() => { setFilter('level', l); setFiltersOpen(false) }}
                   style={{ width:'100%',textAlign:'left',padding:'8px 10px',borderRadius:9,border:'none',background:level===l?'rgba(0,184,152,0.12)':'transparent',color:level===l?'var(--brand-secondary)':'var(--text-muted)',fontWeight:level===l?700:400,fontSize:13,cursor:'pointer',fontFamily:'var(--font-body)',textTransform:'capitalize',marginBottom:2,transition:'all 0.2s' }}>
                   {l||'All Levels'}
                 </button>
@@ -165,9 +171,10 @@ export default function CourseCatalog() {
             </div>
           </div>
         </div>
+        </div>
 
         {/* Results */}
-        <div>
+        <div className="catalog-results">
           {/* Active filter chips */}
           {hasFilters && (
             <div style={{ display:'flex',gap:8,flexWrap:'wrap',marginBottom:20 }}>

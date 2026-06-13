@@ -57,7 +57,7 @@ export default function CourseDetail() {
         <div style={{ position:'absolute',inset:0,backgroundImage:'linear-gradient(rgba(0,184,152,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,184,152,0.05) 1px,transparent 1px)',backgroundSize:'52px 52px',pointerEvents:'none' }}/>
         <div style={{ position:'absolute',top:'-40%',right:'-8%',width:520,height:520,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,184,152,0.12) 0%,transparent 70%)',pointerEvents:'none' }}/>
 
-        <div style={{ maxWidth:1280,margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 400px',gap:56,alignItems:'start',position:'relative',zIndex:1,paddingBottom:0 }} className="detail-hero-grid">
+        <div style={{ maxWidth:1280,margin:'0 auto',position:'relative',zIndex:1,paddingBottom:0 }} className="detail-hero-grid">
           {/* Left */}
           <div style={{ paddingTop:40,paddingBottom:52 }}>
             <Link to="/courses" style={{ color:'rgba(255,255,255,0.45)',fontSize:13,display:'inline-flex',alignItems:'center',gap:5,marginBottom:24,transition:'color 0.2s' }}
@@ -100,7 +100,7 @@ export default function CourseDetail() {
 
           {/* Enroll card */}
           <div style={{ paddingTop:30,paddingBottom:0 }}>
-            <div style={{ background:'var(--bg-card)',borderRadius:24,padding:26,boxShadow:'0 24px 80px rgba(0,0,0,0.4)',border:'1px solid var(--border)',position:'sticky',top:88 }}>
+            <div className="detail-sticky-card" style={{ background:'var(--bg-card)',borderRadius:24,padding:26,boxShadow:'0 24px 80px rgba(0,0,0,0.4)',border:'1px solid var(--border)' }}>
               {/* Thumb */}
               <div style={{ aspectRatio:'16/9',borderRadius:14,overflow:'hidden',background:'linear-gradient(135deg,var(--brand-primary),var(--brand-primary-mid))',marginBottom:20,position:'relative' }}>
                 {course.thumbnail
@@ -162,12 +162,12 @@ export default function CourseDetail() {
       </div>
 
       {/* Body */}
-      <div style={{ maxWidth:1280,margin:'0 auto',padding:'56px 5% 96px',display:'grid',gridTemplateColumns:'1fr 400px',gap:60,alignItems:'start' }} className="detail-hero-grid">
+      <div style={{ maxWidth:1280,margin:'0 auto',padding:'56px 5% 96px' }} className="detail-content-grid">
         <div>
           {/* What you'll learn */}
           <div style={{ background:'var(--bg-card)',borderRadius:20,border:'1px solid var(--border)',padding:32,marginBottom:28 }}>
             <h2 style={{ fontSize:22,marginBottom:22 }}>What You'll Learn</h2>
-            <div style={{ display:'grid',gridTemplateColumns:'1fr 1fr',gap:12 }}>
+            <div className="detail-meta-grid">
               {['Expert-led instruction in Somali','Real-world practical projects','Quiz-based knowledge testing','Assignment feedback from instructor','Certificate upon completion','Lifetime access to all materials'].map(item => (
                 <div key={item} style={{ display:'flex',gap:10,fontSize:13,alignItems:'flex-start' }}>
                   <CheckCircle size={15} color="var(--brand-secondary)" style={{ flexShrink:0,marginTop:2 }}/>

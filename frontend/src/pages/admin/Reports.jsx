@@ -63,7 +63,7 @@ export default function Reports() {
             ))}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginTop: 28, borderTop: '1px solid var(--border)', paddingTop: 20 }}>
+          <div className="reports-stats-grid">
             {monthly.slice(-1).map(m => (
               <>
                 {[['New Students', m.new_students], ['Enrollments', m.new_enrollments], ['Certificates', m.certificates_issued], ['Revenue', `$${parseFloat(m.revenue||0).toFixed(0)}`]].map(([l,v]) => (

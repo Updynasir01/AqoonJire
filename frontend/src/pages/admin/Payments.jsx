@@ -136,7 +136,7 @@ export default function Payments() {
               {courses.map(c => <option key={c.id} value={c.id}>{c.title} — ${c.price}</option>)}
             </select>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label className="form-label">Amount *</label>
               <input className="form-control" type="number" step="0.01" required value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} />

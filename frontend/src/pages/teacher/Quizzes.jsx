@@ -219,7 +219,7 @@ export default function TeacherQuizzes() {
         </>}>
         <form onSubmit={createQuiz}>
           <div className="form-group"><label className="form-label">Quiz Title *</label><input className="form-control" required value={quizForm.title} onChange={e => setQuizForm({ ...quizForm, title: e.target.value })}/></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+          <div className="form-grid-3">
             <div className="form-group"><label className="form-label">Pass Score (%)</label><input className="form-control" type="number" min="1" max="100" value={quizForm.pass_score} onChange={e => setQuizForm({ ...quizForm, pass_score: e.target.value })}/></div>
             <div className="form-group"><label className="form-label">Max Attempts</label><input className="form-control" type="number" min="1" value={quizForm.max_attempts} onChange={e => setQuizForm({ ...quizForm, max_attempts: e.target.value })}/></div>
             <div className="form-group"><label className="form-label">Time Limit (min)</label><input className="form-control" type="number" min="1" placeholder="None" value={quizForm.time_limit_minutes} onChange={e => setQuizForm({ ...quizForm, time_limit_minutes: e.target.value })}/></div>
@@ -235,7 +235,7 @@ export default function TeacherQuizzes() {
         </>}>
         <form onSubmit={addQuestion}>
           <div className="form-group"><label className="form-label">Question *</label><textarea className="form-control" rows={2} required value={qForm.question} onChange={e => setQForm({ ...qForm, question: e.target.value })}/></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label className="form-label">Type</label>
               <select className="form-control" value={qForm.question_type} onChange={e => setQForm({ ...qForm, question_type: e.target.value, correct_answer: '' })}>

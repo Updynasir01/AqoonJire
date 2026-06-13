@@ -51,8 +51,8 @@ export function Navbar() {
             ))}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button className="theme-toggle" onClick={toggle} title="Toggle theme">
+          <div className="pub-nav-actions-desktop">
+            <button className="theme-toggle" onClick={toggle} title="Toggle theme" type="button">
               {isDark ? <Sun size={16}/> : <Moon size={16}/>}
             </button>
             {user ? (
@@ -61,30 +61,31 @@ export function Navbar() {
               </Link>
             ) : (
               <>
-                <Link to="/login" className="pub-nav-link" style={{ display: 'flex' }}>Sign In</Link>
+                <Link to="/login" className="pub-nav-link pub-nav-link-desktop">Sign In</Link>
                 <Link to="/register" className="btn btn-secondary btn-sm">Get Started</Link>
               </>
             )}
-            <button className="theme-toggle" style={{ display: 'none' }} id="mob-btn" onClick={() => setMobileOpen(o => !o)}>
+            <button type="button" className="theme-toggle mob-nav-btn" aria-label={mobileOpen ? 'Close menu' : 'Open menu'} onClick={() => setMobileOpen(o => !o)}>
               {mobileOpen ? <X size={18}/> : <Menu size={18}/>}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile drawer */}
       {mobileOpen && (
-        <div style={{ position: 'fixed', top: 70, left: 0, right: 0, background: 'rgba(10,1,24,0.97)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.1)', padding: '20px 24px', zIndex: 199, display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div className="pub-mobile-drawer">
           {links.map(l => (
-            <Link key={l.to} to={l.to} className="pub-nav-link" style={{ fontSize: 16 }}>{l.label}</Link>
+            <Link key={l.to} to={l.to} className="pub-nav-link" style={{ fontSize: 16, padding: '12px 14px', minHeight: 44, display: 'flex', alignItems: 'center' }}>{l.label}</Link>
           ))}
           <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '10px 0' }}/>
-          <Link to={user ? `/${user.role}` : '/register'} className="btn btn-secondary" style={{ justifyContent: 'center' }}>
+          {!user && (
+            <Link to="/login" className="pub-nav-link" style={{ fontSize: 16, padding: '12px 14px', minHeight: 44, display: 'flex', alignItems: 'center' }}>Sign In</Link>
+          )}
+          <Link to={user ? `/${user.role}` : '/register'} className="btn btn-secondary" style={{ justifyContent: 'center', minHeight: 44 }}>
             {user ? 'Dashboard' : 'Get Started'}
           </Link>
         </div>
       )}
-      <style>{`@media(max-width:768px){.pub-nav-links{display:none!important}#mob-btn{display:flex!important}}`}</style>
     </>
   )
 }
