@@ -75,11 +75,11 @@ export function Navbar() {
       {mobileOpen && (
         <div className="pub-mobile-drawer">
           {links.map(l => (
-            <Link key={l.to} to={l.to} className="pub-nav-link" style={{ fontSize: 16, padding: '12px 14px', minHeight: 44, display: 'flex', alignItems: 'center' }}>{l.label}</Link>
+            <Link key={l.to} to={l.to} className={`pub-nav-link${location.pathname === l.to ? ' active' : ''}`}>{l.label}</Link>
           ))}
-          <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '10px 0' }}/>
+          <div className="pub-mobile-drawer-divider" />
           {!user && (
-            <Link to="/login" className="pub-nav-link" style={{ fontSize: 16, padding: '12px 14px', minHeight: 44, display: 'flex', alignItems: 'center' }}>Sign In</Link>
+            <Link to="/login" className="pub-nav-link">Sign In</Link>
           )}
           <Link to={user ? `/${user.role}` : '/register'} className="btn btn-secondary" style={{ justifyContent: 'center', minHeight: 44 }}>
             {user ? 'Dashboard' : 'Get Started'}
