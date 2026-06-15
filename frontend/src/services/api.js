@@ -23,7 +23,7 @@ export const authAPI = {
   login: d => api.post('/auth/login', d),
   register: d => api.post('/auth/register', d),
   me: () => api.get('/auth/me'),
-  updateProfile: d => api.put('/auth/profile', d),
+  updateProfile: fd => api.put('/auth/profile', fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
   changePassword: d => api.put('/auth/change-password', d),
 }
 
@@ -159,6 +159,7 @@ export const landingAPI = {
   search: p => api.get('/search', { params: p }),
   teacherProfile: id => api.get(`/teachers/${id}/profile`),
   verifyCert: num => api.get(`/certificates/verify/${num}`),
+  alumni: () => api.get('/alumni'),
 }
 
 export const certificateAPI = {

@@ -10,7 +10,7 @@ export default function Contact() {
     path: '/contact',
   })
   return (
-    <div>
+    <div className="contact-page">
       <Navbar />
 
       <section className="hero" style={{ minHeight: 'auto', paddingTop: 130 }}>
@@ -73,8 +73,8 @@ export default function Contact() {
 
       <section className="pub-section">
         <div className="pub-inner">
-          <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: 26 }} className="contact-grid">
-            <div className="card card-body">
+          <div className="contact-grid">
+            <div className="card card-body contact-form-card">
               <div className="section-tag">📝 Send Message</div>
               <h2 className="section-h" style={{ marginBottom: 10 }}>We're Here to Help</h2>
               <p className="section-sub" style={{ marginBottom: 24 }}>
@@ -102,7 +102,7 @@ export default function Contact() {
               </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div className="contact-side-col">
               <div className="card card-body">
                 <div className="section-tag" style={{ marginBottom: 12 }}>⏰ Hours</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>

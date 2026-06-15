@@ -25,7 +25,14 @@ export function Navbar() {
 
   useEffect(() => { setMobileOpen(false) }, [location.pathname])
 
-  const links = [{ to: '/', label: 'Home' }, { to: '/courses', label: 'Courses' }, { to: '/about', label: 'About' }, { to: '/faq', label: 'FAQ' }, { to: '/contact', label: 'Contact' }]
+  const links = [
+    { to: '/', label: 'Home' },
+    { to: '/about', label: 'About us' },
+    { to: '/courses', label: 'Courses' },
+    { to: '/alumni', label: 'Alumni' },
+    { to: '/faq', label: 'FAQ' },
+    { to: '/contact', label: 'Contacts' },
+  ]
   const dashPath = user ? `/${user.role}` : '/login'
   const overDark = !scrolled && (
     location.pathname === '/about' ||
@@ -121,7 +128,7 @@ export function Footer() {
 
           <div>
             <div className="pub-footer-col-title">Platform</div>
-            {[['/', 'Home'], ['/courses', 'Browse Courses'], ['/about', 'About Us'], ['/faq', 'FAQ'], ['/contact', 'Contact Us'], ['/login', 'Student Login']].map(([to, label]) => (
+            {[['/', 'Home'], ['/about', 'About us'], ['/courses', 'Browse Courses'], ['/alumni', 'Alumni'], ['/faq', 'FAQ'], ['/contact', 'Contacts'], ['/login', 'Student Login']].map(([to, label]) => (
               <Link key={to} to={to} className="pub-footer-link">{label}</Link>
             ))}
           </div>

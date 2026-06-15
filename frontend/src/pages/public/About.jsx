@@ -1,115 +1,91 @@
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { Link } from 'react-router-dom'
 import { useSEO } from '../../hooks/useSEO'
-import { ArrowRight, CheckCircle, Award, Users, BookOpen, Globe } from 'lucide-react'
+import { ArrowRight, Target, Eye } from 'lucide-react'
+
+const CORE_VALUES = [
+  { emoji: '💡', title: 'Innovation', desc: 'We encourage creativity and fresh ideas to help learners become forward-thinking digital creators.' },
+  { emoji: '🎓', title: 'Quality Education', desc: 'We provide high-quality learning experiences aligned with today\'s industry needs.' },
+  { emoji: '🤝', title: 'Community', desc: 'We build a supportive community where learners connect, share, and grow together.' },
+  { emoji: '🚀', title: 'Growth', desc: 'We are committed to helping our students achieve both personal and professional development.' },
+  { emoji: '💬', title: 'Support', desc: 'We offer continuous guidance and assistance to ensure every learner succeeds.' },
+  { emoji: '🔓', title: 'Accessibility', desc: 'We make education simple and accessible—anytime, anywhere.' },
+]
 
 export default function About() {
   useSEO({
     title: 'About Us',
-    description: 'Learn about AqoonJire — our mission to make quality education accessible to every Somali learner, in their own language, at a fair price.',
+    description: 'AqoonJire is a modern e-learning platform equipping learners with essential digital skills. Our mission is to make high-quality training accessible for Somali youth.',
     path: '/about',
   })
+
   return (
     <div>
-      <Navbar/>
+      <Navbar />
 
       {/* Hero */}
-      <div style={{ background:'var(--brand-primary)',paddingTop:130,paddingBottom:0,paddingLeft:'5%',paddingRight:'5%',position:'relative',overflow:'hidden' }}>
-        <div style={{ position:'absolute',inset:0,backgroundImage:'linear-gradient(rgba(0,184,152,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,184,152,0.05) 1px,transparent 1px)',backgroundSize:'52px 52px',pointerEvents:'none' }}/>
-        <div style={{ position:'absolute',top:'-30%',right:'-10%',width:500,height:500,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,184,152,0.12) 0%,transparent 70%)',pointerEvents:'none' }}/>
-        <div style={{ maxWidth:900,margin:'0 auto',textAlign:'center',position:'relative',zIndex:1,paddingBottom:72 }}>
-          <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 22px' }}>🌍 Our Story</div>
-          <h1 style={{ color:'#fff',fontSize:'clamp(2.2rem,4.5vw,3.8rem)',fontWeight:800,letterSpacing:'-0.03em',lineHeight:1.1,marginBottom:22 }}>
-            Empowering Somalia<br/>Through Education
+      <div style={{ background: 'var(--brand-primary)', paddingTop: 130, paddingBottom: 0, paddingLeft: '5%', paddingRight: '5%', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(0,184,152,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,184,152,0.05) 1px, transparent 1px)', backgroundSize: '52px 52px', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '-30%', right: '-10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,184,152,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ maxWidth: 820, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1, paddingBottom: 72 }}>
+          <div className="section-tag" style={{ display: 'inline-flex', margin: '0 auto 22px' }}>About us</div>
+          <h1 style={{ color: '#fff', fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.15, marginBottom: 22 }}>
+            Equipping Learners for the<br />Digital Economy
           </h1>
-          <p style={{ color:'rgba(255,255,255,0.6)',fontSize:17,lineHeight:1.8,maxWidth:600,margin:'0 auto 40px' }}>
-            AqoonJire was built with a single mission: to make world-class education accessible to every Somali learner, in their own language, at a price they can afford.
+          <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 17, lineHeight: 1.85, maxWidth: 680, margin: '0 auto 18px' }}>
+            AqoonJire is a modern e-learning platform designed to equip learners with essential digital skills for today&apos;s fast-evolving world. Through flexible and accessible online courses,
           </p>
-          <div style={{ display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap' }}>
-            <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16}/></Link>
-            <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">📱 Contact Us</a>
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 17, lineHeight: 1.85, maxWidth: 680, margin: '0 auto 40px' }}>
+            AqoonJire helps young professionals, students, and aspiring freelancers to upskill, grow, and succeed in the digital economy.
+          </p>
+          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16} /></Link>
+            <Link to="/contact" className="btn btn-ghost-white btn-lg">Contact Us</Link>
           </div>
         </div>
-        <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display:'block',width:'100%' }}>
-          <path d="M0 20C360 44 1080 0 1440 20L1440 40L0 40Z" fill="var(--bg)"/>
+        <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%' }}>
+          <path d="M0 20C360 44 1080 0 1440 20L1440 40L0 40Z" fill="var(--bg)" />
         </svg>
       </div>
 
-      {/* Stats */}
+      {/* Vision & Mission */}
       <section className="pub-section pub-section-alt">
-        <div className="pub-inner">
-          <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:20 }}>
-            {[['1,200+','Students Enrolled'],['45+','Expert Courses'],['980+','Certificates Issued'],['22','Instructors'],['4.9★','Average Rating'],['2021','Founded']].map(([v,l]) => (
-              <div key={l} className="about-stat-card">
-                <div className="about-stat-val">{v}</div>
-                <div className="about-stat-lbl">{l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Mission */}
-      <section className="pub-section">
         <div className="pub-inner">
           <div className="about-mission">
-            <div>
-              <div className="section-tag">🎯 Our Mission</div>
-              <h2 className="section-h">Why We Built<br/>AqoonJire</h2>
-              <p style={{ color:'var(--text-muted)',fontSize:15,lineHeight:1.85,marginTop:16,marginBottom:28 }}>
-                Somalia has millions of talented, motivated learners who deserve access to quality education. But language barriers, high costs, and lack of localised content have held them back.
-              </p>
-              <p style={{ color:'var(--text-muted)',fontSize:15,lineHeight:1.85,marginBottom:32 }}>
-                We built AqoonJire to change that. Every course is taught in Somali, priced fairly, and designed for the realities of Somali learners — whether you're in Mogadishu, Hargeisa, or anywhere in the diaspora.
-              </p>
-              <div style={{ display:'flex',flexDirection:'column',gap:14 }}>
-                {['Courses entirely in Somali language','Fair, one-time pricing — no subscriptions','Pay through EVC Plus, eDahab, Zaad or cash','Certificates recognised by employers','24-hour account setup after payment','Lifetime access to all course materials'].map(item => (
-                  <div key={item} style={{ display:'flex',alignItems:'center',gap:12 }}>
-                    <div style={{ width:22,height:22,borderRadius:'50%',background:'rgba(0,184,152,0.12)',border:'1px solid rgba(0,184,152,0.25)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
-                      <CheckCircle size={12} color="var(--brand-secondary)"/>
-                    </div>
-                    <span style={{ fontSize:14,color:'var(--text-muted)' }}>{item}</span>
-                  </div>
-                ))}
+            <div className="card card-body" style={{ height: '100%' }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(0,184,152,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
+                <Eye color="var(--brand-secondary)" size={22} />
               </div>
+              <div className="section-tag" style={{ marginBottom: 12 }}>Vision</div>
+              <h2 className="section-h" style={{ marginBottom: 16 }}>Where We&apos;re Headed</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: 15, lineHeight: 1.85, margin: 0 }}>
+                To become the leading Somali-based digital learning hub that inspires and empowers the next generation of digital professionals across the Horn of Africa.
+              </p>
             </div>
-            <div style={{ background:'var(--bg-card)',borderRadius:28,border:'1px solid var(--border)',padding:40,position:'relative',overflow:'hidden' }}>
-              <div style={{ position:'absolute',top:0,right:0,width:200,height:200,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,184,152,0.08) 0%,transparent 70%)',pointerEvents:'none',transform:'translate(30%,-30%)' }}/>
-              {[
-                { emoji:'🌍', title:'For Every Somali', desc:'Whether you are in Somalia or the diaspora — our platform is built for you.' },
-                { emoji:'🗣️', title:'Your Language', desc:'All courses are delivered in clear, accessible Somali language.' },
-                { emoji:'💰', title:'Affordable Pricing', desc:'We keep prices fair and accept all major Somali mobile money platforms.' },
-                { emoji:'📜', title:'Real Certificates', desc:'Earn completion certificates that employers actually recognise.' },
-              ].map(item => (
-                <div key={item.title} style={{ display:'flex',gap:16,marginBottom:24,alignItems:'flex-start' }}>
-                  <div style={{ width:48,height:48,borderRadius:14,background:'linear-gradient(135deg,var(--brand-primary),var(--brand-primary-mid))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0 }}>{item.emoji}</div>
-                  <div>
-                    <div style={{ fontWeight:700,fontSize:15,marginBottom:5,fontFamily:'Syne,sans-serif' }}>{item.title}</div>
-                    <div style={{ fontSize:13,color:'var(--text-muted)',lineHeight:1.7 }}>{item.desc}</div>
-                  </div>
-                </div>
-              ))}
+
+            <div className="card card-body" style={{ height: '100%' }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(40,4,84,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
+                <Target color="var(--brand-secondary)" size={22} />
+              </div>
+              <div className="section-tag" style={{ marginBottom: 12 }}>Mission</div>
+              <h2 className="section-h" style={{ marginBottom: 16 }}>What We Do</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: 15, lineHeight: 1.85, margin: 0 }}>
+                Our mission is to make high-quality digital skills training accessible, affordable, and practical for Somali youth — unlocking opportunities in freelancing, entrepreneurship, and digital careers. We aim to bridge the digital skills gap through culturally relevant, easy-to follow online courses, empowering learners to thrive in the global digital economy.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Values */}
-      <section className="pub-section pub-section-alt">
+      {/* Core Values */}
+      <section className="pub-section">
         <div className="pub-inner">
-          <div style={{ textAlign:'center',marginBottom:52 }}>
-            <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 16px' }}>💎 Our Values</div>
-            <h2 className="section-h">What Drives Us</h2>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
+            <div className="section-tag" style={{ display: 'inline-flex', margin: '0 auto 16px' }}>🌟 Our Core Values</div>
+            <h2 className="section-h">What Drives AqoonJire</h2>
           </div>
           <div className="about-value-grid">
-            {[
-              { emoji:'📚', title:'Quality First', desc:'Every course goes through quality review before it reaches students. We never compromise on educational standards.' },
-              { emoji:'🤝', title:'Accessibility', desc:'Education should be available to all Somalis regardless of location, income or background.' },
-              { emoji:'🔒', title:'Trust & Security', desc:'Your data and payments are handled with the highest level of security and transparency.' },
-              { emoji:'🚀', title:'Continuous Growth', desc:'We constantly add new courses and improve the platform based on student feedback.' },
-              { emoji:'🌐', title:'Community', desc:'We are building a community of Somali learners who support and inspire each other.' },
-              { emoji:'🎯', title:'Results-Focused', desc:'We measure success by how many students get better jobs, start businesses, and improve their lives.' },
-            ].map(v => (
+            {CORE_VALUES.map(v => (
               <div key={v.title} className="about-value-card">
                 <div className="about-value-icon">{v.emoji}</div>
                 <div className="about-value-title">{v.title}</div>
@@ -120,46 +96,22 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="pub-section">
-        <div className="pub-inner">
-          <div style={{ textAlign:'center',marginBottom:52 }}>
-            <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 16px' }}>👥 The Team</div>
-            <h2 className="section-h">The People Behind AqoonJire</h2>
-          </div>
-          <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))',gap:24 }}>
-            {[
-              { name:'Abdi Rahman Mohamed', role:'Founder & CEO', avatar:'A' },
-              { name:'Hodan Ali Hassan', role:'Head of Curriculum', avatar:'H' },
-              { name:'Mohamed Farah', role:'Lead Developer', avatar:'M' },
-              { name:'Fadumo Osman', role:'Student Success Manager', avatar:'F' },
-            ].map(p => (
-              <div key={p.name} className="about-team-card">
-                <div className="about-team-ava">{p.avatar}</div>
-                <div style={{ fontWeight:700,fontSize:15,marginBottom:5,fontFamily:'Syne,sans-serif' }}>{p.name}</div>
-                <div style={{ fontSize:13,color:'var(--brand-secondary)',fontWeight:600 }}>{p.role}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="pub-section pub-section-alt">
         <div className="pub-inner">
           <div className="cta-wrap">
-            <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 20px' }}>🎓 Join Us</div>
-            <h2 className="cta-h">Ready to Start Your<br/>Learning Journey?</h2>
-            <p className="cta-sub">Join thousands of Somali learners already transforming their lives with AqoonJire.</p>
+            <div className="section-tag" style={{ display: 'inline-flex', margin: '0 auto 20px' }}>🎓 Start Learning</div>
+            <h2 className="cta-h">Ready to Build Your<br />Digital Skills?</h2>
+            <p className="cta-sub">Explore our courses and take the first step toward freelancing, entrepreneurship, and a digital career.</p>
             <div className="cta-btns">
-              <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16}/></Link>
-              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">📱 WhatsApp Us</a>
+              <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16} /></Link>
+              <Link to="/register" className="btn btn-ghost-white btn-lg">Get Started</Link>
             </div>
           </div>
         </div>
       </section>
 
-      <Footer/>
+      <Footer />
     </div>
   )
 }

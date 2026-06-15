@@ -245,12 +245,19 @@ const trackLessonProgress = asyncHandler(async (req, res) => {
     grantLoyaltyReward(studentId, courseTitle).catch(() => {});
   }
 
+  let needsAlumniBio = false;
+  if (certificateData) {
+    const profile = await query('SELECT bio FROM users WHERE id = $1', [studentId]);
+    needsAlumniBio = !profile.rows[0]?.bio?.trim();
+  }
+
   res.json({
     success: true,
     data: {
       progress: result.rows[0],
       certificate_issued: !!certificateData,
-      certificate: certificateData
+      certificate: certificateData,
+      needs_alumni_bio: needsAlumniBio
     }
   });
 });

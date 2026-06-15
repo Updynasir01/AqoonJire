@@ -60,6 +60,9 @@ const NAV = {
     { label:'Updates', items:[
       { to:'/student/announcements', icon:<Megaphone size={15}/>, label:'Announcements' },
     ]},
+    { label:'Account', items:[
+      { to:'/student/settings', icon:<Settings size={15}/>, label:'Settings' },
+    ]},
   ],
 }
 

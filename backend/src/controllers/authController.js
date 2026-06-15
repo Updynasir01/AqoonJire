@@ -17,7 +17,7 @@ const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const result = await query(
-    'SELECT id, full_name, email, password_hash, role, is_active, is_approved, profile_photo FROM users WHERE email = $1',
+    'SELECT id, full_name, display_name, email, password_hash, role, is_active, is_approved, profile_photo, bio FROM users WHERE email = $1',
     [email.toLowerCase().trim()]
   );
 
@@ -61,9 +61,11 @@ const login = asyncHandler(async (req, res) => {
       user: {
         id: user.id,
         full_name: user.full_name,
+        display_name: user.display_name,
         email: user.email,
         role: user.role,
-        profile_photo: user.profile_photo
+        profile_photo: user.profile_photo,
+        bio: user.bio
       }
     }
   });
@@ -140,7 +142,7 @@ const register = asyncHandler(async (req, res) => {
 // GET /api/auth/me
 const getMe = asyncHandler(async (req, res) => {
   const result = await query(
-    `SELECT u.id, u.full_name, u.email, u.role, u.phone, u.bio,
+    `SELECT u.id, u.full_name, u.display_name, u.email, u.role, u.phone, u.bio,
             u.profile_photo, u.is_active, u.last_login, u.created_at
      FROM users u WHERE u.id = $1`,
     [req.user.id]
@@ -174,7 +176,7 @@ const changePassword = asyncHandler(async (req, res) => {
 
 // PUT /api/auth/profile
 const updateProfile = asyncHandler(async (req, res) => {
-  const { full_name, phone, bio } = req.body;
+  const { full_name, display_name, phone, bio } = req.body;
   const photo = req.file ? `/uploads/images/${req.file.filename}` : undefined;
 
   const fields = [];
@@ -182,8 +184,12 @@ const updateProfile = asyncHandler(async (req, res) => {
   let i = 1;
 
   if (full_name) { fields.push(`full_name = $${i++}`); values.push(full_name); }
+  if (display_name !== undefined) {
+    fields.push(`display_name = $${i++}`);
+    values.push(display_name?.trim() || null);
+  }
   if (phone !== undefined) { fields.push(`phone = $${i++}`); values.push(phone); }
-  if (bio !== undefined) { fields.push(`bio = $${i++}`); values.push(bio); }
+  if (bio !== undefined) { fields.push(`bio = $${i++}`); values.push(bio?.trim() || null); }
   if (photo) { fields.push(`profile_photo = $${i++}`); values.push(photo); }
 
   if (!fields.length) {
@@ -194,7 +200,7 @@ const updateProfile = asyncHandler(async (req, res) => {
   values.push(req.user.id);
 
   const result = await query(
-    `UPDATE users SET ${fields.join(', ')} WHERE id = $${i} RETURNING id, full_name, email, role, phone, bio, profile_photo`,
+    `UPDATE users SET ${fields.join(', ')} WHERE id = $${i} RETURNING id, full_name, display_name, email, role, phone, bio, profile_photo`,
     values
   );
 

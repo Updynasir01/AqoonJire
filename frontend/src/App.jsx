@@ -11,6 +11,7 @@ import Contact from './pages/public/Contact.jsx'
 import Login from './pages/public/Login.jsx'
 import Register from './pages/public/Register.jsx'
 import FAQ from './pages/public/FAQ.jsx'
+import Alumni from './pages/public/Alumni.jsx'
 
 import AdminDashboard from './pages/admin/Dashboard.jsx'
 import AdminUsers from './pages/admin/Users.jsx'
@@ -45,6 +46,7 @@ import Certificates from './pages/student/Certificates.jsx'
 import StudentAnnouncements from './pages/student/Announcements.jsx'
 import StudentLiveClasses from './pages/student/LiveClasses.jsx'
 import StudentRewards from './pages/student/Rewards.jsx'
+import StudentSettings from './pages/student/Settings.jsx'
 
 function RequireAuth({ children, roles }) {
   const { user, loading } = useAuth()
@@ -72,6 +74,7 @@ export default function App() {
             <Route path="/courses" element={<CourseCatalog />} />
             <Route path="/courses/:slug" element={<CourseDetail />} />
             <Route path="/about" element={<About />} />
+            <Route path="/alumni" element={<Alumni />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/login" element={<RedirectIfGuest><Login /></RedirectIfGuest>} />
@@ -110,6 +113,7 @@ export default function App() {
             <Route path="/student/announcements" element={<RequireAuth roles={['student']}><StudentAnnouncements /></RequireAuth>} />
             <Route path="/student/live" element={<RequireAuth roles={['student']}><StudentLiveClasses /></RequireAuth>} />
             <Route path="/student/rewards" element={<RequireAuth roles={['student']}><StudentRewards /></RequireAuth>} />
+            <Route path="/student/settings" element={<RequireAuth roles={['student']}><StudentSettings /></RequireAuth>} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

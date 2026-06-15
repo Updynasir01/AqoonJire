@@ -57,7 +57,7 @@ function PubCourseCard({ course }) {
 
 export default function Home() {
   useSEO({
-    description: "AqoonJire is Somalia's online learning platform. Learn IT, business, languages, health and more — taught in Somali by expert instructors. Earn certificates and study at your own pace.",
+    description: 'AqoonJire is a modern e-learning and digital innovation platform dedicated to equipping the next generation with technology, creativity, and future-ready skills.',
     path: '/',
   })
   const [data, setData] = useState(null)
@@ -97,13 +97,13 @@ export default function Home() {
               Somalia's #1 E-Learning Platform
             </div>
             <h1 className="hero-h1">
-              Learn Skills That<br/>
+              Empowering the Next Generation to<br/>
               <span className="hero-h1-line">
-                <span className="hero-h1-teal">Shape Your Future</span>
+                <span className="hero-h1-teal">Learn, Create, Innovate, and Lead</span>
               </span>
             </h1>
             <p className="hero-desc">
-              Expert-taught courses in Somali language. Pay once, learn for life, earn certificates that matter.
+              AqoonJire is a modern e-learning and digital innovation platform dedicated to equipping the next generation with technology, creativity, and future-ready skills.
             </p>
             <div className="hero-btns">
               <Link to="/courses" className="btn btn-secondary btn-lg">

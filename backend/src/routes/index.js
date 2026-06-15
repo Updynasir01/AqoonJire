@@ -46,6 +46,7 @@ const streak       = require('../controllers/streakController');
 const faq          = require('../controllers/faqController');
 const broadcast    = require('../controllers/broadcastController');
 const siteFaq      = require('../controllers/siteFaqController');
+const alumni       = require('../controllers/alumniController');
 
 // ── PUBLIC ────────────────────────────────────────────────────────────────
 router.get('/landing',                         landing.getLandingData);
@@ -62,6 +63,7 @@ router.get('/settings',                        settings.getSettings);
 router.get('/certificates/verify/:certNumber', certificate.verifyCertificate);
 router.get('/unsubscribe',                     broadcast.publicUnsubscribe);
 router.get('/site-faqs',                       siteFaq.listPublic);
+router.get('/alumni',                          alumni.listAlumni);
 
 // ── AUTH ──────────────────────────────────────────────────────────────────
 router.post('/auth/login',           loginLimiter, loginRules, validate, auth.login);
