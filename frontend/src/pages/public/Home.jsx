@@ -217,8 +217,7 @@ export default function Home() {
               { name:'Arabic Language', icon:'book', course_count:6 },
               { name:'English Language', icon:'globe', course_count:9 },
               { name:'Mathematics', icon:'calculator', course_count:5 },
-              { name:'Health & Medicine', icon:'stethoscope', course_count:4 },
-            ]).map(cat => (
+            ]).filter(cat => Number(cat.course_count) > 0).map(cat => (
               <Link to={`/courses?category=${cat.name}`} key={cat.name} className="cat-card">
                 <span className="cat-emoji">{EMOJIS[cat.icon]||'📚'}</span>
                 <div className="cat-name">{cat.name}</div>

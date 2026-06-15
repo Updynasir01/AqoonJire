@@ -48,6 +48,13 @@ const storedWatchPct = lesson => {
   return Math.min(100, (lesson.watch_time_seconds / dur) * 100)
 }
 
+const lessonDurationSeconds = (lesson, playerDuration = 0) => {
+  if (playerDuration > 0) return Math.round(playerDuration)
+  if (lesson?.mux_duration_seconds) return lesson.mux_duration_seconds
+  if (lesson?.duration_minutes) return lesson.duration_minutes * 60
+  return 0
+}
+
 const LessonIcon = ({ type }) => {
   if (type === 'video' || type === 'youtube') return <Play size={12} style={{ color: 'var(--text-light)', flexShrink: 0 }} />
   if (type === 'pdf') return <FileText size={12} style={{ color: 'var(--text-light)', flexShrink: 0 }} />
@@ -225,13 +232,20 @@ export default function CoursePlayer() {
     const isLast = idx === flat.length - 1
 
     setCompleting(true)
+    const durationSec = lessonDurationSeconds(currentLesson, playerDuration)
+    const minRequired = durationSec > 0 ? Math.ceil(durationSec * (COMPLETION_MIN_WATCH_PCT / 100)) : 0
+    const watchedPct = Math.max(watchPct, storedWatchPct(currentLesson))
     const watchSeconds = Math.max(
       Math.round(videoCurrentTimeRef.current),
       currentLesson.watch_time_seconds || 0,
-      watchStart.current ? Math.round((Date.now() - watchStart.current) / 1000) : 0
+      minRequired > 0 && watchedPct >= COMPLETION_MIN_WATCH_PCT ? minRequired : 0
     )
     try {
-      const r = await progressAPI.track(currentLesson.id, { is_completed: true, watch_time_seconds: watchSeconds })
+      const r = await progressAPI.track(currentLesson.id, {
+        is_completed: true,
+        watch_time_seconds: watchSeconds,
+        duration_seconds: durationSec || undefined,
+      })
       if (r.data.data.certificate_issued) {
         toast.success('🎓 Certificate earned! Course complete!')
         if (r.data.data.needs_alumni_bio) setAlumniBioModal(true)

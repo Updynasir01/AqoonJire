@@ -1,21 +1,7 @@
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
 const { isSectionReleased, daysUntilRelease, toDateStr } = require('../utils/streak');
-
-const COMPLETION_MIN_WATCH_PCT = 30;
-
-const getLessonCompletionGate = lessonRow => {
-  const contentType = (lessonRow?.content_type || '').toLowerCase();
-  const watchGatedTypes = new Set(['video', 'youtube']);
-  if (!watchGatedTypes.has(contentType)) {
-    return { durationMinutes: Number(lessonRow?.duration_minutes || 0), requiredWatchSeconds: 0 };
-  }
-  const durationMinutes = Number(lessonRow?.duration_minutes || 0);
-  const requiredWatchSeconds = durationMinutes > 0
-    ? Math.ceil(durationMinutes * 60 * (COMPLETION_MIN_WATCH_PCT / 100))
-    : 0;
-  return { durationMinutes, requiredWatchSeconds };
-};
+const { getLessonCompletionGate, COMPLETION_MIN_WATCH_PCT } = require('../utils/lessonProgress');
 
 // GET /api/student/dashboard
 const getDashboard = asyncHandler(async (req, res) => {
@@ -167,11 +153,14 @@ const getCourseContent = asyncHandler(async (req, res) => {
 // POST /api/student/lessons/:lessonId/complete — mark lesson complete
 const completeLesson = asyncHandler(async (req, res) => {
   const { lessonId } = req.params;
-  const { watch_time_seconds } = req.body;
+  const { watch_time_seconds, duration_seconds } = req.body;
   const studentId = req.user.id;
 
   // Get course_id for this lesson
-  const lesson = await query('SELECT course_id, duration_minutes, content_type FROM lessons WHERE id = $1', [lessonId]);
+  const lesson = await query(
+    'SELECT course_id, duration_minutes, mux_duration_seconds, content_type FROM lessons WHERE id = $1',
+    [lessonId]
+  );
   if (!lesson.rows.length) throw createError('Lesson not found.', 404);
   const lessonRow = lesson.rows[0];
   const courseId = lessonRow.course_id;
@@ -189,7 +178,7 @@ const completeLesson = asyncHandler(async (req, res) => {
   );
   const prevWatch = Number(currentProgress.rows[0]?.watch_time_seconds || 0);
   const nextWatch = Math.max(prevWatch, Number(watch_time_seconds || 0));
-  const { requiredWatchSeconds } = getLessonCompletionGate(lessonRow);
+  const { requiredWatchSeconds } = getLessonCompletionGate(lessonRow, duration_seconds);
 
   if (nextWatch < requiredWatchSeconds) {
     throw createError(

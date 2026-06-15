@@ -2,21 +2,7 @@ const { query, getClient } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
 const { generateCertificatePDF } = require('../utils/certificateGenerator');
 const { recordLessonActivity, grantLoyaltyReward, logEvent } = require('../services/growthService');
-
-const COMPLETION_MIN_WATCH_PCT = 30;
-
-const getLessonCompletionGate = lessonRow => {
-  const contentType = (lessonRow?.content_type || '').toLowerCase();
-  const watchGatedTypes = new Set(['video', 'youtube']);
-  if (!watchGatedTypes.has(contentType)) {
-    return { durationMinutes: Number(lessonRow?.duration_minutes || 0), requiredWatchSeconds: 0 };
-  }
-  const durationMinutes = Number(lessonRow?.duration_minutes || 0);
-  const requiredWatchSeconds = durationMinutes > 0
-    ? Math.ceil(durationMinutes * 60 * (COMPLETION_MIN_WATCH_PCT / 100))
-    : 0;
-  return { durationMinutes, requiredWatchSeconds };
-};
+const { COMPLETION_MIN_WATCH_PCT, getLessonCompletionGate } = require('../utils/lessonProgress');
 
 // GET /api/progress/course/:courseId
 // Full progress snapshot for the authenticated student
@@ -133,10 +119,13 @@ const getCourseProgress = asyncHandler(async (req, res) => {
 // Track watch progress (called periodically while watching a video)
 const trackLessonProgress = asyncHandler(async (req, res) => {
   const { lessonId } = req.params;
-  const { watch_time_seconds, is_completed } = req.body;
+  const { watch_time_seconds, is_completed, duration_seconds } = req.body;
   const studentId = req.user.id;
 
-  const lesson = await query('SELECT course_id, duration_minutes, content_type FROM lessons WHERE id = $1', [lessonId]);
+  const lesson = await query(
+    'SELECT course_id, duration_minutes, mux_duration_seconds, content_type FROM lessons WHERE id = $1',
+    [lessonId]
+  );
   if (!lesson.rows.length) throw createError('Lesson not found.', 404);
   const lessonRow = lesson.rows[0];
   const courseId = lessonRow.course_id;
@@ -154,7 +143,7 @@ const trackLessonProgress = asyncHandler(async (req, res) => {
   );
   const prevWatch = Number(currentProgress.rows[0]?.watch_time_seconds || 0);
   const nextWatch = Math.max(prevWatch, Number(watch_time_seconds || 0));
-  const { requiredWatchSeconds } = getLessonCompletionGate(lessonRow);
+  const { requiredWatchSeconds } = getLessonCompletionGate(lessonRow, duration_seconds);
 
   if (is_completed && nextWatch < requiredWatchSeconds) {
     throw createError(
@@ -174,7 +163,7 @@ const trackLessonProgress = asyncHandler(async (req, res) => {
                           ELSE lesson_progress.completed_at END,
        updated_at = NOW()
      RETURNING *`,
-    [studentId, lessonId, courseId, watch_time_seconds || 0, is_completed || false,
+    [studentId, lessonId, courseId, nextWatch, is_completed || false,
      is_completed ? new Date() : null]
   );
 
