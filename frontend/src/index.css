@@ -521,6 +521,9 @@ tr:hover td{background:var(--bg-glass)}
 .alumni-skills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px}
 .alumni-skill-pill{font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(0,184,152,0.1);color:var(--brand-secondary);border:1px solid rgba(0,184,152,0.2)}
 .alumni-bio{font-size:13px;color:var(--text-muted);line-height:1.65;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.alumni-socials{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.alumni-social{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:all var(--transition)}
+.alumni-social:hover{border-color:var(--brand-secondary);color:var(--brand-secondary);background:rgba(0,184,152,0.08)}
 
 /* ═══════════════════════════════════════════════════
    TESTIMONIALS

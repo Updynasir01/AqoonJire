@@ -143,7 +143,8 @@ const register = asyncHandler(async (req, res) => {
 const getMe = asyncHandler(async (req, res) => {
   const result = await query(
     `SELECT u.id, u.full_name, u.display_name, u.email, u.role, u.phone, u.bio,
-            u.profile_photo, u.is_active, u.last_login, u.created_at
+            u.profile_photo, u.social_facebook, u.social_linkedin, u.social_instagram, u.social_tiktok,
+            u.is_active, u.last_login, u.created_at
      FROM users u WHERE u.id = $1`,
     [req.user.id]
   );
@@ -175,8 +176,18 @@ const changePassword = asyncHandler(async (req, res) => {
 });
 
 // PUT /api/auth/profile
+const normalizeSocialUrl = (value) => {
+  const trimmed = (value || '').trim();
+  if (!trimmed) return null;
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+};
+
 const updateProfile = asyncHandler(async (req, res) => {
-  const { full_name, display_name, phone, bio } = req.body;
+  const {
+    full_name, display_name, phone, bio,
+    social_facebook, social_linkedin, social_instagram, social_tiktok
+  } = req.body;
   const photo = req.file ? `/uploads/images/${req.file.filename}` : undefined;
 
   const fields = [];
@@ -190,6 +201,10 @@ const updateProfile = asyncHandler(async (req, res) => {
   }
   if (phone !== undefined) { fields.push(`phone = $${i++}`); values.push(phone); }
   if (bio !== undefined) { fields.push(`bio = $${i++}`); values.push(bio?.trim() || null); }
+  if (social_facebook !== undefined) { fields.push(`social_facebook = $${i++}`); values.push(normalizeSocialUrl(social_facebook)); }
+  if (social_linkedin !== undefined) { fields.push(`social_linkedin = $${i++}`); values.push(normalizeSocialUrl(social_linkedin)); }
+  if (social_instagram !== undefined) { fields.push(`social_instagram = $${i++}`); values.push(normalizeSocialUrl(social_instagram)); }
+  if (social_tiktok !== undefined) { fields.push(`social_tiktok = $${i++}`); values.push(normalizeSocialUrl(social_tiktok)); }
   if (photo) { fields.push(`profile_photo = $${i++}`); values.push(photo); }
 
   if (!fields.length) {
@@ -200,7 +215,9 @@ const updateProfile = asyncHandler(async (req, res) => {
   values.push(req.user.id);
 
   const result = await query(
-    `UPDATE users SET ${fields.join(', ')} WHERE id = $${i} RETURNING id, full_name, display_name, email, role, phone, bio, profile_photo`,
+    `UPDATE users SET ${fields.join(', ')} WHERE id = $${i}
+     RETURNING id, full_name, display_name, email, role, phone, bio, profile_photo,
+               social_facebook, social_linkedin, social_instagram, social_tiktok`,
     values
   );
 

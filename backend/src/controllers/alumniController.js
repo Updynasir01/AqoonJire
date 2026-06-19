@@ -10,6 +10,10 @@ const listAlumni = asyncHandler(async (req, res) => {
        COALESCE(NULLIF(TRIM(u.display_name), ''), u.full_name) AS display_name,
        u.profile_photo,
        u.bio,
+       u.social_facebook,
+       u.social_linkedin,
+       u.social_instagram,
+       u.social_tiktok,
        COUNT(cert.id)::int AS certificate_count,
        MAX(cert.issued_at) AS latest_certificate_at,
        COALESCE(
@@ -24,7 +28,8 @@ const listAlumni = asyncHandler(async (req, res) => {
        AND u.is_active = TRUE
        AND u.bio IS NOT NULL
        AND TRIM(u.bio) <> ''
-     GROUP BY u.id, u.full_name, u.display_name, u.profile_photo, u.bio
+     GROUP BY u.id, u.full_name, u.display_name, u.profile_photo, u.bio,
+              u.social_facebook, u.social_linkedin, u.social_instagram, u.social_tiktok
      ORDER BY latest_certificate_at DESC`
   );
 

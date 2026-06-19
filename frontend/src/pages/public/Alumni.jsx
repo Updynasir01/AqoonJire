@@ -3,8 +3,43 @@ import { Link } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { landingAPI } from '../../services/api'
 import { useSEO } from '../../hooks/useSEO'
-import { ArrowRight, GraduationCap, Award } from 'lucide-react'
+import { ArrowRight, GraduationCap, Award, Facebook, Linkedin, Instagram } from 'lucide-react'
 import { Spinner } from '../../components/common/index.jsx'
+
+const TikTokIcon = ({ size = 16 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
+    <path d="M16.5 3c.3 2.1 1.6 3.6 3.5 3.85v2.3c-1.2.1-2.4-.2-3.5-.83v5.93c0 3-2.1 5.32-5 5.32s-5-2.3-5-5.12 2.4-5.12 5.3-4.92v2.42c-.3-.1-.6-.13-.9-.13-1.4 0-2.5 1.13-2.5 2.63s1.1 2.6 2.5 2.6 2.6-1.2 2.6-2.7V3h2.5z"/>
+  </svg>
+)
+
+const SOCIAL_LINKS = [
+  { key: 'social_facebook', icon: Facebook, label: 'Facebook' },
+  { key: 'social_linkedin', icon: Linkedin, label: 'LinkedIn' },
+  { key: 'social_instagram', icon: Instagram, label: 'Instagram' },
+  { key: 'social_tiktok', icon: TikTokIcon, label: 'TikTok' },
+]
+
+function AlumniSocials({ person }) {
+  const links = SOCIAL_LINKS.filter(s => person[s.key])
+  if (!links.length) return null
+  return (
+    <div className="alumni-socials">
+      {links.map(({ key, icon: Icon, label }) => (
+        <a
+          key={key}
+          href={person[key]}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="alumni-social"
+          title={label}
+          aria-label={label}
+        >
+          <Icon size={16} />
+        </a>
+      ))}
+    </div>
+  )
+}
 
 function AlumniAvatar({ name, photo }) {
   const initials = name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || '?'
@@ -106,6 +141,7 @@ export default function Alumni() {
                       </div>
                     )}
                     {person.bio && <p className="alumni-bio">{person.bio}</p>}
+                    <AlumniSocials person={person} />
                   </div>
                 ))}
               </div>
