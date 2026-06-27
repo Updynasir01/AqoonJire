@@ -202,7 +202,7 @@ export default function Home() {
         <div className="pub-inner">
           <div className="section-row">
             <div>
-              <div className="section-tag">📚 Subjects</div>
+              <div className="section-tag">📚 Our Courses</div>
               <h2 className="section-h">Find Your Path</h2>
               <p className="section-sub">From IT to Islamic studies — we cover what Somalia needs most.</p>
             </div>
