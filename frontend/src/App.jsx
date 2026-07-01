@@ -12,6 +12,7 @@ import Login from './pages/public/Login.jsx'
 import Register from './pages/public/Register.jsx'
 import FAQ from './pages/public/FAQ.jsx'
 import Alumni from './pages/public/Alumni.jsx'
+import Verify from './pages/public/Verify.jsx'
 
 import AdminDashboard from './pages/admin/Dashboard.jsx'
 import AdminUsers from './pages/admin/Users.jsx'
@@ -29,6 +30,8 @@ import AdminFunnel from './pages/admin/Funnel.jsx'
 import AdminReferrals from './pages/admin/Referrals.jsx'
 import AdminBroadcast from './pages/admin/Broadcast.jsx'
 import AdminFAQs from './pages/admin/FAQs.jsx'
+import AdminTeam from './pages/admin/Team.jsx'
+import AdminAlumni from './pages/admin/Alumni.jsx'
 
 import TeacherDashboard from './pages/teacher/Dashboard.jsx'
 import TeacherCourses from './pages/teacher/Courses.jsx'
@@ -77,6 +80,7 @@ export default function App() {
             <Route path="/alumni" element={<Alumni />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/verify" element={<Verify />} />
             <Route path="/login" element={<RedirectIfGuest><Login /></RedirectIfGuest>} />
             <Route path="/register" element={<RedirectIfGuest><Register /></RedirectIfGuest>} />
 
@@ -96,6 +100,8 @@ export default function App() {
             <Route path="/admin/referrals" element={<RequireAuth roles={['admin']}><AdminReferrals /></RequireAuth>} />
             <Route path="/admin/broadcast" element={<RequireAuth roles={['admin']}><AdminBroadcast /></RequireAuth>} />
             <Route path="/admin/faqs" element={<RequireAuth roles={['admin']}><AdminFAQs /></RequireAuth>} />
+            <Route path="/admin/team" element={<RequireAuth roles={['admin']}><AdminTeam /></RequireAuth>} />
+            <Route path="/admin/alumni" element={<RequireAuth roles={['admin']}><AdminAlumni /></RequireAuth>} />
 
             <Route path="/teacher" element={<RequireAuth roles={['teacher','admin']}><TeacherDashboard /></RequireAuth>} />
             <Route path="/teacher/courses" element={<RequireAuth roles={['teacher','admin']}><TeacherCourses /></RequireAuth>} />

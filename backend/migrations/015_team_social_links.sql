@@ -1,0 +1,4 @@
+ALTER TABLE team_members ADD COLUMN IF NOT EXISTS social_facebook VARCHAR(500);
+ALTER TABLE team_members ADD COLUMN IF NOT EXISTS social_linkedin VARCHAR(500);
+ALTER TABLE team_members ADD COLUMN IF NOT EXISTS social_instagram VARCHAR(500);
+ALTER TABLE team_members ADD COLUMN IF NOT EXISTS social_tiktok VARCHAR(500);

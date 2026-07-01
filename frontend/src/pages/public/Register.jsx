@@ -5,6 +5,8 @@ import { useTheme } from '../../context/ThemeContext'
 import { useSEO } from '../../hooks/useSEO'
 import { Eye, EyeOff, ArrowRight, Sun, Moon, BookOpen, Award, Users, CheckCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
+import WhatsAppFloat from '../../components/common/WhatsAppFloat.jsx'
+import BrandLogo from '../../components/common/BrandLogo.jsx'
 
 export default function Register() {
   useSEO({ title: 'Create a Free Account', description: 'Create a free AqoonJire account to browse courses and get notified about new launches and special offers.', path: '/register' })
@@ -88,9 +90,8 @@ export default function Register() {
       <div className="login-left">
         <div className="login-left-grid"/><div className="login-left-orb"/>
         <div style={{position:'relative',zIndex:1}}>
-          <Link to="/" style={{display:'flex',alignItems:'center',gap:10,marginBottom:52}}>
-            <div className="pub-logo-mark" style={{width:40,height:40,fontSize:18}}>A</div>
-            <span style={{fontFamily:'Syne,sans-serif',fontSize:20,fontWeight:800,color:'#fff'}}>Aqoon<span style={{color:'var(--brand-secondary)'}}>Jire</span></span>
+          <Link to="/" style={{display:'block',marginBottom:52}}>
+            <BrandLogo variant="onDark" size="auth" />
           </Link>
           <h1 style={{color:'#fff',fontSize:'clamp(2rem,3.5vw,3rem)',fontWeight:800,letterSpacing:'-0.03em',lineHeight:1.1,marginBottom:18}}>Join Free.<br/>Learn When You're Ready.</h1>
           <p style={{color:'rgba(255,255,255,0.55)',fontSize:15,lineHeight:1.8,marginBottom:48,maxWidth:380}}>Create a free account to browse courses and get notified about new launches. Course access is unlocked after you enroll with our team.</p>
@@ -150,6 +151,7 @@ export default function Register() {
           </p>
         </div>
       </div>
+      <WhatsAppFloat message="Hi AqoonJire, I need support." />
     </div>
   )
 }

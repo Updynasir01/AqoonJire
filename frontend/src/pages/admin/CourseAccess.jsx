@@ -76,7 +76,7 @@ export default function CourseAccess() {
       <div className="page-header">
         <div>
           <h1>Course Access</h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>Grant or revoke course access after verifying manual payment</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>Grant or revoke course access after verifying manual payment. Each grant includes 6 months of access.</p>
         </div>
       </div>
 
@@ -142,24 +142,29 @@ export default function CourseAccess() {
                     <div className="table-wrap">
                       <table>
                         <thead>
-                          <tr><th>Course</th><th>Status</th><th>Granted</th><th>Notes</th><th>Action</th></tr>
+                          <tr><th>Course</th><th>Status</th><th>Granted</th><th>Expires</th><th>Notes</th><th>Action</th></tr>
                         </thead>
                         <tbody>
-                          {access.map(a => (
+                          {access.map(a => {
+                            const expired = a.is_active && a.expires_at && new Date(a.expires_at) <= new Date()
+                            const status = !a.is_active ? 'Revoked' : expired ? 'Expired' : 'Active'
+                            const variant = !a.is_active ? 'danger' : expired ? 'warning' : 'success'
+                            return (
                             <tr key={a.id}>
                               <td style={{ fontWeight: 500 }}>{a.title}</td>
-                              <td><Badge variant={a.is_active ? 'success' : 'danger'}>{a.is_active ? 'Active' : 'Revoked'}</Badge></td>
+                              <td><Badge variant={variant}>{status}</Badge></td>
                               <td style={{ color: 'var(--text-muted)', fontSize: 13 }}>{new Date(a.granted_at).toLocaleDateString()}</td>
+                              <td style={{ color: 'var(--text-muted)', fontSize: 13 }}>{a.expires_at ? new Date(a.expires_at).toLocaleDateString() : '—'}</td>
                               <td style={{ color: 'var(--text-muted)', fontSize: 13 }}>{a.notes || '—'}</td>
                               <td>
-                                {a.is_active && (
+                                {a.is_active && !expired && (
                                   <button className="btn btn-danger btn-sm" onClick={() => revokeAccess(a.course_id)} disabled={saving}>
                                     <ShieldOff size={13} /> Revoke
                                   </button>
                                 )}
                               </td>
                             </tr>
-                          ))}
+                          )})}
                         </tbody>
                       </table>
                     </div>
@@ -176,7 +181,7 @@ export default function CourseAccess() {
           <button className="btn btn-ghost" onClick={() => setShowGrant(false)}>Cancel</button>
           <button className="btn btn-primary" onClick={grantAccess} disabled={saving}>{saving ? <Spinner size={16} /> : <><ShieldCheck size={14} /> Grant Access</>}</button>
         </>}>
-        <div className="alert alert-info" style={{ marginBottom: 16 }}>Only grant access after confirming the student has paid.</div>
+        <div className="alert alert-info" style={{ marginBottom: 16 }}>Only grant access after confirming payment. Access lasts 6 months from the grant date.</div>
         <form onSubmit={grantAccess}>
           <div className="form-group">
             <label className="form-label">Select Course *</label>

@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const { scaActive } = require('../utils/courseAccess');
 const { notifyCourseStudents } = require('./notificationController');
 
 // GET /api/courses/:courseId/live-sessions  (teacher/admin manage view)
@@ -73,7 +74,7 @@ const myUpcoming = asyncHandler(async (req, res) => {
      FROM live_sessions ls
      JOIN courses c ON ls.course_id = c.id
      JOIN student_course_access sca ON sca.course_id = ls.course_id
-     WHERE sca.student_id = $1 AND sca.is_active = TRUE
+     WHERE sca.student_id = $1 AND ${scaActive('sca')}
        AND ls.scheduled_at > NOW() - INTERVAL '2 hours'
      ORDER BY ls.scheduled_at ASC`,
     [req.user.id]

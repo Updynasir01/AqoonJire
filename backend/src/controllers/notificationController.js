@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const { scaActivePlain } = require('../utils/courseAccess');
 
 // ─── INTERNAL HELPER ──────────────────────────────────────────────────────
 // Called internally by other controllers to create notifications
@@ -20,7 +21,7 @@ const createNotification = async (userId, type, title, message, link = null) => 
 const notifyCourseStudents = async (courseId, type, title, message, link = null) => {
   try {
     const students = await query(
-      `SELECT student_id FROM student_course_access WHERE course_id = $1 AND is_active = TRUE`,
+      `SELECT student_id FROM student_course_access WHERE course_id = $1 AND ${scaActivePlain()}`,
       [courseId]
     );
     for (const row of students.rows) {

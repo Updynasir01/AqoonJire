@@ -256,7 +256,7 @@ const sendEnrollmentEmail = async ({ email, fullName, courseName, teacherName })
       <strong>Course:</strong> ${courseName}<br>
       <strong>Instructor:</strong> ${teacherName || 'Platform Instructor'}
     </div>
-    <p>Log in to your account to start learning right away.</p>
+    <p>Log in to your account to start learning. Your course access is valid for <strong>6 months</strong> from today.</p>
     <a href="${process.env.FRONTEND_URL || '#'}/student/courses" class="btn">Go to My Courses</a>
   `);
   return sendEmail({ to: email, subject: `You're enrolled: ${courseName}`, html });

@@ -1,5 +1,6 @@
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const { scaActive, scaActivePlain } = require('../utils/courseAccess');
 
 // Convert array of objects to CSV string
 const toCSV = (rows, columns) => {
@@ -39,7 +40,7 @@ const overviewReport = asyncHandler(async (req, res) => {
            FROM courses`),
 
     query(`SELECT COUNT(*) AS total_active_enrollments
-           FROM student_course_access WHERE is_active = TRUE`),
+           FROM student_course_access WHERE ${scaActivePlain()}`),
 
     query(`SELECT COUNT(*) AS total_certificates FROM certificates`),
 
@@ -108,7 +109,7 @@ const studentsReport = asyncHandler(async (req, res) => {
             COUNT(DISTINCT cert.id) AS certificates_earned,
             MAX(lp.updated_at) AS last_activity
      FROM users u
-     LEFT JOIN student_course_access sca ON sca.student_id = u.id AND sca.is_active = TRUE
+     LEFT JOIN student_course_access sca ON sca.student_id = u.id AND ${scaActive('sca')}
      LEFT JOIN certificates cert ON cert.student_id = u.id
      LEFT JOIN lesson_progress lp ON lp.student_id = u.id
      WHERE u.role = 'student'

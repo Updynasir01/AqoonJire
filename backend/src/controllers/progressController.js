@@ -1,8 +1,9 @@
 const { query, getClient } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
-const { generateCertificatePDF } = require('../utils/certificateGenerator');
-const { recordLessonActivity, grantLoyaltyReward, logEvent } = require('../services/growthService');
 const { COMPLETION_MIN_WATCH_PCT, getLessonCompletionGate } = require('../utils/lessonProgress');
+const { recordLessonActivity, grantLoyaltyReward, logEvent } = require('../services/growthService');
+const { issueCourseCertificate } = require('../services/certificateService');
+const { scaActive, scaActivePlain } = require('../utils/courseAccess');
 
 // GET /api/progress/course/:courseId
 // Full progress snapshot for the authenticated student
@@ -12,7 +13,7 @@ const getCourseProgress = asyncHandler(async (req, res) => {
 
   // Verify access
   const access = await query(
-    `SELECT id FROM student_course_access WHERE student_id = $1 AND course_id = $2 AND is_active = TRUE`,
+    `SELECT id FROM student_course_access WHERE student_id = $1 AND course_id = $2 AND ${scaActivePlain()}`,
     [studentId, courseId]
   );
   if (!access.rows.length) throw createError('Access denied to this course.', 403);
@@ -132,7 +133,7 @@ const trackLessonProgress = asyncHandler(async (req, res) => {
 
   // Check student access
   const access = await query(
-    `SELECT id FROM student_course_access WHERE student_id = $1 AND course_id = $2 AND is_active = TRUE`,
+    `SELECT id FROM student_course_access WHERE student_id = $1 AND course_id = $2 AND ${scaActivePlain()}`,
     [studentId, courseId]
   );
   if (!access.rows.length) throw createError('Access denied.', 403);
@@ -188,36 +189,7 @@ const trackLessonProgress = asyncHandler(async (req, res) => {
       );
 
       if (!existing.rows.length) {
-        const certNum = `CERT-${Date.now()}-${studentId.slice(0,8).toUpperCase()}`;
-
-        // Get names for PDF generation
-        const names = await query(
-          `SELECT u.full_name AS student_name, c.title AS course_title,
-                  t.full_name AS teacher_name
-           FROM users u, courses c
-           LEFT JOIN users t ON c.teacher_id = t.id
-           WHERE u.id = $1 AND c.id = $2`,
-          [studentId, courseId]
-        );
-
-        const certResult = await query(
-          `INSERT INTO certificates (student_id, course_id, certificate_number)
-           VALUES ($1, $2, $3) RETURNING *`,
-          [studentId, courseId, certNum]
-        );
-
-        // Generate PDF in background (don't await so response is fast)
-        if (names.rows.length) {
-          generateCertificatePDF({
-            studentName: names.rows[0].student_name,
-            courseName: names.rows[0].course_title,
-            teacherName: names.rows[0].teacher_name || 'Platform Instructor',
-            certificateNumber: certNum,
-            issuedAt: new Date()
-          }).catch(err => console.error('Certificate PDF gen error:', err.message));
-        }
-
-        certificateData = certResult.rows[0];
+        certificateData = await issueCourseCertificate({ studentId, courseId });
       }
     }
   }
@@ -234,19 +206,12 @@ const trackLessonProgress = asyncHandler(async (req, res) => {
     grantLoyaltyReward(studentId, courseTitle).catch(() => {});
   }
 
-  let needsAlumniBio = false;
-  if (certificateData) {
-    const profile = await query('SELECT bio FROM users WHERE id = $1', [studentId]);
-    needsAlumniBio = !profile.rows[0]?.bio?.trim();
-  }
-
   res.json({
     success: true,
     data: {
       progress: result.rows[0],
       certificate_issued: !!certificateData,
       certificate: certificateData,
-      needs_alumni_bio: needsAlumniBio
     }
   });
 });
@@ -269,7 +234,7 @@ const getProgressSummary = asyncHandler(async (req, res) => {
      LEFT JOIN lessons l ON l.course_id = c.id
      LEFT JOIN lesson_progress lp ON lp.lesson_id = l.id AND lp.student_id = $1
      LEFT JOIN certificates cert ON cert.course_id = c.id AND cert.student_id = $1
-     WHERE sca.student_id = $1 AND sca.is_active = TRUE
+     WHERE sca.student_id = $1 AND ${scaActive('sca')}
      GROUP BY c.id, c.title, c.thumbnail, c.slug, cert.issued_at, cert.certificate_number
      ORDER BY last_activity DESC NULLS LAST`,
     [req.user.id]

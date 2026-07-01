@@ -2,6 +2,7 @@ const { sendGradeEmail } = require('../services/emailService');
 const { v4: uuidv4 } = require('uuid');
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const { scaActivePlain } = require('../utils/courseAccess');
 
 // ─── TEACHER: MANAGE ASSIGNMENTS ──────────────────────────────────────────
 
@@ -19,7 +20,7 @@ const getAssignments = asyncHandler(async (req, res) => {
   if (req.user.role === 'student') {
     const access = await query(
       `SELECT id FROM student_course_access
-       WHERE student_id = $1 AND course_id = $2 AND is_active = TRUE`,
+       WHERE student_id = $1 AND course_id = $2 AND ${scaActivePlain()}`,
       [req.user.id, course_id]
     );
     if (!access.rows.length) throw createError('You do not have access to this course.', 403);
@@ -184,7 +185,7 @@ const submitAssignment = asyncHandler(async (req, res) => {
 
   // Check student access to course
   const access = await query(
-    `SELECT id FROM student_course_access WHERE student_id = $1 AND course_id = $2 AND is_active = TRUE`,
+    `SELECT id FROM student_course_access WHERE student_id = $1 AND course_id = $2 AND ${scaActivePlain()}`,
     [studentId, a.course_id]
   );
   if (!access.rows.length) throw createError('You do not have access to this course.', 403);

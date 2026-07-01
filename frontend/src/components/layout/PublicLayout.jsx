@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
 import { Sun, Moon, Menu, X, ChevronRight, Mail, Phone, MapPin, Facebook, Linkedin, Instagram } from 'lucide-react'
+import WhatsAppFloat from '../common/WhatsAppFloat.jsx'
+import BrandLogo from '../common/BrandLogo.jsx'
 
 const TikTokIcon = ({ size = 16 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
@@ -30,6 +32,7 @@ export function Navbar() {
     { to: '/about', label: 'About us' },
     { to: '/courses', label: 'Courses' },
     { to: '/alumni', label: 'Alumni' },
+    { to: '/verify', label: 'Verify Certificate' },
     { to: '/faq', label: 'FAQ' },
     { to: '/contact', label: 'Contacts' },
   ]
@@ -39,14 +42,14 @@ export function Navbar() {
     location.pathname === '/courses' ||
     /^\/courses\/[^/]+$/.test(location.pathname)
   )
+  const lightNav = !isDark && !scrolled && !overDark
 
   return (
     <>
       <nav className={`pub-nav${scrolled ? ' scrolled' : ''}${overDark ? ' over-dark' : ''}`} style={{ background: scrolled ? undefined : 'transparent' }}>
         <div className="pub-nav-inner">
           <Link to="/" className="pub-logo">
-            <div className="pub-logo-mark">A</div>
-            <span className="pub-logo-text">Aqoon<em>Jire</em></span>
+            <BrandLogo variant={lightNav ? 'onLight' : 'onDark'} size="nav" />
           </Link>
 
           <div className="pub-nav-links" style={{ display: 'flex' }}>
@@ -93,19 +96,20 @@ export function Navbar() {
           </Link>
         </div>
       )}
+      <WhatsAppFloat message="Hi AqoonJire, I need support." />
     </>
   )
 }
 
 export function Footer() {
   return (
+    <>
     <footer className="pub-footer">
       <div className="pub-footer-inner">
         <div className="pub-footer-grid">
           <div>
             <div className="pub-footer-brand-logo">
-              <div className="pub-logo-mark" style={{ width: 36, height: 36, fontSize: 16 }}>A</div>
-              <span className="pub-footer-brand-text">Aqoon<em>Jire</em></span>
+              <BrandLogo variant="onLight" size="footer" />
             </div>
             <p className="pub-footer-brand-desc">
               Empowering Somalia through quality education. Learn from expert instructors in your own language, earn certificates, and build your future.
@@ -128,7 +132,7 @@ export function Footer() {
 
           <div>
             <div className="pub-footer-col-title">Platform</div>
-            {[['/', 'Home'], ['/about', 'About us'], ['/courses', 'Browse Courses'], ['/alumni', 'Alumni'], ['/faq', 'FAQ'], ['/contact', 'Contacts'], ['/login', 'Student Login']].map(([to, label]) => (
+            {[['/', 'Home'], ['/about', 'About us'], ['/courses', 'Browse Courses'], ['/alumni', 'Alumni'], ['/verify', 'Verify Certificate'], ['/faq', 'FAQ'], ['/contact', 'Contacts'], ['/login', 'Student Login']].map(([to, label]) => (
               <Link key={to} to={to} className="pub-footer-link">{label}</Link>
             ))}
           </div>
@@ -166,5 +170,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
+  </>
   )
 }

@@ -2,6 +2,8 @@ const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
 const { isSectionReleased, daysUntilRelease, toDateStr } = require('../utils/streak');
 const { getLessonCompletionGate, COMPLETION_MIN_WATCH_PCT } = require('../utils/lessonProgress');
+const { issueCourseCertificate } = require('../services/certificateService');
+const { scaActive, scaActivePlain } = require('../utils/courseAccess');
 
 // GET /api/student/dashboard
 const getDashboard = asyncHandler(async (req, res) => {
@@ -18,7 +20,7 @@ const getDashboard = asyncHandler(async (req, res) => {
        LEFT JOIN users u ON c.teacher_id = u.id
        LEFT JOIN lessons l ON l.course_id = c.id
        LEFT JOIN lesson_progress lp ON lp.lesson_id = l.id AND lp.student_id = $1
-       WHERE sca.student_id = $1 AND sca.is_active = TRUE
+       WHERE sca.student_id = $1 AND ${scaActive('sca')}
        GROUP BY c.id, c.title, c.slug, c.thumbnail, c.total_students, u.full_name`,
       [studentId]
     ),
@@ -49,6 +51,7 @@ const getMyCourses = asyncHandler(async (req, res) => {
   const result = await query(
     `SELECT c.id, c.title, c.slug, c.thumbnail, c.language, c.level,
             u.full_name AS teacher_name,
+            sca.expires_at,
             COUNT(DISTINCT l.id) AS total_lessons,
             COUNT(DISTINCT lp.id) FILTER (WHERE lp.is_completed = TRUE) AS completed_lessons,
             ROUND(COUNT(DISTINCT lp.id) FILTER (WHERE lp.is_completed = TRUE) * 100.0
@@ -58,8 +61,8 @@ const getMyCourses = asyncHandler(async (req, res) => {
      LEFT JOIN users u ON c.teacher_id = u.id
      LEFT JOIN lessons l ON l.course_id = c.id
      LEFT JOIN lesson_progress lp ON lp.lesson_id = l.id AND lp.student_id = $1
-     WHERE sca.student_id = $1 AND sca.is_active = TRUE
-     GROUP BY c.id, c.title, c.slug, c.thumbnail, c.language, c.level, u.full_name`,
+     WHERE sca.student_id = $1 AND ${scaActive('sca')}
+     GROUP BY c.id, c.title, c.slug, c.thumbnail, c.language, c.level, u.full_name, sca.expires_at`,
     [req.user.id]
   );
   res.json({ success: true, data: result.rows });
@@ -72,10 +75,19 @@ const getCourseContent = asyncHandler(async (req, res) => {
 
   // Check access
   const access = await query(
-    `SELECT id, granted_at FROM student_course_access WHERE student_id = $1 AND course_id = $2 AND is_active = TRUE`,
+    `SELECT id, granted_at, expires_at FROM student_course_access
+     WHERE student_id = $1 AND course_id = $2 AND ${scaActivePlain()}`,
     [studentId, courseId]
   );
   if (!access.rows.length) {
+    const expired = await query(
+      `SELECT expires_at FROM student_course_access
+       WHERE student_id = $1 AND course_id = $2 AND is_active = TRUE AND expires_at <= NOW()`,
+      [studentId, courseId]
+    );
+    if (expired.rows.length) {
+      throw createError('Your access to this course has expired. Contact us on WhatsApp to renew.', 403);
+    }
     throw createError('You do not have access to this course. Please contact the admin.', 403);
   }
 
@@ -167,7 +179,7 @@ const completeLesson = asyncHandler(async (req, res) => {
 
   // Verify student has access
   const access = await query(
-    `SELECT id FROM student_course_access WHERE student_id = $1 AND course_id = $2 AND is_active = TRUE`,
+    `SELECT id FROM student_course_access WHERE student_id = $1 AND course_id = $2 AND ${scaActivePlain()}`,
     [studentId, courseId]
   );
   if (!access.rows.length) throw createError('Access denied.', 403);
@@ -207,15 +219,15 @@ const completeLesson = asyncHandler(async (req, res) => {
   let certificate = null;
   const { total, done } = progress.rows[0];
   if (parseInt(total) > 0 && parseInt(done) >= parseInt(total)) {
-    const certNum = `CERT-${Date.now()}-${studentId.slice(0, 8).toUpperCase()}`;
-    const cert = await query(
-      `INSERT INTO certificates (student_id, course_id, certificate_number)
-       VALUES ($1, $2, $3)
-       ON CONFLICT (student_id, course_id) DO NOTHING
-       RETURNING *`,
-      [studentId, courseId, certNum]
-    );
-    certificate = cert.rows[0] || null;
+    try {
+      certificate = await issueCourseCertificate({ studentId, courseId });
+    } catch (err) {
+      const existing = await query(
+        'SELECT * FROM certificates WHERE student_id = $1 AND course_id = $2',
+        [studentId, courseId]
+      );
+      certificate = existing.rows[0] || null;
+    }
   }
 
   res.json({
@@ -251,7 +263,7 @@ const getAnnouncements = asyncHandler(async (req, res) => {
      WHERE a.is_global = TRUE
         OR a.course_id IN (
           SELECT course_id FROM student_course_access
-          WHERE student_id = $1 AND is_active = TRUE
+          WHERE student_id = $1 AND ${scaActivePlain()}
         )
      ORDER BY a.created_at DESC`,
     [req.user.id]

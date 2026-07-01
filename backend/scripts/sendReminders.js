@@ -14,6 +14,7 @@
 require('../src/loadEnv');
 const { pool, query } = require('../src/config/database');
 const { sendStreakReminder } = require('../src/services/emailService');
+const { scaActive } = require('../src/utils/courseAccess');
 
 const INACTIVE_DAYS = Number(process.env.REMINDER_INACTIVE_DAYS || 3);
 
@@ -27,7 +28,7 @@ async function run() {
             MAX(c.title) AS a_course_title,
             MAX(lp.updated_at) AS last_activity
      FROM users u
-     JOIN student_course_access sca ON sca.student_id = u.id AND sca.is_active = TRUE
+     JOIN student_course_access sca ON sca.student_id = u.id AND ${scaActive('sca')}
      JOIN courses c ON sca.course_id = c.id
      LEFT JOIN lesson_progress lp ON lp.student_id = u.id
      LEFT JOIN learning_streaks ls ON ls.student_id = u.id

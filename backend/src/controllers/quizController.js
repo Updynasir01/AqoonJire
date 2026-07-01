@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const { scaActivePlain } = require('../utils/courseAccess');
 
 // GET /api/quizzes?course_id=... — list quizzes for a course
 const listQuizzes = asyncHandler(async (req, res) => {
@@ -16,7 +17,7 @@ const listQuizzes = asyncHandler(async (req, res) => {
   } else if (req.user.role === 'student') {
     const access = await query(
       `SELECT id FROM student_course_access
-       WHERE student_id = $1 AND course_id = $2 AND is_active = TRUE`,
+       WHERE student_id = $1 AND course_id = $2 AND ${scaActivePlain()}`,
       [req.user.id, course_id]
     );
     if (!access.rows.length) throw createError('You do not have access to this course.', 403);

@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import DashboardLayout from '../../components/layout/DashboardLayout.jsx'
 import { LoadingScreen, Avatar } from '../../components/common/index.jsx'
 import { authAPI } from '../../services/api'
@@ -98,14 +97,10 @@ export default function StudentSettings() {
         <div className="card card-body" style={{ marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
             <Award size={18} color="var(--brand-secondary)" />
-            <h2 style={{ fontSize: 18, margin: 0 }}>Alumni Profile</h2>
+            <h2 style={{ fontSize: 18, margin: 0 }}>Your Profile</h2>
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: 14, lineHeight: 1.7, margin: 0 }}>
-            When you earn a certificate, your profile can appear on the public{' '}
-            <Link to="/alumni" target="_blank" rel="noreferrer" style={{ color: 'var(--brand-secondary)', fontWeight: 600 }}>
-              Alumni page
-            </Link>
-            . Add a display name, photo, bio, and social links so others can connect with you.
+            Add a display name, photo, bio, and social links for your student profile and certificates.
           </p>
         </div>
 

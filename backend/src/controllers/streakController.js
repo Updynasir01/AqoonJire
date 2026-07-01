@@ -1,5 +1,6 @@
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const { scaActive } = require('../utils/courseAccess');
 const { toDateStr } = require('../utils/streak');
 
 // GET /api/me/streak — current streak, today's goal progress, last 7 days, and the
@@ -46,7 +47,7 @@ const getStreak = asyncHandler(async (req, res) => {
      LEFT JOIN lessons l ON l.course_id = c.id
      LEFT JOIN lesson_progress lp ON lp.lesson_id = l.id AND lp.student_id = $1
      LEFT JOIN certificates cert ON cert.course_id = c.id AND cert.student_id = $1
-     WHERE sca.student_id = $1 AND sca.is_active = TRUE AND cert.id IS NULL
+     WHERE sca.student_id = $1 AND ${scaActive('sca')} AND cert.id IS NULL
      GROUP BY c.id, c.title, c.slug
      HAVING COUNT(DISTINCT l.id) > 0
         AND COUNT(DISTINCT lp.id) FILTER (WHERE lp.is_completed = TRUE) > 0

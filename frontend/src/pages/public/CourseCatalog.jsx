@@ -51,7 +51,7 @@ function SkeletonCard() {
 export default function CourseCatalog() {
   useSEO({
     title: 'All Courses',
-    description: 'Browse all AqoonJire courses — IT, business, languages, health and more, taught in Somali. Pay once, learn for life, earn certificates.',
+    description: 'Browse all AqoonJire courses — IT, business, languages, health and more, taught in Somali. Pay once, get 6 months access, earn certificates.',
     path: '/courses',
   })
   const [searchParams, setSearchParams] = useSearchParams()

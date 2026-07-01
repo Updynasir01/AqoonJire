@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
 const { sendBroadcastEmail, buildCampaignContent } = require('../services/emailService');
+const { scaActive } = require('../utils/courseAccess');
 
 const BATCH_SIZE = parseInt(process.env.BROADCAST_BATCH_SIZE) || 20;
 const DELAY_MS = parseInt(process.env.BROADCAST_DELAY_MS) || 1500;
@@ -32,7 +33,7 @@ const resolveAudience = (audience, courseId) => {
         text: `${base} AND u.role = 'student'
                AND EXISTS (
                  SELECT 1 FROM student_course_access sca
-                 WHERE sca.student_id = u.id AND sca.course_id = $1 AND sca.is_active = TRUE
+                 WHERE sca.student_id = u.id AND sca.course_id = $1 AND ${scaActive('sca')}
                )`,
         values: [courseId]
       };

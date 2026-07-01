@@ -1,5 +1,6 @@
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const { scaActive, scaActivePlain } = require('../utils/courseAccess');
 
 // GET /api/teacher/dashboard
 const getDashboard = asyncHandler(async (req, res) => {
@@ -25,7 +26,7 @@ const getDashboard = asyncHandler(async (req, res) => {
       `SELECT COUNT(DISTINCT sca.student_id) AS total
        FROM student_course_access sca
        JOIN courses c ON sca.course_id = c.id
-       WHERE c.teacher_id = $1 AND sca.is_active = TRUE`,
+       WHERE c.teacher_id = $1 AND ${scaActive('sca')}`,
       [teacherId]
     ),
 
@@ -99,7 +100,7 @@ const getCourseStudents = asyncHandler(async (req, res) => {
      LEFT JOIN lessons l ON l.course_id = $1
      LEFT JOIN lesson_progress lp ON lp.lesson_id = l.id AND lp.student_id = u.id
      LEFT JOIN certificates cert ON cert.student_id = u.id AND cert.course_id = $1
-     WHERE sca.course_id = $1 AND sca.is_active = TRUE
+     WHERE sca.course_id = $1 AND ${scaActive('sca')}
      GROUP BY u.id, u.full_name, u.email, u.profile_photo, u.phone, sca.granted_at, cert.issued_at
      ORDER BY sca.granted_at DESC`,
     [courseId]
@@ -132,7 +133,7 @@ const getCourseAnalytics = asyncHandler(async (req, res) => {
               ) AS completion_rate
        FROM lessons l
        JOIN sections s ON l.section_id = s.id
-       LEFT JOIN student_course_access sca ON sca.course_id = l.course_id AND sca.is_active = TRUE
+       LEFT JOIN student_course_access sca ON sca.course_id = l.course_id AND ${scaActive('sca')}
        LEFT JOIN lesson_progress lp ON lp.lesson_id = l.id
        WHERE l.course_id = $1
        GROUP BY l.id, l.title, l.order_index, s.title
@@ -169,7 +170,7 @@ const getCourseAnalytics = asyncHandler(async (req, res) => {
          FROM student_course_access sca
          LEFT JOIN lessons l ON l.course_id = sca.course_id
          LEFT JOIN lesson_progress lp ON lp.lesson_id = l.id AND lp.student_id = sca.student_id
-         WHERE sca.course_id = $1 AND sca.is_active = TRUE
+         WHERE sca.course_id = $1 AND ${scaActive('sca')}
          GROUP BY sca.student_id
        ) sub`,
       [courseId]

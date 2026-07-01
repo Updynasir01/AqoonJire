@@ -87,7 +87,6 @@ export default function CoursePlayer() {
   const [playerDuration, setPlayerDuration] = useState(0)
   const [pendingResume, setPendingResume] = useState(null)
   const [courseJustCompleted, setCourseJustCompleted] = useState(false)
-  const [alumniBioModal, setAlumniBioModal] = useState(false)
   const [contentOpen, setContentOpen] = useState(false)
   const watchStart = useRef(null)
   const videoRef = useRef(null)
@@ -248,7 +247,6 @@ export default function CoursePlayer() {
       })
       if (r.data.data.certificate_issued) {
         toast.success('🎓 Certificate earned! Course complete!')
-        if (r.data.data.needs_alumni_bio) setAlumniBioModal(true)
       } else {
         toast.success('Lesson completed!')
       }
@@ -831,27 +829,6 @@ export default function CoursePlayer() {
             </form>
           </div>
         )}
-      </Modal>
-
-      <Modal
-        open={alumniBioModal}
-        onClose={() => setAlumniBioModal(false)}
-        title="Add your bio for Alumni"
-        footer={
-          <>
-            <button type="button" className="btn btn-ghost" onClick={() => setAlumniBioModal(false)}>Later</button>
-            <Link to="/student/settings" className="btn btn-secondary" onClick={() => setAlumniBioModal(false)}>
-              Go to Settings
-            </Link>
-          </>
-        }
-      >
-        <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: 12 }}>
-          Congratulations on earning your certificate!
-        </p>
-        <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, margin: 0 }}>
-          You don&apos;t have a bio yet. Please add your bio and profile photo in Settings so you can appear on the public Alumni page.
-        </p>
       </Modal>
     </DashboardLayout>
   )

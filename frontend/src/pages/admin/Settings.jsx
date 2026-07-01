@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import DashboardLayout from '../../components/layout/DashboardLayout.jsx'
 import { Spinner, Badge } from '../../components/common/index.jsx'
-import { settingsAPI, landingAPI } from '../../services/api'
+import { settingsAPI, landingAPI, certificateAPI } from '../../services/api'
 import toast from 'react-hot-toast'
-import { Save, Users, BookOpen, Award, GraduationCap } from 'lucide-react'
+import { Save, Users, BookOpen, Award, GraduationCap, ShieldCheck, RefreshCw } from 'lucide-react'
 
 export default function Settings() {
   const [settings, setSettings] = useState({})
   const [realStats, setRealStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [regenerating, setRegenerating] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -33,6 +34,19 @@ export default function Settings() {
 
   const set = (k, v) => setSettings(p => ({ ...p, [k]: v }))
   const useMock = settings.stats_use_mock === true || settings.stats_use_mock === 'true'
+
+  const regenerateAllCerts = async () => {
+    if (!window.confirm('Regenerate PDF files for all certificates? This updates the design and QR codes but keeps existing serial numbers.')) return
+    setRegenerating(true)
+    try {
+      const r = await certificateAPI.regenerateAll()
+      toast.success(r.data.message || 'Certificates regenerated.')
+    } catch {
+      toast.error('Failed to regenerate certificates.')
+    } finally {
+      setRegenerating(false)
+    }
+  }
 
   const field = (key, label, type = 'text', placeholder = '') => (
     <div className="form-group">
@@ -133,6 +147,45 @@ export default function Settings() {
                 ? 'Visitors will see the mockup numbers above on the homepage.'
                 : 'Visitors will see live counts from your database (students, published courses, certificates, active teachers).'}
             </p>
+          </div>
+        </div>
+
+        <div className="card" style={{ gridColumn: '1 / -1' }}>
+          <div className="card-body">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap', marginBottom: 20 }}>
+              <div>
+                <h3 style={{ fontSize: 16, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <ShieldCheck size={18} /> Certificates
+                </h3>
+                <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>
+                  Control serial numbers for new certificates and PDF appearance. Set the next serial if you already issued certificates offline (e.g. 01–07 used → set next to 8 for 00008).
+                </p>
+              </div>
+              <button type="button" className="btn btn-ghost" onClick={regenerateAllCerts} disabled={regenerating}>
+                {regenerating ? <Spinner size={16} /> : <><RefreshCw size={15} /> Regenerate All PDFs</>}
+              </button>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+              <div className="form-group">
+                <label className="form-label">Next Serial Number</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  min="1"
+                  value={settings.certificate_serial_next ?? ''}
+                  onChange={e => set('certificate_serial_next', e.target.value)}
+                  placeholder="8"
+                />
+                <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 6, marginBottom: 0 }}>
+                  The next certificate issued will use this number, then increment automatically.
+                </p>
+              </div>
+              {field('certificate_serial_padding', 'Serial Padding (digits)', 'number', '5')}
+              {field('certificate_academy_name', 'Academy Name on Certificate', 'text', 'Aqoonjire Academy')}
+              {field('certificate_director_name', 'Director Signature Name', 'text', 'Amin Ahmed Abdi')}
+              {field('certificate_director_title', 'Director Title', 'text', 'Academic Director')}
+            </div>
           </div>
         </div>
 

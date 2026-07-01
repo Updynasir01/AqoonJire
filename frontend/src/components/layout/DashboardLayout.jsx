@@ -3,7 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
 import { adminAPI } from '../../services/api'
-import { LayoutDashboard, BookOpen, Users, Settings, LogOut, FileText, ClipboardList, Megaphone, Award, Home, Menu, X, CreditCard, BarChart2, ShieldCheck, BookMarked, Sun, Moon, Ticket, Package, TrendingUp, Share2, Video, MessageSquare, Gift, Send, HelpCircle } from 'lucide-react'
+import WhatsAppFloat from '../common/WhatsAppFloat.jsx'
+import BrandLogo from '../common/BrandLogo.jsx'
+import { LayoutDashboard, BookOpen, Users, Settings, LogOut, FileText, ClipboardList, Megaphone, Award, Home, Menu, X, CreditCard, BarChart2, ShieldCheck, BookMarked, Sun, Moon, Ticket, Package, TrendingUp, Share2, Video, MessageSquare, Gift, Send, HelpCircle, UsersRound, GraduationCap } from 'lucide-react'
 
 const NAV = {
   admin: [
@@ -29,6 +31,8 @@ const NAV = {
       { to:'/admin/categories', icon:<BookMarked size={15}/>, label:'Categories' },
       { to:'/admin/announcements', icon:<Megaphone size={15}/>, label:'Announcements' },
       { to:'/admin/faqs', icon:<HelpCircle size={15}/>, label:'FAQs' },
+      { to:'/admin/team', icon:<UsersRound size={15}/>, label:'Team' },
+      { to:'/admin/alumni', icon:<GraduationCap size={15}/>, label:'Alumni' },
       { to:'/admin/settings', icon:<Settings size={15}/>, label:'Settings' },
     ]},
   ],
@@ -93,9 +97,9 @@ export default function DashboardLayout({ children, title }) {
       <aside className={`sidebar${open ? ' open' : ''}`}>
         <div className="sidebar-logo">
           <div style={{display:'flex',alignItems:'center',gap:9}}>
-            <div className="pub-logo-mark" style={{width:32,height:32,fontSize:15,flexShrink:0}}>A</div>
+            <BrandLogo iconOnly size="sidebar" variant="onDark" />
             <div>
-              <h2 style={{fontSize:15}}>Aqoon<span style={{color:'var(--brand-secondary)'}}>Jire</span></h2>
+              <h2 style={{fontSize:15,lineHeight:1.2}}>Aqoon<span style={{color:'var(--brand-secondary)'}}>Jire</span></h2>
               <span style={{color:'var(--brand-secondary)',fontSize:10,textTransform:'capitalize',letterSpacing:'.04em'}}>{user?.role} Portal</span>
             </div>
           </div>
@@ -167,6 +171,12 @@ export default function DashboardLayout({ children, title }) {
         </header>
         <main className="page-content">{children}</main>
       </div>
+      {user?.role === 'student' && (
+        <WhatsAppFloat
+          message="Hi AqoonJire, I need help with my course."
+          label="Get course support on WhatsApp"
+        />
+      )}
     </div>
   )
 }

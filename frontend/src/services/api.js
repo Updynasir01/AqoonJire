@@ -164,6 +164,7 @@ export const landingAPI = {
 
 export const certificateAPI = {
   download: id => api.get(`/certificates/${id}/download`, { responseType: 'blob' }),
+  regenerateAll: () => api.post('/admin/certificates/regenerate-all'),
 }
 
 // ─── GROWTH FEATURES ────────────────────────────────────────────────────
@@ -252,4 +253,19 @@ export const siteFaqAPI = {
   create: d => api.post('/admin/site-faqs', d),
   update: (id, d) => api.put(`/admin/site-faqs/${id}`, d),
   delete: id => api.delete(`/admin/site-faqs/${id}`),
+}
+
+export const teamAPI = {
+  publicList: () => api.get('/team'),
+  list: () => api.get('/admin/team'),
+  create: fd => api.post('/admin/team', fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  update: (id, fd) => api.put(`/admin/team/${id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  delete: id => api.delete(`/admin/team/${id}`),
+}
+
+export const alumniAdminAPI = {
+  list: () => api.get('/admin/alumni'),
+  create: fd => api.post('/admin/alumni', fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  update: (id, fd) => api.put(`/admin/alumni/${id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  delete: id => api.delete(`/admin/alumni/${id}`),
 }

@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const { query, getClient } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
 const { qualifyReferral, logEvent } = require('../services/growthService');
+const { EXPIRES_INTERVAL_SQL, scaActive, scaActivePlain } = require('../utils/courseAccess');
 
 // ─── USER MANAGEMENT ───────────────────────────────────────────────────────
 
@@ -171,7 +172,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 const getStudentAccess = asyncHandler(async (req, res) => {
   const result = await query(
     `SELECT sca.id, sca.course_id, c.title, c.thumbnail, c.price,
-            sca.is_active, sca.granted_at, sca.revoked_at, sca.notes,
+            sca.is_active, sca.granted_at, sca.expires_at, sca.revoked_at, sca.notes,
             u.full_name AS teacher_name
      FROM student_course_access sca
      JOIN courses c ON sca.course_id = c.id
@@ -197,10 +198,11 @@ const grantAccess = asyncHandler(async (req, res) => {
   }
 
   const result = await query(
-    `INSERT INTO student_course_access (student_id, course_id, granted_by, notes, is_active)
-     VALUES ($1, $2, $3, $4, TRUE)
+    `INSERT INTO student_course_access (student_id, course_id, granted_by, notes, is_active, expires_at)
+     VALUES ($1, $2, $3, $4, TRUE, NOW() + ${EXPIRES_INTERVAL_SQL})
      ON CONFLICT (student_id, course_id)
-     DO UPDATE SET is_active = TRUE, granted_by = $3, granted_at = NOW(), revoked_at = NULL, notes = $4
+     DO UPDATE SET is_active = TRUE, granted_by = $3, granted_at = NOW(), revoked_at = NULL, notes = $4,
+                   expires_at = NOW() + ${EXPIRES_INTERVAL_SQL}
      RETURNING *`,
     [studentId, course_id, req.user.id, notes || null]
   );
@@ -212,7 +214,7 @@ const grantAccess = asyncHandler(async (req, res) => {
   await query(
     `UPDATE courses SET total_students = (
        SELECT COUNT(*) FROM student_course_access
-       WHERE course_id = $1 AND is_active = TRUE
+       WHERE course_id = $1 AND ${scaActivePlain()}
      ) WHERE id = $1`,
     [course_id]
   );
@@ -253,7 +255,7 @@ const revokeAccess = asyncHandler(async (req, res) => {
 
   await query(
     `UPDATE courses SET total_students = (
-       SELECT COUNT(*) FROM student_course_access WHERE course_id = $1 AND is_active = TRUE
+       SELECT COUNT(*) FROM student_course_access WHERE course_id = $1 AND ${scaActivePlain()}
      ) WHERE id = $1`,
     [courseId]
   );
@@ -346,7 +348,7 @@ const getStudentProgress = asyncHandler(async (req, res) => {
      JOIN courses c ON sca.course_id = c.id
      JOIN lessons l ON l.course_id = c.id
      LEFT JOIN lesson_progress lp ON lp.lesson_id = l.id AND lp.student_id = $1
-     WHERE sca.student_id = $1 AND sca.is_active = TRUE
+     WHERE sca.student_id = $1 AND ${scaActive('sca')}
      GROUP BY c.id, c.title`,
     [req.params.studentId]
   );

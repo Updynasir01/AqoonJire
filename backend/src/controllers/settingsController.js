@@ -23,7 +23,9 @@ const updateSettings = asyncHandler(async (req, res) => {
     'hero_image_url', 'footer_text', 'facebook_url', 'twitter_url',
     'whatsapp_number', 'about_text', 'primary_color', 'currency_default',
     'stats_use_mock', 'mock_total_students', 'mock_total_courses',
-    'mock_certificates_issued', 'mock_total_teachers'
+    'mock_certificates_issued', 'mock_total_teachers',
+    'certificate_serial_next', 'certificate_serial_padding',
+    'certificate_director_name', 'certificate_director_title', 'certificate_academy_name'
   ];
 
   const updates = Object.entries(req.body).filter(([k]) => allowed.includes(k));

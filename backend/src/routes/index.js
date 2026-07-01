@@ -47,6 +47,7 @@ const faq          = require('../controllers/faqController');
 const broadcast    = require('../controllers/broadcastController');
 const siteFaq      = require('../controllers/siteFaqController');
 const alumni       = require('../controllers/alumniController');
+const team         = require('../controllers/teamController');
 
 // ── PUBLIC ────────────────────────────────────────────────────────────────
 router.get('/landing',                         landing.getLandingData);
@@ -64,6 +65,7 @@ router.get('/certificates/verify/:certNumber', certificate.verifyCertificate);
 router.get('/unsubscribe',                     broadcast.publicUnsubscribe);
 router.get('/site-faqs',                       siteFaq.listPublic);
 router.get('/alumni',                          alumni.listAlumni);
+router.get('/team',                            team.listPublic);
 
 // ── AUTH ──────────────────────────────────────────────────────────────────
 router.post('/auth/login',           loginLimiter, loginRules, validate, auth.login);
@@ -163,6 +165,7 @@ router.post('/progress/lesson/:lessonId/track',authenticate, progress.trackLesso
 // ── CERTIFICATES ──────────────────────────────────────────────────────────
 router.get ('/certificates/:certificateId/download',   authenticate, certificate.downloadCertificate);
 router.post('/certificates/regenerate/:certificateId', authenticate, adminOnly, certificate.regenerateCertificate);
+router.post('/admin/certificates/regenerate-all',      authenticate, adminOnly, certificate.regenerateAllCertificates);
 
 // ── QUIZZES ───────────────────────────────────────────────────────────────
 router.get   ('/quizzes',       authenticate, quiz.listQuizzes);
@@ -284,5 +287,21 @@ router.get   ('/admin/site-faqs',     authenticate, adminOnly, siteFaq.listAll);
 router.post  ('/admin/site-faqs',     authenticate, adminOnly, siteFaq.createFaq);
 router.put   ('/admin/site-faqs/:id', authenticate, adminOnly, siteFaq.updateFaq);
 router.delete('/admin/site-faqs/:id', authenticate, adminOnly, siteFaq.deleteFaq);
+
+// ── TEAM (About page) ─────────────────────────────────────────────────────
+router.get   ('/admin/team',     authenticate, adminOnly, team.listAll);
+router.post  ('/admin/team',     authenticate, adminOnly, upload.single('photo'), team.createMember);
+router.put   ('/admin/team/:id', authenticate, adminOnly, upload.single('photo'), team.updateMember);
+router.delete('/admin/team/:id', authenticate, adminOnly, team.deleteMember);
+
+// ── ALUMNI SPOTLIGHTS (curated success stories) ───────────────────────────
+router.get   ('/admin/alumni',     authenticate, adminOnly, alumni.listAll);
+router.post  ('/admin/alumni',     authenticate, adminOnly, uploadLimiter,
+  upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'story_pdf', maxCount: 1 }]),
+  alumni.createSpotlight);
+router.put   ('/admin/alumni/:id', authenticate, adminOnly, uploadLimiter,
+  upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'story_pdf', maxCount: 1 }]),
+  alumni.updateSpotlight);
+router.delete('/admin/alumni/:id', authenticate, adminOnly, alumni.deleteSpotlight);
 
 module.exports = router;

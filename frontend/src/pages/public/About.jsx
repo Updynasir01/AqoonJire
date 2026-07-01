@@ -1,7 +1,45 @@
+import { useEffect, useState } from 'react'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { Link } from 'react-router-dom'
 import { useSEO } from '../../hooks/useSEO'
-import { ArrowRight, Target, Eye } from 'lucide-react'
+import { teamAPI } from '../../services/api'
+import { ArrowRight, Target, Eye, Facebook, Linkedin, Instagram } from 'lucide-react'
+import { Spinner } from '../../components/common/index.jsx'
+
+const TikTokIcon = ({ size = 16 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
+    <path d="M16.5 3c.3 2.1 1.6 3.6 3.5 3.85v2.3c-1.2.1-2.4-.2-3.5-.83v5.93c0 3-2.1 5.32-5 5.32s-5-2.3-5-5.12 2.4-5.12 5.3-4.92v2.42c-.3-.1-.6-.13-.9-.13-1.4 0-2.5 1.13-2.5 2.63s1.1 2.6 2.5 2.6 2.6-1.2 2.6-2.7V3h2.5z"/>
+  </svg>
+)
+
+const SOCIAL_LINKS = [
+  { key: 'social_facebook', icon: Facebook, label: 'Facebook' },
+  { key: 'social_linkedin', icon: Linkedin, label: 'LinkedIn' },
+  { key: 'social_instagram', icon: Instagram, label: 'Instagram' },
+  { key: 'social_tiktok', icon: TikTokIcon, label: 'TikTok' },
+]
+
+function TeamSocials({ member }) {
+  const links = SOCIAL_LINKS.filter(s => member[s.key])
+  if (!links.length) return null
+  return (
+    <div className="about-team-socials">
+      {links.map(({ key, icon: Icon, label }) => (
+        <a
+          key={key}
+          href={member[key]}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="about-team-social"
+          title={label}
+          aria-label={label}
+        >
+          <Icon size={16} />
+        </a>
+      ))}
+    </div>
+  )
+}
 
 const CORE_VALUES = [
   { emoji: '💡', title: 'Innovation', desc: 'We encourage creativity and fresh ideas to help learners become forward-thinking digital creators.' },
@@ -12,12 +50,31 @@ const CORE_VALUES = [
   { emoji: '🔓', title: 'Accessibility', desc: 'We make education simple and accessible—anytime, anywhere.' },
 ]
 
+function TeamAvatar({ name, photo }) {
+  const initials = name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || '?'
+  return (
+    <div className="about-team-ava">
+      {photo ? <img src={photo} alt={name} /> : initials}
+    </div>
+  )
+}
+
 export default function About() {
   useSEO({
     title: 'About Us',
     description: 'AqoonJire is a modern e-learning platform equipping learners with essential digital skills. Our mission is to make high-quality training accessible for Somali youth.',
     path: '/about',
   })
+
+  const [team, setTeam] = useState([])
+  const [teamLoading, setTeamLoading] = useState(true)
+
+  useEffect(() => {
+    teamAPI.publicList()
+      .then(r => setTeam(r.data.data || []))
+      .catch(() => setTeam([]))
+      .finally(() => setTeamLoading(false))
+  }, [])
 
   return (
     <div>
@@ -96,8 +153,38 @@ export default function About() {
         </div>
       </section>
 
+      {/* Team */}
+      {(teamLoading || team.length > 0) && (
+        <section className="pub-section pub-section-alt">
+          <div className="pub-inner">
+            <div style={{ textAlign: 'center', marginBottom: 52 }}>
+              <div className="section-tag" style={{ display: 'inline-flex', margin: '0 auto 16px' }}>👥 Meet Behind AqoonJire</div>
+              <h2 className="section-h">Our Team</h2>
+              <p className="section-sub" style={{ margin: '0 auto' }}>
+                The people building Somalia&apos;s next generation of digital learners.
+              </p>
+            </div>
+            {teamLoading ? (
+              <div style={{ textAlign: 'center', padding: 40 }}><Spinner /></div>
+            ) : (
+              <div className="about-team-grid">
+                {team.map(member => (
+                  <div key={member.id} className="about-team-card">
+                    <TeamAvatar name={member.full_name} photo={member.photo} />
+                    <div className="about-team-name">{member.full_name}</div>
+                    <div className="about-team-role">{member.role}</div>
+                    {member.bio && <p className="about-team-bio">{member.bio}</p>}
+                    <TeamSocials member={member} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* CTA */}
-      <section className="pub-section pub-section-alt">
+      <section className="pub-section">
         <div className="pub-inner">
           <div className="cta-wrap">
             <div className="section-tag" style={{ display: 'inline-flex', margin: '0 auto 20px' }}>🎓 Start Learning</div>

@@ -35,8 +35,13 @@ export default function StudentCourses() {
                 <div className="course-card-title">{c.title}</div>
                 <div style={{ fontSize:12,color:'var(--text-muted)',marginBottom:12 }}>by {c.teacher_name}</div>
                 <ProgressBar value={parseFloat(c.progress_pct)||0}/>
-                <div style={{ display:'flex',justifyContent:'space-between',marginTop:8,fontSize:12 }}>
+                <div style={{ display:'flex',justifyContent:'space-between',marginTop:8,fontSize:12,flexWrap:'wrap',gap:6 }}>
                   <span style={{ color:'var(--text-muted)' }}>{c.completed_lessons}/{c.total_lessons} lessons</span>
+                  {c.expires_at && (
+                    <span style={{ color:'var(--text-muted)' }}>
+                      Access until {new Date(c.expires_at).toLocaleDateString()}
+                    </span>
+                  )}
                   <span style={{ fontWeight:700,color:parseFloat(c.progress_pct)>=100?'var(--success)':'var(--primary)' }}>{parseFloat(c.progress_pct)||0}%</span>
                 </div>
               </div>

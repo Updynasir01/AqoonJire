@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const { query, getClient } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const { EXPIRES_INTERVAL_SQL, scaActivePlain } = require('../utils/courseAccess');
 
 const slugify = (s) =>
   s.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').slice(0, 280) + '-' + Math.random().toString(36).slice(2, 6);
@@ -106,9 +107,10 @@ const grantBundleAccess = asyncHandler(async (req, res) => {
 
   for (const row of courses.rows) {
     await query(
-      `INSERT INTO student_course_access (id, student_id, course_id, granted_by, notes)
-       VALUES ($1,$2,$3,$4,'Bundle grant')
-       ON CONFLICT (student_id, course_id) DO UPDATE SET is_active = TRUE, revoked_at = NULL`,
+      `INSERT INTO student_course_access (id, student_id, course_id, granted_by, notes, expires_at)
+       VALUES ($1,$2,$3,$4,'Bundle grant', NOW() + ${EXPIRES_INTERVAL_SQL})
+       ON CONFLICT (student_id, course_id) DO UPDATE SET is_active = TRUE, revoked_at = NULL,
+         expires_at = NOW() + ${EXPIRES_INTERVAL_SQL}`,
       [uuidv4(), student_id, row.course_id, req.user.id]
     );
   }

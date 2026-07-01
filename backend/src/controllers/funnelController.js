@@ -1,6 +1,7 @@
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
 const { logEvent } = require('../services/growthService');
+const { scaActivePlain } = require('../utils/courseAccess');
 
 // POST /api/track  (public, optional auth) body: { type, course_id?, lesson_id?, session_id?, metadata? }
 // Lightweight client-side funnel ping (catalog_view, course_view, etc.).
@@ -76,7 +77,7 @@ const lessonDropoff = asyncHandler(async (req, res) => {
   const { courseId } = req.params;
 
   const enrolled = await query(
-    `SELECT COUNT(*) FROM student_course_access WHERE course_id = $1 AND is_active = TRUE`,
+    `SELECT COUNT(*) FROM student_course_access WHERE course_id = $1 AND ${scaActivePlain()}`,
     [courseId]
   );
   const totalStudents = Number(enrolled.rows[0].count) || 0;

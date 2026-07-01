@@ -22,7 +22,7 @@ export default function CourseDetail() {
     title: course?.title,
     description: course?.description
       ? course.description.replace(/\s+/g, ' ').trim().slice(0, 160)
-      : 'Enroll in this AqoonJire course — taught in Somali, with lifetime access and a certificate on completion.',
+      : 'Enroll in this AqoonJire course — taught in Somali, with 6 months of access and a certificate on completion.',
     path: `/courses/${slug}`,
   })
 
@@ -118,7 +118,7 @@ export default function CourseDetail() {
                 <div style={{ fontSize:14,color:'var(--text-muted)',textDecoration:'line-through' }}>${Math.round(course.price*1.4)}</div>
                 <div style={{ fontSize:12,fontWeight:700,color:'var(--brand-secondary)',background:'rgba(0,184,152,0.1)',border:'1px solid rgba(0,184,152,0.2)',borderRadius:6,padding:'3px 8px',marginLeft:4 }}>30% OFF</div>
               </div>
-              <div style={{ fontSize:12,color:'var(--text-muted)',marginBottom:20 }}>One-time payment · Lifetime access</div>
+              <div style={{ fontSize:12,color:'var(--text-muted)',marginBottom:20 }}>One-time payment · 6 months access</div>
 
               <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer"
                 className="btn btn-secondary btn-lg" style={{ width:'100%',justifyContent:'center',marginBottom:10 }}>
@@ -135,7 +135,7 @@ export default function CourseDetail() {
                   [<Clock size={13}/>, `${course.duration_hours} hours of content`],
                   [<Award size={13}/>, 'Certificate of completion'],
                   [<Globe size={13}/>, `Language: ${course.language}`],
-                  ['♾️','Lifetime access — pay once'],
+                  ['📅','6 months access — pay once'],
                 ].map(([icon,text]) => (
                   <div key={text} style={{ display:'flex',alignItems:'center',gap:9,fontSize:13,color:'var(--text-muted)',marginBottom:9 }}>
                     <span style={{ color:'var(--brand-secondary)',display:'flex',alignItems:'center' }}>{icon}</span>{text}
@@ -168,7 +168,7 @@ export default function CourseDetail() {
           <div style={{ background:'var(--bg-card)',borderRadius:20,border:'1px solid var(--border)',padding:32,marginBottom:28 }}>
             <h2 style={{ fontSize:22,marginBottom:22 }}>What You'll Learn</h2>
             <div className="detail-meta-grid">
-              {['Expert-led instruction in Somali','Real-world practical projects','Quiz-based knowledge testing','Assignment feedback from instructor','Certificate upon completion','Lifetime access to all materials'].map(item => (
+              {['Expert-led instruction in Somali','Real-world practical projects','Quiz-based knowledge testing','Assignment feedback from instructor','Certificate upon completion','6 months access to all materials'].map(item => (
                 <div key={item} style={{ display:'flex',gap:10,fontSize:13,alignItems:'flex-start' }}>
                   <CheckCircle size={15} color="var(--brand-secondary)" style={{ flexShrink:0,marginTop:2 }}/>
                   <span style={{ color:'var(--text-muted)',lineHeight:1.6 }}>{item}</span>
@@ -249,7 +249,7 @@ export default function CourseDetail() {
             <div style={{ fontSize:12,color:'rgba(255,255,255,0.45)',marginBottom:6 }}>One-time price</div>
             <div style={{ fontSize:38,fontWeight:800,color:'var(--brand-secondary)',marginBottom:4,fontFamily:'Syne,sans-serif' }}>${course.price}</div>
             <div style={{ fontSize:12,color:'rgba(255,255,255,0.45)',marginBottom:18 }}>Pay in Somali shillings accepted</div>
-            {['Lifetime access','Full certificate included','24/7 content access','Instructor Q&A'].map(f => (
+            {['6 months access','Full certificate included','24/7 content access','Instructor Q&A'].map(f => (
               <div key={f} style={{ display:'flex',alignItems:'center',gap:8,fontSize:13,color:'rgba(255,255,255,0.65)',marginBottom:10 }}>
                 <CheckCircle size={14} color="var(--brand-secondary)"/>{f}
               </div>

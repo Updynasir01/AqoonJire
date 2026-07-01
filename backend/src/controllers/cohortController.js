@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const { EXPIRES_INTERVAL_SQL } = require('../utils/courseAccess');
 
 // GET /api/courses/:courseId/cohorts
 const listCohorts = asyncHandler(async (req, res) => {
@@ -92,9 +93,10 @@ const enrollStudent = asyncHandler(async (req, res) => {
     [uuidv4(), id, student_id]
   );
   await query(
-    `INSERT INTO student_course_access (id, student_id, course_id, granted_by, notes)
-     VALUES ($1,$2,$3,$4,'Cohort enrollment')
-     ON CONFLICT (student_id, course_id) DO UPDATE SET is_active = TRUE, revoked_at = NULL`,
+    `INSERT INTO student_course_access (id, student_id, course_id, granted_by, notes, expires_at)
+     VALUES ($1,$2,$3,$4,'Cohort enrollment', NOW() + ${EXPIRES_INTERVAL_SQL})
+     ON CONFLICT (student_id, course_id) DO UPDATE SET is_active = TRUE, revoked_at = NULL,
+       expires_at = NOW() + ${EXPIRES_INTERVAL_SQL}`,
     [uuidv4(), student_id, cohort.rows[0].course_id, req.user.id]
   );
   res.json({ success: true, message: 'Student enrolled in cohort.' });

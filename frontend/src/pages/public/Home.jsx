@@ -123,7 +123,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Visual card */}
+          {/* Visual */}
           <div className="hero-visual">
             <div className="hero-card">
               <div className="hero-card-header">
@@ -145,7 +145,7 @@ export default function Home() {
                 </div>
               ))}
               <div className="hero-pill-row">
-                {[['4.9★','Rating'],['100%','Somali'],['∞','Access']].map(([v,l]) => (
+                {[['4.9★','Rating'],['100%','Somali'],['6mo','Access']].map(([v,l]) => (
                   <div key={l} className="hero-pill">
                     <div className="hero-pill-val">{v}</div>
                     <div className="hero-pill-lbl">{l}</div>
@@ -189,7 +189,7 @@ export default function Home() {
       {/* ── TRUST BAR ──────────────────────────────── */}
       <div className="pub-section-alt" style={{ padding:'0' }}>
         <div style={{ maxWidth:1280,margin:'0 auto',padding:'20px 5%',display:'flex',justifyContent:'center',gap:'clamp(20px,4vw,56px)',flexWrap:'wrap' }}>
-          {[[<Shield size={16}/>, 'Trusted by 1,200+ students'],[<Globe size={16}/>, 'Courses in Somali language'],[<Zap size={16}/>, 'Lifetime access after payment'],[<Award size={16}/>, 'Recognised certificates']].map(([icon, text]) => (
+          {[[<Shield size={16}/>, 'Trusted by 1,200+ students'],[<Globe size={16}/>, 'Courses in Somali language'],[<Zap size={16}/>, '6 months access after payment'],[<Award size={16}/>, 'Recognised certificates']].map(([icon, text]) => (
             <div key={text} style={{ display:'flex',alignItems:'center',gap:8,color:'var(--text-muted)',fontSize:13,fontWeight:500 }}>
               <span style={{ color:'var(--brand-secondary)' }}>{icon}</span>{text}
             </div>
@@ -282,7 +282,7 @@ export default function Home() {
               <h2 className="section-h">Built for<br/>Somali Learners</h2>
               <p className="section-sub" style={{ marginTop:14 }}>Every detail — from language to payment methods — is designed for you.</p>
               <div className="why-checks">
-                {['All courses taught in Somali language','Pay via EVC Plus, eDahab, Zaad or cash','Download materials for offline learning','Personal support from our admin team','Certificates recognised by employers','Lifetime access — pay once, keep forever'].map(item => (
+                {['All courses taught in Somali language','Pay via EVC Plus, eDahab, Zaad or cash','Download materials for offline learning','Personal support from our admin team','Certificates recognised by employers','6 months access from enrollment date'].map(item => (
                   <div key={item} className="why-check">
                     <div className="why-check-icon"><CheckCircle size={12} color="var(--brand-secondary)"/></div>
                     <span className="why-check-text">{item}</span>
@@ -294,7 +294,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="why-cards">
-              {[['💻','Online Learning','Study anywhere on any device, at your own pace.'],['🏆','Certificates','Earn recognised completion certificates.'],['💬','Q&A Support','Ask instructors directly in every lesson.'],['♾️','Lifetime Access','One-time payment — yours forever.']].map(([e,t,d]) => (
+              {[['💻','Online Learning','Study anywhere on any device, at your own pace.'],['🏆','Certificates','Earn recognised completion certificates.'],['💬','Q&A Support','Ask instructors directly in every lesson.'],['📅','6 Months Access','One-time payment — full access for six months.']].map(([e,t,d]) => (
                 <div key={t} className="why-card">
                   <div className="why-card-emoji">{e}</div>
                   <div className="why-card-title">{t}</div>

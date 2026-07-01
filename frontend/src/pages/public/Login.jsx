@@ -5,6 +5,8 @@ import { useTheme } from '../../context/ThemeContext'
 import { useSEO } from '../../hooks/useSEO'
 import { Eye, EyeOff, ArrowRight, Sun, Moon, BookOpen, Award, Users } from 'lucide-react'
 import toast from 'react-hot-toast'
+import WhatsAppFloat from '../../components/common/WhatsAppFloat.jsx'
+import BrandLogo from '../../components/common/BrandLogo.jsx'
 
 export default function Login() {
   useSEO({ title: 'Sign In', description: 'Sign in to your AqoonJire account to access your courses and dashboard.', path: '/login' })
@@ -32,9 +34,8 @@ export default function Login() {
       <div className="login-left">
         <div className="login-left-grid"/><div className="login-left-orb"/>
         <div style={{position:'relative',zIndex:1}}>
-          <Link to="/" style={{display:'flex',alignItems:'center',gap:10,marginBottom:52}}>
-            <div className="pub-logo-mark" style={{width:40,height:40,fontSize:18}}>A</div>
-            <span style={{fontFamily:'Syne,sans-serif',fontSize:20,fontWeight:800,color:'#fff'}}>Aqoon<span style={{color:'var(--brand-secondary)'}}>Jire</span></span>
+          <Link to="/" style={{display:'block',marginBottom:52}}>
+            <BrandLogo variant="onDark" size="auth" />
           </Link>
           <h1 style={{color:'#fff',fontSize:'clamp(2rem,3.5vw,3rem)',fontWeight:800,letterSpacing:'-0.03em',lineHeight:1.1,marginBottom:18}}>Your Learning<br/>Journey Continues</h1>
           <p style={{color:'rgba(255,255,255,0.55)',fontSize:15,lineHeight:1.8,marginBottom:48,maxWidth:380}}>Sign in to access your courses, track your progress, and earn certificates that advance your career.</p>
@@ -97,6 +98,7 @@ export default function Login() {
           </div>
         </div>
       </div>
+      <WhatsAppFloat message="Hi AqoonJire, I need support." />
     </div>
   )
 }
