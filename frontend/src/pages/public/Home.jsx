@@ -1,30 +1,20 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
+import { BRAND } from '../../config/brandAssets'
 import { landingAPI } from '../../services/api'
 import { useSEO } from '../../hooks/useSEO'
-import { BookOpen, Users, Award, ArrowRight, CheckCircle, Star, Clock, Globe, ChevronRight, Zap, Shield, Play } from 'lucide-react'
- 
+import PublicCta from '../../components/common/PublicCta.jsx'
+import { BookOpen, Users, Award, ArrowRight, CheckCircle, Star, Globe, ChevronRight, Zap, Shield, Play, GraduationCap } from 'lucide-react'
 
 const EMOJIS = { laptop:'💻', briefcase:'💼', book:'📖', globe:'🌍', calculator:'🔢', stethoscope:'🩺', heart:'❤️', star:'⭐', moon:'🌙', flask:'🧪', pencil:'✏️' }
 
-function useCountUp(target, duration = 2000) {
-  const [count, setCount] = useState(0)
-  const started = useRef(false)
-  useEffect(() => {
-    if (started.current) return
-    started.current = true
-    const step = target / (duration / 16)
-    let current = 0
-    const t = setInterval(() => {
-      current += step
-      if (current >= target) { setCount(target); clearInterval(t) }
-      else setCount(Math.floor(current))
-    }, 16)
-    return () => clearInterval(t)
-  }, [target])
-  return count
-}
+const HERO_FEATURES = [
+  { icon: GraduationCap, label: 'Expert Instructors' },
+  { icon: BookOpen, label: 'Online Courses' },
+  { icon: Play, label: 'Practical Learning' },
+  { icon: Award, label: 'Certificates' },
+]
 
 function PubCourseCard({ course }) {
   return (
@@ -57,21 +47,15 @@ function PubCourseCard({ course }) {
 
 export default function Home() {
   useSEO({
-    description: 'AqoonJire is a modern e-learning and digital innovation platform dedicated to equipping the next generation with technology, creativity, and future-ready skills.',
+    description: `${BRAND.headline} ${BRAND.heroDesc}`,
     path: '/',
   })
   const [data, setData] = useState(null)
   useEffect(() => { landingAPI.get().then(r => setData(r.data.data)).catch(() => {}) }, [])
 
-  const stats = data?.stats || {}
   const featured = data?.featured_courses || []
   const categories = data?.categories || []
   const teachers = data?.featured_teachers || []
-
-  const n1 = useCountUp(Number(stats.total_students) || 0)
-  const n2 = useCountUp(Number(stats.total_courses) || 0)
-  const n3 = useCountUp(Number(stats.certificates_issued) || 0)
-  const n4 = useCountUp(Number(stats.total_teachers) || 0)
 
   const mockCourses = [
     { id:1, title:'Complete Web Development Bootcamp', slug:'web-dev', category:'IT', teacher_name:'Ahmed Hassan', total_students:312, total_lessons:48, price:75, level:'beginner' },
@@ -92,19 +76,12 @@ export default function Home() {
 
         <div className="hero-inner">
           <div>
-            <div className="hero-tag">
-              <div className="hero-tag-dot"/>
-              Somalia's #1 E-Learning Platform
-            </div>
+            <p className="hero-positioning">{BRAND.positioning}</p>
             <h1 className="hero-h1">
-              Empowering the Next Generation to<br/>
-              <span className="hero-h1-line">
-                <span className="hero-h1-teal">Learn, Create, Innovate, and Lead</span>
-              </span>
+              Empowering the Next Generation with{' '}
+              <span className="hero-h1-teal">Future-Ready Skills, Expert Instructors, and Recognized Certifications.</span>
             </h1>
-            <p className="hero-desc">
-              AqoonJire is a modern e-learning and digital innovation platform dedicated to equipping the next generation with technology, creativity, and future-ready skills.
-            </p>
+            <p className="hero-desc">{BRAND.heroDesc}</p>
             <div className="hero-btns">
               <Link to="/courses" className="btn btn-secondary btn-lg">
                 Explore Courses <ArrowRight size={18}/>
@@ -113,11 +90,13 @@ export default function Home() {
                 How It Works
               </Link>
             </div>
-            <div className="hero-stats">
-              {[[n1+'+','Students'],[n2+'+','Courses'],[n3+'+','Certificates'],[n4,'Instructors']].map(([v,l]) => (
-                <div key={l} className="hero-stat">
-                  <div className="hero-stat-val">{v}</div>
-                  <div className="hero-stat-lbl">{l}</div>
+            <div className="hero-features">
+              {HERO_FEATURES.map(({ icon: Icon, label }) => (
+                <div key={label} className="hero-feature">
+                  <div className="hero-feature-icon">
+                    <Icon size={18} />
+                  </div>
+                  <div className="hero-feature-label">{label}</div>
                 </div>
               ))}
             </div>
@@ -358,25 +337,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CTA ────────────────────────────────────── */}
-      <section className="pub-section pub-section-alt">
-        <div className="pub-inner">
-          <div className="cta-wrap">
-            <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 20px' }}>🎯 Get Started</div>
-            <h2 className="cta-h">Ready to Transform<br/>Your Career?</h2>
-            <p className="cta-sub">Join 1,200+ students already learning and growing with AqoonJire. Your journey starts today.</p>
-            <div className="cta-btns">
-              <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16}/></Link>
-              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">📱 WhatsApp Us</a>
-            </div>
-            <div className="cta-perks">
-              {['No hidden fees','Pay in local currency','Account ready in 24h'].map(f => (
-                <div key={f} className="cta-perk"><CheckCircle size={14} color="var(--brand-secondary)"/>{f}</div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <PublicCta showPerks />
 
       <Footer/>
     </div>

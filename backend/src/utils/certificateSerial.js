@@ -37,17 +37,27 @@ const allocateCertificateNumber = async (client) => {
   return serial;
 };
 
+const DEFAULT_PDF_SETTINGS = {
+  directorName: 'Amin Ahmed Abdi',
+  directorTitle: 'Academic Director',
+  academyName: 'Aqoonjire Academy',
+};
+
 const getCertificatePdfSettings = async () => {
-  const client = await pool.connect();
   try {
-    const [directorName, directorTitle, academyName] = await Promise.all([
-      getSetting(client, 'certificate_director_name', 'Amin Ahmed Abdi'),
-      getSetting(client, 'certificate_director_title', 'Academic Director'),
-      getSetting(client, 'certificate_academy_name', 'Aqoonjire Academy'),
-    ]);
-    return { directorName, directorTitle, academyName };
-  } finally {
-    client.release();
+    const client = await pool.connect();
+    try {
+      const [directorName, directorTitle, academyName] = await Promise.all([
+        getSetting(client, 'certificate_director_name', DEFAULT_PDF_SETTINGS.directorName),
+        getSetting(client, 'certificate_director_title', DEFAULT_PDF_SETTINGS.directorTitle),
+        getSetting(client, 'certificate_academy_name', DEFAULT_PDF_SETTINGS.academyName),
+      ]);
+      return { directorName, directorTitle, academyName };
+    } finally {
+      client.release();
+    }
+  } catch {
+    return { ...DEFAULT_PDF_SETTINGS };
   }
 };
 
@@ -56,4 +66,5 @@ module.exports = {
   getCertificatePdfSettings,
   formatSerial,
   parseSettingValue,
+  DEFAULT_PDF_SETTINGS,
 };

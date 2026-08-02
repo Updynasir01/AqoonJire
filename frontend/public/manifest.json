@@ -4,7 +4,12 @@
   "description": "Somalia's online learning platform. Learn in Somali, earn certificates, study anytime.",
   "icons": [
     {
-      "src": "/ResourcesPhotos/Logo%20Aqoonjire%205-01.png",
+      "src": "/ResourcesPhotos/aqoonjire-icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/ResourcesPhotos/aqoonjire-icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

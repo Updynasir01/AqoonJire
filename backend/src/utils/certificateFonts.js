@@ -1,46 +1,42 @@
 const fs = require('fs');
 const path = require('path');
 const { StandardFonts } = require('pdf-lib');
+const fontkit = require('@pdf-lib/fontkit');
 
 const fontsDir = path.join(__dirname, '..', '..', 'assets', 'fonts');
 
-/**
- * Drop .ttf or .otf files here (same fonts as your Illustrator certificate).
- * Expected filenames — rename your files to match, or tell us the exact names:
- *
- *   name-script.ttf   → student name (cursive/script)
- *   body-regular.ttf  → course line, serial number
- *   body-bold.ttf     → date
- */
-const FONT_FILES = {
-  script: 'name-script.ttf',
-  regular: 'body-regular.ttf',
-  bold: 'body-bold.ttf',
+const FONT_CANDIDATES = {
+  script: ['name-script.ttf', 'name-script.otf'],
+  regular: ['body-regular.ttf', 'body-regular.otf'],
+  bold: ['body-bold.ttf', 'body-bold.otf'],
 };
 
-const readFontBytes = filename => {
-  const filepath = path.join(fontsDir, filename);
-  if (!fs.existsSync(filepath)) return null;
-  return fs.readFileSync(filepath);
+const readFirstFont = keys => {
+  for (const filename of keys) {
+    const filepath = path.join(fontsDir, filename);
+    if (fs.existsSync(filepath)) return fs.readFileSync(filepath);
+  }
+  return null;
 };
 
-const embedCustomOrStandard = async (pdfDoc, filename, standard) => {
-  const bytes = readFontBytes(filename);
+const embedCustomOrStandard = async (pdfDoc, keys, standard) => {
+  const bytes = readFirstFont(keys);
   if (bytes) {
     try {
       return await pdfDoc.embedFont(bytes, { subset: true });
     } catch {
-      console.warn(`Certificate font could not load: ${filename}, using fallback.`);
+      console.warn(`Certificate font could not load (${keys.join(', ')}), using fallback.`);
     }
   }
   return pdfDoc.embedFont(standard);
 };
 
 const loadCertificateFonts = async pdfDoc => {
+  pdfDoc.registerFontkit(fontkit);
   const [script, regular, bold] = await Promise.all([
-    embedCustomOrStandard(pdfDoc, FONT_FILES.script, StandardFonts.HelveticaOblique),
-    embedCustomOrStandard(pdfDoc, FONT_FILES.regular, StandardFonts.Helvetica),
-    embedCustomOrStandard(pdfDoc, FONT_FILES.bold, StandardFonts.HelveticaBold),
+    embedCustomOrStandard(pdfDoc, FONT_CANDIDATES.script, StandardFonts.HelveticaOblique),
+    embedCustomOrStandard(pdfDoc, FONT_CANDIDATES.regular, StandardFonts.Helvetica),
+    embedCustomOrStandard(pdfDoc, FONT_CANDIDATES.bold, StandardFonts.HelveticaBold),
   ]);
   return { script, regular, bold };
 };
@@ -50,4 +46,9 @@ const listAvailableFonts = () => {
   return fs.readdirSync(fontsDir).filter(f => /\.(ttf|otf)$/i.test(f));
 };
 
-module.exports = { loadCertificateFonts, listAvailableFonts, FONT_FILES, fontsDir };
+module.exports = {
+  loadCertificateFonts,
+  listAvailableFonts,
+  FONT_CANDIDATES,
+  fontsDir,
+};

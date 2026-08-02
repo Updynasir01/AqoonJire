@@ -5,6 +5,7 @@ import { useTheme } from '../../context/ThemeContext'
 import { Sun, Moon, Menu, X, ChevronRight, Mail, Phone, MapPin, Facebook, Linkedin, Instagram } from 'lucide-react'
 import WhatsAppFloat from '../common/WhatsAppFloat.jsx'
 import BrandLogo from '../common/BrandLogo.jsx'
+import { BRAND } from '../../config/brandAssets'
 
 const TikTokIcon = ({ size = 16 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
@@ -102,6 +103,8 @@ export function Navbar() {
 }
 
 export function Footer() {
+  const { isDark } = useTheme()
+
   return (
     <>
     <footer className="pub-footer">
@@ -109,11 +112,9 @@ export function Footer() {
         <div className="pub-footer-grid">
           <div>
             <div className="pub-footer-brand-logo">
-              <BrandLogo variant="onLight" size="footer" />
+              <BrandLogo variant={isDark ? 'onDark' : 'onLight'} size="footer" />
             </div>
-            <p className="pub-footer-brand-desc">
-              Empowering Somalia through quality education. Learn from expert instructors in your own language, earn certificates, and build your future.
-            </p>
+            <p className="pub-footer-brand-desc">{BRAND.footerDesc}</p>
             <div className="pub-footer-socials">
               <a href="https://www.facebook.com/AqoonjirePlatform/" target="_blank" rel="noreferrer" className="pub-footer-social" title="Facebook" aria-label="Facebook">
                 <Facebook size={16} />
@@ -138,7 +139,7 @@ export function Footer() {
           </div>
 
           <div>
-            <div className="pub-footer-col-title">Subjects</div>
+            <div className="pub-footer-col-title">Courses</div>
             {['Information Technology', 'Business & Management', 'Arabic Language', 'English Language', 'Mathematics'].map(s => (
               <Link key={s} to={`/courses?category=${s}`} className="pub-footer-link">{s}</Link>
             ))}

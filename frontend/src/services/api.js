@@ -165,6 +165,7 @@ export const landingAPI = {
 export const certificateAPI = {
   download: id => api.get(`/certificates/${id}/download`, { responseType: 'blob' }),
   regenerateAll: () => api.post('/admin/certificates/regenerate-all'),
+  preview: data => api.post('/admin/certificates/preview', data, { responseType: 'blob' }),
 }
 
 // ─── GROWTH FEATURES ────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 const { getClient } = require('../config/database');
-const { allocateCertificateNumber } = require('../utils/certificateSerial');
+const { allocateCertificateNumber, getCertificatePdfSettings } = require('../utils/certificateSerial');
 const { generateCertificatePDF } = require('../utils/certificateGenerator');
 
 /** Issue a certificate with the next serial number (transaction-safe). */
@@ -39,13 +39,21 @@ const issueCourseCertificate = async ({ studentId, courseId }) => {
 
     const cert = certResult.rows[0];
     if (names.rows.length) {
-      generateCertificatePDF({
-        studentName: names.rows[0].student_name,
-        courseName: names.rows[0].course_title,
-        teacherName: names.rows[0].teacher_name || 'Platform Instructor',
-        certificateNumber: certNumber,
-        issuedAt: cert.issued_at,
-      }).catch(err => console.error('Certificate PDF gen error:', err.message));
+      const pdfSettings = await getCertificatePdfSettings();
+      try {
+        await generateCertificatePDF({
+          studentName: names.rows[0].student_name,
+          courseName: names.rows[0].course_title,
+          teacherName: names.rows[0].teacher_name || 'Platform Instructor',
+          certificateNumber: certNumber,
+          issuedAt: cert.issued_at,
+          academyName: pdfSettings.academyName,
+          directorName: pdfSettings.directorName,
+          directorTitle: pdfSettings.directorTitle,
+        });
+      } catch (err) {
+        console.error('Certificate PDF gen error:', err.message);
+      }
     }
 
     return cert;

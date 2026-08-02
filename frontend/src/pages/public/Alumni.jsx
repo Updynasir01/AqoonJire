@@ -4,6 +4,7 @@ import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { landingAPI } from '../../services/api'
 import { useSEO } from '../../hooks/useSEO'
 import { ArrowRight, GraduationCap, Building2 } from 'lucide-react'
+import PublicCta from '../../components/common/PublicCta.jsx'
 import { Spinner } from '../../components/common/index.jsx'
 
 function AlumniAvatar({ name, photo }) {
@@ -117,19 +118,7 @@ export default function Alumni() {
         </div>
       </section>
 
-      <section className="pub-section">
-        <div className="pub-inner">
-          <div className="cta-wrap">
-            <div className="section-tag" style={{ display: 'inline-flex', margin: '0 auto 20px' }}>🚀 Be Next</div>
-            <h2 className="cta-h">Ready to Build<br />Your Success Story?</h2>
-            <p className="cta-sub">Complete a course, grow your skills, and join graduates making an impact in the real world.</p>
-            <div className="cta-btns">
-              <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16} /></Link>
-              <Link to="/contact" className="btn btn-ghost-white btn-lg">Contact Us</Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PublicCta altSection />
 
       <Footer />
     </div>

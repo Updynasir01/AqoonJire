@@ -166,6 +166,7 @@ router.post('/progress/lesson/:lessonId/track',authenticate, progress.trackLesso
 router.get ('/certificates/:certificateId/download',   authenticate, certificate.downloadCertificate);
 router.post('/certificates/regenerate/:certificateId', authenticate, adminOnly, certificate.regenerateCertificate);
 router.post('/admin/certificates/regenerate-all',      authenticate, adminOnly, certificate.regenerateAllCertificates);
+router.post('/admin/certificates/preview',             authenticate, adminOnly, certificate.previewCertificate);
 
 // ── QUIZZES ───────────────────────────────────────────────────────────────
 router.get   ('/quizzes',       authenticate, quiz.listQuizzes);

@@ -3,6 +3,7 @@ const fs = require('fs');
 const { query } = require('../config/database');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
 const { generateCertificatePDF, streamCertificate, safeFilename } = require('../utils/certificateGenerator');
+const { getCertificatePdfSettings } = require('../utils/certificateSerial');
 
 const certPdfPath = certNumber => {
   const filename = `${safeFilename(certNumber)}.pdf`;
@@ -26,13 +27,19 @@ const fetchCertRow = async (whereClause, params) => {
   return result.rows[0] || null;
 };
 
-const buildPdf = cert => generateCertificatePDF({
-  studentName: cert.student_name,
-  courseName: cert.course_title,
-  teacherName: cert.teacher_name || 'Platform Instructor',
-  certificateNumber: cert.certificate_number,
-  issuedAt: cert.issued_at,
-});
+const buildPdf = async cert => {
+  const pdfSettings = await getCertificatePdfSettings();
+  return generateCertificatePDF({
+    studentName: cert.student_name,
+    courseName: cert.course_title,
+    teacherName: cert.teacher_name || 'Platform Instructor',
+    certificateNumber: cert.certificate_number,
+    issuedAt: cert.issued_at,
+    academyName: pdfSettings.academyName,
+    directorName: pdfSettings.directorName,
+    directorTitle: pdfSettings.directorTitle,
+  });
+};
 
 // GET /api/certificates/:certificateId/download
 const downloadCertificate = asyncHandler(async (req, res) => {
@@ -118,9 +125,37 @@ const regenerateAllCertificates = asyncHandler(async (req, res) => {
   });
 });
 
+// POST /api/admin/certificates/preview  (admin — sample PDF download)
+const previewCertificate = asyncHandler(async (req, res) => {
+  const studentName = String(req.body.studentName || '').trim();
+  const courseName = String(req.body.courseName || '').trim();
+  if (!studentName || !courseName) {
+    throw createError('Student name and course name are required.', 400);
+  }
+
+  const pdfSettings = await getCertificatePdfSettings();
+  const certificateNumber = String(req.body.certificateNumber || '00000').trim() || '00000';
+
+  const generated = await generateCertificatePDF({
+    studentName,
+    courseName,
+    certificateNumber,
+    issuedAt: req.body.issuedAt ? new Date(req.body.issuedAt) : new Date(),
+    academyName: pdfSettings.academyName,
+    directorName: pdfSettings.directorName,
+    directorTitle: pdfSettings.directorTitle,
+    preview: true,
+  });
+
+  const downloadName = `certificate-preview-${safeFilename(certificateNumber)}.pdf`;
+  const streamed = streamCertificate(generated.filepath, res, downloadName);
+  if (!streamed) throw createError('Preview certificate could not be generated.', 500);
+});
+
 module.exports = {
   downloadCertificate,
   verifyCertificate,
   regenerateCertificate,
   regenerateAllCertificates,
+  previewCertificate,
 };

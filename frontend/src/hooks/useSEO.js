@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
+import { BRAND } from '../config/brandAssets'
 
 const SITE = 'AqoonJire'
 const BASE = 'https://www.aqoonjire.com'
 const DEFAULT_TITLE = 'AqoonJire — Online Courses in Somali | Learn Anytime'
-const DEFAULT_DESC =
-  "AqoonJire is Somalia's online learning platform. Learn IT, business, languages, health and more — taught in Somali by expert instructors."
+const DEFAULT_DESC = `${BRAND.positioning}. ${BRAND.heroDesc}`
 
 function upsertMeta(attr, key, content) {
   if (!content) return

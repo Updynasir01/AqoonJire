@@ -17,7 +17,7 @@ const layout = {
   name: { y: 252, size: 26, color: 'teal' },
   course: { y: 304, size: 11.5, color: 'navy', maxWidth: 780 },
   date: { x: 226, y: 362, size: 12, color: 'navy' },
-  serial: { x: 803, y: 362, size: 11, color: 'navy' },
+  serial: { x: 956, y: 362, size: 11, color: 'navy', align: 'right' },
   qr: { x: 68, y: 468, size: 88 },
 };
 

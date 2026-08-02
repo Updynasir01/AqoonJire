@@ -69,6 +69,7 @@ const drawAt = (page, text, x, yTop, font, size, color, pageHeight, align = 'cen
   const w = textWidth(text, font, size);
   let drawX = x;
   if (align === 'center') drawX = x - w / 2;
+  if (align === 'right') drawX = x - w;
   page.drawText(text, {
     x: drawX,
     y: yFromTop(yTop, pageHeight),
@@ -87,7 +88,7 @@ const scaleLayout = (layout, pageWidth, pageHeight) => {
     name: { y: s(layout.name.y, 'y'), size: layout.name.size * sy, color: layout.name.color },
     course: { y: s(layout.course.y, 'y'), size: layout.course.size * sy, color: layout.course.color, maxWidth: s(layout.course.maxWidth, 'x') },
     date: { x: s(layout.date.x, 'x'), y: s(layout.date.y, 'y'), size: layout.date.size * sy, color: layout.date.color },
-    serial: { x: s(layout.serial.x, 'x'), y: s(layout.serial.y, 'y'), size: layout.serial.size * sy, color: layout.serial.color },
+    serial: { x: s(layout.serial.x, 'x'), y: s(layout.serial.y, 'y'), size: layout.serial.size * sy, color: layout.serial.color, align: layout.serial.align || 'center' },
     qr: { x: s(layout.qr.x, 'x'), y: s(layout.qr.y, 'y'), size: s(layout.qr.size, 'x') },
   };
 };
@@ -131,6 +132,7 @@ const generateCertificatePDF = async ({
   directorTitle: _directorTitle,
   academyName,
   verifyBaseUrl,
+  preview = false,
 }) => {
   const pdfSettings = await getCertificatePdfSettings();
   const academy = academyName || pdfSettings.academyName;
@@ -140,7 +142,7 @@ const generateCertificatePDF = async ({
   const certsDir = path.join(process.cwd(), 'uploads', 'certificates');
   if (!fs.existsSync(certsDir)) fs.mkdirSync(certsDir, { recursive: true });
 
-  const filename = `${safeFilename(certificateNumber)}.pdf`;
+  const filename = preview ? '_preview.pdf' : `${safeFilename(certificateNumber)}.pdf`;
   const filepath = path.join(certsDir, filename);
 
   const qrBuffer = await QRCode.toBuffer(verifyUrl, {
@@ -156,7 +158,7 @@ const generateCertificatePDF = async ({
   });
 
   const courseLine = `Has successfully completed the online course in ${courseName} at ${academy}.`;
-  const serialLine = `Serial Number: ${certificateNumber}`;
+  const serialLine = `Certificate Serial Number: ${certificateNumber}`;
 
   const pdfDoc = await PDFDocument.create();
   const templatePath = resolveTemplatePath();
@@ -194,8 +196,8 @@ const generateCertificatePDF = async ({
 
   drawCentered(page, studentName, layout.name.y, fonts.script, layout.name.size, COLORS.teal, pageWidth, pageHeight);
   drawCentered(page, courseLine, layout.course.y, fonts.regular, layout.course.size, COLORS.navy, pageWidth, pageHeight, layout.course.maxWidth);
-  drawAt(page, dateStr, layout.date.x, layout.date.y, fonts.bold, layout.date.size, COLORS.navy, pageHeight);
-  drawAt(page, serialLine, layout.serial.x, layout.serial.y, fonts.regular, layout.serial.size, COLORS.navy, pageHeight);
+  drawAt(page, dateStr, layout.date.x, layout.date.y, fonts.bold, layout.date.size, COLORS.teal, pageHeight);
+  drawAt(page, serialLine, layout.serial.x, layout.serial.y, fonts.regular, layout.serial.size, COLORS.navy, pageHeight, layout.serial.align);
 
   const qrImage = await pdfDoc.embedPng(qrBuffer);
   page.drawImage(qrImage, {

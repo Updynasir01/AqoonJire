@@ -3,7 +3,7 @@ import DashboardLayout from '../../components/layout/DashboardLayout.jsx'
 import { Spinner, Badge } from '../../components/common/index.jsx'
 import { settingsAPI, landingAPI, certificateAPI } from '../../services/api'
 import toast from 'react-hot-toast'
-import { Save, Users, BookOpen, Award, GraduationCap, ShieldCheck, RefreshCw } from 'lucide-react'
+import { Save, Users, BookOpen, Award, GraduationCap, ShieldCheck, RefreshCw, Download } from 'lucide-react'
 
 export default function Settings() {
   const [settings, setSettings] = useState({})
@@ -11,6 +11,12 @@ export default function Settings() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [regenerating, setRegenerating] = useState(false)
+  const [previewForm, setPreviewForm] = useState({
+    studentName: 'Hamdi Artan Haashi',
+    courseName: 'Visual Graphic Design',
+    certificateNumber: '00008',
+  })
+  const [previewLoading, setPreviewLoading] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -45,6 +51,32 @@ export default function Settings() {
       toast.error('Failed to regenerate certificates.')
     } finally {
       setRegenerating(false)
+    }
+  }
+
+  const downloadPreview = async () => {
+    if (!previewForm.studentName.trim() || !previewForm.courseName.trim()) {
+      toast.error('Enter a student name and course name.')
+      return
+    }
+    setPreviewLoading(true)
+    try {
+      const r = await certificateAPI.preview({
+        studentName: previewForm.studentName.trim(),
+        courseName: previewForm.courseName.trim(),
+        certificateNumber: previewForm.certificateNumber.trim() || '00000',
+      })
+      const url = URL.createObjectURL(new Blob([r.data], { type: 'application/pdf' }))
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `certificate-preview-${previewForm.certificateNumber.trim() || '00000'}.pdf`
+      a.click()
+      URL.revokeObjectURL(url)
+      toast.success('Preview certificate downloaded.')
+    } catch {
+      toast.error('Failed to generate preview certificate.')
+    } finally {
+      setPreviewLoading(false)
     }
   }
 
@@ -158,7 +190,7 @@ export default function Settings() {
                   <ShieldCheck size={18} /> Certificates
                 </h3>
                 <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>
-                  Control serial numbers for new certificates and PDF appearance. Set the next serial if you already issued certificates offline (e.g. 01–07 used → set next to 8 for 00008).
+                  Control serial numbers for new certificates and PDF appearance. PDFs use the AqoonJire template in <code style={{ fontSize: 12 }}>backend/assets/certificate-template.png</code> with Dancing Script + Metropolis fonts. Set the next serial if you already issued certificates offline (e.g. 01–07 used → set next to 8 for 00008).
                 </p>
               </div>
               <button type="button" className="btn btn-ghost" onClick={regenerateAllCerts} disabled={regenerating}>
@@ -185,6 +217,45 @@ export default function Settings() {
               {field('certificate_academy_name', 'Academy Name on Certificate', 'text', 'Aqoonjire Academy')}
               {field('certificate_director_name', 'Director Signature Name', 'text', 'Amin Ahmed Abdi')}
               {field('certificate_director_title', 'Director Title', 'text', 'Academic Director')}
+            </div>
+
+            <div style={{ marginTop: 28, paddingTop: 24, borderTop: '1px solid var(--border)' }}>
+              <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 8 }}>Preview certificate</h4>
+              <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 16 }}>
+                Generate a sample PDF with any name and course — nothing is saved to the database.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 16 }}>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label">Student name</label>
+                  <input
+                    className="form-control"
+                    value={previewForm.studentName}
+                    onChange={e => setPreviewForm(p => ({ ...p, studentName: e.target.value }))}
+                    placeholder="Student full name"
+                  />
+                </div>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label">Course name</label>
+                  <input
+                    className="form-control"
+                    value={previewForm.courseName}
+                    onChange={e => setPreviewForm(p => ({ ...p, courseName: e.target.value }))}
+                    placeholder="Course title"
+                  />
+                </div>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label">Serial number (sample)</label>
+                  <input
+                    className="form-control"
+                    value={previewForm.certificateNumber}
+                    onChange={e => setPreviewForm(p => ({ ...p, certificateNumber: e.target.value }))}
+                    placeholder="00008"
+                  />
+                </div>
+              </div>
+              <button type="button" className="btn btn-secondary" onClick={downloadPreview} disabled={previewLoading}>
+                {previewLoading ? <Spinner size={16} /> : <><Download size={15} /> Download Preview PDF</>}
+              </button>
             </div>
           </div>
         </div>

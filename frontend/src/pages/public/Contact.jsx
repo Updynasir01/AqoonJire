@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { useSEO } from '../../hooks/useSEO'
 import { ArrowRight, Mail, Phone, MapPin, Clock, MessageCircle, CheckCircle } from 'lucide-react'
+import PublicCta from '../../components/common/PublicCta.jsx'
 
 export default function Contact() {
   useSEO({
@@ -136,19 +137,7 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="pub-section pub-section-alt">
-        <div className="pub-inner">
-          <div className="cta-wrap">
-            <div className="section-tag" style={{ display: 'inline-flex', margin: '0 auto 20px' }}>🚀 Start Today</div>
-            <h2 className="cta-h">Ready to Begin Your<br />Learning Journey?</h2>
-            <p className="cta-sub">Explore our courses and reach out if you need any help choosing the best path.</p>
-            <div className="cta-btns">
-              <Link to="/courses" className="btn btn-secondary btn-lg">Browse Courses <ArrowRight size={16} /></Link>
-              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-ghost-white btn-lg">WhatsApp Support</a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PublicCta />
 
       <Footer />
     </div>
