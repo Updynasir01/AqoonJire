@@ -64,11 +64,11 @@ export default function Home() {
   ]
 
   return (
-    <div style={{ overflowX:'hidden' }}>
+    <div className="home-page">
       <Navbar/>
 
       {/* ── HERO ───────────────────────────────────── */}
-      <section className="hero">
+      <section className="hero hero--brand">
         <div className="hero-noise"/>
         <div className="hero-grid"/>
         <div className="hero-orb-1"/>
@@ -159,25 +159,24 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Wave */}
-        <svg viewBox="0 0 1440 56" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display:'block',width:'100%',marginTop:'auto',flexShrink:0 }}>
-          <path d="M0 28C240 56 480 0 720 28C960 56 1200 0 1440 28L1440 56L0 56Z" fill="var(--bg-2)"/>
+        {/* Transition to white content */}
+        <svg viewBox="0 0 1440 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="hero-wave" aria-hidden="true">
+          <path d="M0 28C240 56 480 0 720 28C960 56 1200 0 1440 28L1440 56L0 56Z" fill="#ffffff"/>
         </svg>
       </section>
 
+      <div className="home-body">
       {/* ── TRUST BAR ──────────────────────────────── */}
-      <div className="pub-section-alt" style={{ padding:'0' }}>
-        <div style={{ maxWidth:1280,margin:'0 auto',padding:'20px 5%',display:'flex',justifyContent:'center',gap:'clamp(20px,4vw,56px)',flexWrap:'wrap' }}>
+      <div className="home-trust-bar">
           {[[<Shield size={16}/>, 'Trusted by 1,200+ students'],[<Globe size={16}/>, 'Courses in Somali language'],[<Zap size={16}/>, '6 months access after payment'],[<Award size={16}/>, 'Recognised certificates']].map(([icon, text]) => (
-            <div key={text} style={{ display:'flex',alignItems:'center',gap:8,color:'var(--text-muted)',fontSize:13,fontWeight:500 }}>
-              <span style={{ color:'var(--brand-secondary)' }}>{icon}</span>{text}
+            <div key={text} className="home-trust-item">
+              <span className="home-trust-icon">{icon}</span>{text}
             </div>
           ))}
-        </div>
       </div>
 
       {/* ── CATEGORIES ─────────────────────────────── */}
-      <section className="pub-section pub-section-alt">
+      <section className="pub-section">
         <div className="pub-inner">
           <div className="section-row">
             <div>
@@ -227,7 +226,7 @@ export default function Home() {
       </section>
 
       {/* ── HOW IT WORKS ───────────────────────────── */}
-      <section className="pub-section pub-section-alt">
+      <section className="pub-section home-section-divider">
         <div className="pub-inner">
           <div style={{ textAlign:'center', marginBottom:52 }}>
             <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 16px' }}>🚀 Process</div>
@@ -287,7 +286,7 @@ export default function Home() {
 
       {/* ── INSTRUCTORS ────────────────────────────── */}
       {teachers.length > 0 && (
-        <section className="pub-section pub-section-alt">
+        <section className="pub-section home-section-divider">
           <div className="pub-inner">
             <div style={{ textAlign:'center', marginBottom:52 }}>
               <div className="section-tag" style={{ display:'inline-flex',margin:'0 auto 16px' }}>👨‍🏫 Instructors</div>
@@ -336,10 +335,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </div>
 
-      <PublicCta showPerks />
+      <PublicCta showPerks fullBleed />
 
-      <Footer/>
+      <Footer />
     </div>
   )
 }

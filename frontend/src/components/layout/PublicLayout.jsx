@@ -37,8 +37,10 @@ export function Navbar() {
     { to: '/faq', label: 'FAQ' },
     { to: '/contact', label: 'Contacts' },
   ]
+  const isHome = location.pathname === '/'
   const dashPath = user ? `/${user.role}` : '/login'
   const overDark = !scrolled && (
+    isHome ||
     location.pathname === '/about' ||
     location.pathname === '/courses' ||
     /^\/courses\/[^/]+$/.test(location.pathname)
@@ -47,7 +49,16 @@ export function Navbar() {
 
   return (
     <>
-      <nav className={`pub-nav${scrolled ? ' scrolled' : ''}${overDark ? ' over-dark' : ''}`} style={{ background: scrolled ? undefined : 'transparent' }}>
+      <nav
+        className={`pub-nav${scrolled ? ' scrolled' : ''}${overDark ? ' over-dark' : ''}${isHome ? ' pub-nav--home' : ''}`}
+        style={{
+          background: isHome && !scrolled
+            ? 'var(--brand-primary)'
+            : scrolled
+              ? undefined
+              : 'transparent',
+        }}
+      >
         <div className="pub-nav-inner">
           <Link to="/" className="pub-logo">
             <BrandLogo variant={lightNav ? 'onLight' : 'onDark'} size="nav" />
@@ -103,16 +114,14 @@ export function Navbar() {
 }
 
 export function Footer() {
-  const { isDark } = useTheme()
-
   return (
     <>
-    <footer className="pub-footer">
+    <footer className="pub-footer pub-footer--brand">
       <div className="pub-footer-inner">
         <div className="pub-footer-grid">
           <div>
             <div className="pub-footer-brand-logo">
-              <BrandLogo variant={isDark ? 'onDark' : 'onLight'} size="footer" />
+              <BrandLogo variant="onDark" size="footer" />
             </div>
             <p className="pub-footer-slogan">{BRAND.slogan}</p>
             <p className="pub-footer-brand-desc">{BRAND.footerDesc}</p>
@@ -148,23 +157,23 @@ export function Footer() {
 
           <div>
             <div className="pub-footer-col-title">Contact</div>
-            <a href="mailto:info@aqoonjire.com" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              <Mail size={13} color="var(--brand-secondary)"/> info@aqoonjire.com
+            <a href="mailto:info@aqoonjire.com" className="pub-footer-link pub-footer-contact">
+              <Mail size={13} /> info@aqoonjire.com
             </a>
-            <a href="tel:+252610317264" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              <Phone size={13} color="var(--brand-secondary)"/> +252 61 031 7264
+            <a href="tel:+252610317264" className="pub-footer-link pub-footer-contact">
+              <Phone size={13} /> +252 61 031 7264
             </a>
-            <a href="#" className="pub-footer-link" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              <MapPin size={13} color="var(--brand-secondary)"/> Mogadishu, Somalia
-            </a>
-            <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm" style={{ marginTop: 16 }}>
-              📱 WhatsApp Us
+            <span className="pub-footer-link pub-footer-contact">
+              <MapPin size={13} /> Mogadishu, Somalia
+            </span>
+            <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm pub-footer-wa">
+              WhatsApp Us
             </a>
           </div>
         </div>
 
         <div className="pub-footer-bottom">
-          <span className="pub-footer-copy">© {new Date().getFullYear()} AqoonJire. All rights reserved.</span>
+          <span className="pub-footer-copy">© {new Date().getFullYear()} AqoonJire. All rights reserved. · {BRAND.positioning}</span>
           <div className="pub-footer-legal">
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>
