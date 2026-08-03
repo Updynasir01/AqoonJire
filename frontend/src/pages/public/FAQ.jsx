@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
+import FaqAccordion from '../../components/common/FaqAccordion.jsx'
 import { siteFaqAPI } from '../../services/api'
 import { useSEO } from '../../hooks/useSEO'
-import { Search, ChevronDown, MessageCircle, ArrowRight, HelpCircle } from 'lucide-react'
+import { Search, MessageCircle, ArrowRight, HelpCircle } from 'lucide-react'
 
 export default function FAQ() {
   useSEO({
@@ -15,7 +16,6 @@ export default function FAQ() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [activeCat, setActiveCat] = useState('All')
-  const [open, setOpen] = useState(null)
 
   useEffect(() => {
     siteFaqAPI.publicList()
@@ -45,7 +45,7 @@ export default function FAQ() {
         <div className="hero-orb-2" />
         <div className="pub-inner" style={{ padding: '0 5% 60px', position: 'relative', zIndex: 2 }}>
           <div style={{ maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
-            <div className="section-tag" style={{ display: 'inline-flex', margin: '0 auto 18px' }}>💬 Help Center</div>
+            <div className="section-tag" style={{ display: 'inline-flex', margin: '0 auto 18px' }}>Help Center</div>
             <h1 className="hero-h1" style={{ marginBottom: 18 }}>Frequently Asked<br /><span className="hero-h1-teal">Questions</span></h1>
             <p className="hero-desc" style={{ margin: '0 auto 30px' }}>
               Everything you need to know about accounts, courses, payments and certificates.
@@ -60,7 +60,6 @@ export default function FAQ() {
 
       <section className="pub-section pub-section-alt" style={{ paddingTop: 50 }}>
         <div className="pub-inner" style={{ maxWidth: 860, margin: '0 auto', padding: '0 5%' }}>
-          {/* Category pills */}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 32 }}>
             {categories.map(cat => (
               <button key={cat} onClick={() => setActiveCat(cat)}
@@ -77,30 +76,9 @@ export default function FAQ() {
               <p>No questions found{search ? ` for "${search}"` : ''}. Try a different search or contact us.</p>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {filtered.map(f => {
-                const isOpen = open === f.id
-                return (
-                  <div key={f.id} className="card" style={{ overflow: 'hidden' }}>
-                    <button onClick={() => setOpen(isOpen ? null : f.id)}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        gap: 16, padding: '20px 22px', background: 'none', border: 'none', cursor: 'pointer',
-                        textAlign: 'left', color: 'var(--text)', fontSize: 16, fontWeight: 600 }}>
-                      {f.question}
-                      <ChevronDown size={20} style={{ flexShrink: 0, transition: 'transform .2s', transform: isOpen ? 'rotate(180deg)' : 'none', color: 'var(--brand-secondary)' }} />
-                    </button>
-                    {isOpen && (
-                      <div style={{ padding: '0 22px 22px', color: 'var(--text-muted)', fontSize: 15, lineHeight: 1.7, whiteSpace: 'pre-line' }}>
-                        {f.answer}
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
+            <FaqAccordion faqs={filtered} />
           )}
 
-          {/* Still need help */}
           <div className="card" style={{ marginTop: 40, padding: 32, textAlign: 'center' }}>
             <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 8 }}>Still have questions?</h3>
             <p style={{ color: 'var(--text-muted)', marginBottom: 20 }}>Our team is one message away — we usually reply fast.</p>

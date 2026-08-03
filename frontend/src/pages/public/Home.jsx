@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Navbar, Footer } from '../../components/layout/PublicLayout.jsx'
 import { BRAND } from '../../config/brandAssets'
-import { landingAPI } from '../../services/api'
+import { landingAPI, siteFaqAPI } from '../../services/api'
 import { useSEO } from '../../hooks/useSEO'
 import PublicCta from '../../components/common/PublicCta.jsx'
-import { BookOpen, Users, Award, ArrowRight, CheckCircle, Star, Globe, ChevronRight, Zap, Shield, Play, GraduationCap } from 'lucide-react'
+import FaqAccordion from '../../components/common/FaqAccordion.jsx'
+import { BookOpen, Users, Award, ArrowRight, CheckCircle, Star, Globe, ChevronRight, Zap, Shield, Play, GraduationCap, HelpCircle } from 'lucide-react'
+
+const HOME_FAQ_LIMIT = 5
 
 const EMOJIS = { laptop:'💻', briefcase:'💼', book:'📖', globe:'🌍', calculator:'🔢', stethoscope:'🩺', heart:'❤️', star:'⭐', moon:'🌙', flask:'🧪', pencil:'✏️' }
 
@@ -51,7 +54,13 @@ export default function Home() {
     path: '/',
   })
   const [data, setData] = useState(null)
+  const [faqs, setFaqs] = useState([])
   useEffect(() => { landingAPI.get().then(r => setData(r.data.data)).catch(() => {}) }, [])
+  useEffect(() => {
+    siteFaqAPI.publicList()
+      .then(r => setFaqs((r.data.data || []).slice(0, HOME_FAQ_LIMIT)))
+      .catch(() => setFaqs([]))
+  }, [])
 
   const featured = data?.featured_courses || []
   const categories = data?.categories || []
@@ -283,6 +292,34 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── FAQ PREVIEW ────────────────────────────── */}
+      {faqs.length > 0 && (
+        <section className="pub-section home-section-divider">
+          <div className="pub-inner home-faq">
+            <div className="section-row">
+              <div>
+                <div className="section-tag">
+                  <HelpCircle size={14} style={{ marginRight: 6 }} />
+                  FAQ
+                </div>
+                <h2 className="section-h">Common Questions</h2>
+                <p className="section-sub">Quick answers to help you get started with AqoonJire.</p>
+              </div>
+              <Link to="/faq" className="btn btn-outline-teal" style={{ whiteSpace: 'nowrap' }}>
+                View All FAQs <ChevronRight size={14} />
+              </Link>
+            </div>
+            <FaqAccordion faqs={faqs} />
+            <p className="home-faq-more">
+              Have more questions?{' '}
+              <Link to="/faq">Browse the full FAQ page</Link>
+              {' '}or{' '}
+              <a href="https://wa.me/252610317264" target="_blank" rel="noreferrer">message us on WhatsApp</a>.
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* ── INSTRUCTORS ────────────────────────────── */}
       {teachers.length > 0 && (
