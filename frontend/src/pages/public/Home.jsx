@@ -47,7 +47,7 @@ function PubCourseCard({ course }) {
 
 export default function Home() {
   useSEO({
-    description: `${BRAND.headline} ${BRAND.heroDesc}`,
+    description: `${BRAND.positioning}. ${BRAND.promise}`,
     path: '/',
   })
   const [data, setData] = useState(null)
@@ -78,10 +78,10 @@ export default function Home() {
           <div>
             <p className="hero-positioning">{BRAND.positioning}</p>
             <h1 className="hero-h1">
-              Empowering the Next Generation with{' '}
-              <span className="hero-h1-teal">Future-Ready Skills, Expert Instructors, and Recognized Certifications.</span>
+              Learn{' '}
+              <span className="hero-h1-teal">{BRAND.heroHeadingAccent}</span>
             </h1>
-            <p className="hero-desc">{BRAND.heroDesc}</p>
+            <p className="hero-desc">{BRAND.promise}</p>
             <div className="hero-btns">
               <Link to="/courses" className="btn btn-secondary btn-lg">
                 Explore Courses <ArrowRight size={18}/>

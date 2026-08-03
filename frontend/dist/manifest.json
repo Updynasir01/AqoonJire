@@ -1,20 +1,15 @@
 {
   "short_name": "AqoonJire",
   "name": "AqoonJire — Online Courses in Somali",
-  "description": "Somalia's online learning platform. Learn in Somali, earn certificates, study anytime.",
+  "description": "Somalia's Leading E-Learning Platform. Empowering the next generation with practical digital skills, expert-led learning, and recognized certifications.",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo192.png",
+      "src": "/ResourcesPhotos/aqoonjire-icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "/ResourcesPhotos/aqoonjire-icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

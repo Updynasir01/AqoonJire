@@ -114,6 +114,7 @@ export function Footer() {
             <div className="pub-footer-brand-logo">
               <BrandLogo variant={isDark ? 'onDark' : 'onLight'} size="footer" />
             </div>
+            <p className="pub-footer-slogan">{BRAND.slogan}</p>
             <p className="pub-footer-brand-desc">{BRAND.footerDesc}</p>
             <div className="pub-footer-socials">
               <a href="https://www.facebook.com/AqoonjirePlatform/" target="_blank" rel="noreferrer" className="pub-footer-social" title="Facebook" aria-label="Facebook">
