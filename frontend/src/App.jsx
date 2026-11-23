@@ -4,15 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 
 import Home from './pages/public/Home.jsx'
-import CourseCatalog from './pages/public/CourseCatalog.jsx'
-import CourseDetail from './pages/public/CourseDetail.jsx'
-import About from './pages/public/About.jsx'
-import Contact from './pages/public/Contact.jsx'
 import Login from './pages/public/Login.jsx'
-import Register from './pages/public/Register.jsx'
-import FAQ from './pages/public/FAQ.jsx'
-import Alumni from './pages/public/Alumni.jsx'
-import Verify from './pages/public/Verify.jsx'
 
 import AdminDashboard from './pages/admin/Dashboard.jsx'
 import AdminUsers from './pages/admin/Users.jsx'
@@ -73,16 +65,17 @@ export default function App() {
         <BrowserRouter>
           <Toaster position="top-right" toastOptions={{ duration: 3500, style: { fontFamily: 'Degular, Outfit, Segoe UI, Roboto, Arial, sans-serif', fontSize: 14, background: 'var(--bg-card)', color: 'var(--text)', border: '1px solid var(--border)' } }} />
           <Routes>
+            {/* Public site locked to Coming Soon / Under Maintenance */}
             <Route path="/" element={<Home />} />
-            <Route path="/courses" element={<CourseCatalog />} />
-            <Route path="/courses/:slug" element={<CourseDetail />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/alumni" element={<Alumni />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/verify" element={<Verify />} />
+            <Route path="/courses" element={<Navigate to="/" replace />} />
+            <Route path="/courses/:slug" element={<Navigate to="/" replace />} />
+            <Route path="/about" element={<Navigate to="/" replace />} />
+            <Route path="/alumni" element={<Navigate to="/" replace />} />
+            <Route path="/contact" element={<Navigate to="/" replace />} />
+            <Route path="/faq" element={<Navigate to="/" replace />} />
+            <Route path="/verify" element={<Navigate to="/" replace />} />
+            <Route path="/register" element={<Navigate to="/" replace />} />
             <Route path="/login" element={<RedirectIfGuest><Login /></RedirectIfGuest>} />
-            <Route path="/register" element={<RedirectIfGuest><Register /></RedirectIfGuest>} />
 
             <Route path="/admin" element={<RequireAuth roles={['admin']}><AdminDashboard /></RequireAuth>} />
             <Route path="/admin/users" element={<RequireAuth roles={['admin']}><AdminUsers /></RequireAuth>} />
